@@ -1,0 +1,52 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap'); */
+@import "tailwindcss";
+
+@font-face {
+    font-family: Doto;
+    font-style: normal;
+    font-weight: 200 700;
+    font-display: swap;
+    src: url("./assets/fonts/minecart-lcd.regular.ttf") format("truetype"); 
+}
+/* 
+@font-face {
+    font-family: Cyberpunk;
+    font-style: italic;
+    font-weight: 500 700;
+    font-display: swap;
+    src: url("./assets/fonts/cyberway_riders/Cyberway\ Riders.otf") format("opentype");
+} */
+
+@font-face {
+    font-family: Hand;
+    font-style: normal;
+    font-display: swap;
+    /* src: url("src/assets/fonts/Reenie_Beanie,Rock_Salt/Reenie_Beanie/ReenieBeanie-Regular.ttf") format("truetype"); */
+    src: url("./assets/fonts/Reenie_Beanie,Rock_Salt/Rock_Salt/RockSalt-Regular.ttf") format("truetype");
+}
+
+@theme {
+    --column-width: 9;
+    --font-dots: "Doto", monospace, sans-serif;
+    --font-hand: "Hand", monospace, sans-serif;
+    /* --font-cyberpunk: "Cyberpunk", monospace, sans-serif;
+    --color-yellow: #fcee0a;
+    --color-red: #db0d15; */
+}
+
+/* global.css */
+.navigator::backdrop {
+    @apply bg-black/50 backdrop-blur-sm ;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}

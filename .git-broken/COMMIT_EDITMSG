@@ -1,0 +1,2 @@
+refactor: encapsulate navigation logic into Nav component and move to dedicated directory
+also fixed the navigotor rendering on page loads

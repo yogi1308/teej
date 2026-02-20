@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import MarqueeContents from "./MarqueeContents.tsx"
-import MainContent from "./MainContent.tsx"
+import MarqueeContents from "./MarqueeContents.tsx";
+import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
-import yellowAudio from "../assets/Gemini_Generated_Image_sb0r0rsb0r0rsb0r.png"
-import TiltedCard from "../components/onlineLibraries/TiltedCard.jsx"
+import yellowAudio from "../assets/Gemini_Generated_Image_sb0r0rsb0r0rsb0r.png";
+import TiltedCard from "../components/onlineLibraries/TiltedCard.jsx";
 
 export default function Music() {
-  const [columnCount, setColumnCount] = useState(0)
+  const [columnCount, setColumnCount] = useState(0);
   const music = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     title: `lorem ipsum dolor amit ${i}`,
@@ -14,13 +14,17 @@ export default function Music() {
   }));
   useEffect(() => {
     const calc = () => {
-      const cols = parseFloat(getComputedStyle(document.body).getPropertyValue('--column-width'));
+      const cols = parseFloat(
+        getComputedStyle(document.body).getPropertyValue("--column-width"),
+      );
       const colWidth = window.innerHeight / cols;
-      setColumnCount(Math.max(2, Math.floor(window.innerWidth / (colWidth + 8))));
-    }
+      setColumnCount(
+        Math.max(2, Math.floor(window.innerWidth / (colWidth + 8))),
+      );
+    };
     calc();
     window.addEventListener("resize", calc);
-  }, [])
+  }, []);
   return (
     <div className="bg-black h-screen w-screen overflow-hidden">
       {/* <div

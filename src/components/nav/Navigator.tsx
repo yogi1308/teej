@@ -1,5 +1,5 @@
 import MusicNote from "../../assets/svg/MusicNote";
-import { useState, useRef, forwardRef, useEffect } from "react";
+import { useState, useRef, forwardRef } from "react";
 
 const Navigator = forwardRef<
   HTMLDialogElement,
@@ -62,7 +62,6 @@ const Navigator = forwardRef<
           // snap exactly to target
           setTimeout(() => {
             setNavigatorVisibility(() => false);
-            console.log("run")
           }, 100);
 
           return target;
@@ -107,7 +106,6 @@ const Navigator = forwardRef<
           const effectiveAngle = (rotation + angle + 360) % 360; // normalize 0–360
 
           if (Math.abs(effectiveAngle) < 10) {
-            console.log(rotation)
             setLeftMost(`${item}`);
           }
 

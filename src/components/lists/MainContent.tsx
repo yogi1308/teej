@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
-import PlayArrow from "../assets/svg/PlayArrow";
+import PlayArrow from "../../assets/svg/PlayArrow";
 
 export default function MainContent({
   music,

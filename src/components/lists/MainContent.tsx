@@ -19,7 +19,7 @@ export default function MainContent({
     if (!firstItem) return;
 
     const itemHeight = firstItem.offsetHeight;
-    const gap = 16;
+    const gap = 8;
     const totalStep = itemHeight + gap;
     const targetIndex = Math.floor(latest / totalStep);
 
@@ -41,7 +41,7 @@ export default function MainContent({
     const element = e.currentTarget;
 
     container.scrollTo({
-      top: element.offsetTop + 16,
+      top: element.offsetTop + 8,
       behavior: "smooth",
     });
   };
@@ -59,16 +59,25 @@ export default function MainContent({
         </div>
       </div>
 
-      <ul className="pb-[calc(50vh+1.2rem)] flex flex-col gap-4 pt-0 after:fixed after:inset-0 after:content-[''] after:pointer-events-none after:bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.7)_85%,rgba(0,0,0,0.95)_100%)]">
+      <ul className="pb-[calc(50vh+1.2rem)] flex flex-col gap-2 pt-0 after:fixed after:inset-0 after:content-[''] after:pointer-events-none after:bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.7)_85%,rgba(0,0,0,0.95)_100%)]">
         {music.map((song) => (
           <li
             key={song.id}
-            className={`song flex justify-between px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:opacity-100 cursor-pointer ${song.id === 0 ? "invisible" : ""}
-            ${song == currSong && "invisible" }`}
+            className={`song flex justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.9)] cursor-pointer ${song.id === 0 ? "invisible" : ""}
+            `}
             onClick={toTop}
           >
-            <p className="text-yellow"> {song.title} </p>
-            <p className="text-red pr-8"> {song.duration} </p>
+            <p
+              className={`transition-all duration-300 ease-in-out text-yellow ${song.id === currSong.id && "opacity-0"}`}
+            >
+              {song.title}
+            </p>
+            <p
+              className={` transition-all duration-300 ease-in-out text-red pr-8 ${song.id === currSong.id && "opacity-0"}`}
+            >
+              {" "}
+              {song.duration}{" "}
+            </p>
           </li>
         ))}
       </ul>

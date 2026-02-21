@@ -34,12 +34,24 @@ export default function MainContent({
     }
   });
 
+  const toTop = (e: React.MouseEvent<HTMLLIElement>) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const element = e.currentTarget;
+
+    container.scrollTo({
+      top: element.offsetTop + 16,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div
       ref={containerRef}
       className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
     >
-      <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4">
+      <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]">
         <p className="text-yellow"> {currSong.title} </p>
         <div className="text-red flex gap-2 items-center">
           <span>{currSong.duration}</span>
@@ -47,12 +59,13 @@ export default function MainContent({
         </div>
       </div>
 
-      <ul className="pb-[calc(50vh+1.2rem)] flex flex-col gap-4 pt-0 after:fixed after:inset-0 after:content-[''] after:pointer-events-none after:bg-[linear-gradient(to_bottom,transparent_35%,rgba(0,0,0,0.7)_85%,rgba(0,0,0,0.95)_100%)]">
+      <ul className="pb-[calc(50vh+1.2rem)] flex flex-col gap-4 pt-0 after:fixed after:inset-0 after:content-[''] after:pointer-events-none after:bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.7)_85%,rgba(0,0,0,0.95)_100%)]">
         {music.map((song) => (
           <li
             key={song.id}
-            data-song-id={song.id}
-            className={`song flex justify-between px-4 opacity-40 ${song.id === 0 ? "invisible" : ""}`}
+            className={`song flex justify-between px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:opacity-100 cursor-pointer ${song.id === 0 ? "invisible" : ""}
+            ${song == currSong && "invisible" }`}
+            onClick={toTop}
           >
             <p className="text-yellow"> {song.title} </p>
             <p className="text-red pr-8"> {song.duration} </p>

@@ -18,17 +18,18 @@
 } */
 
 @font-face {
-    font-family: Hand;
+    font-family: marker;
     font-style: normal;
     font-display: swap;
     /* src: url("src/assets/fonts/Reenie_Beanie,Rock_Salt/Reenie_Beanie/ReenieBeanie-Regular.ttf") format("truetype"); */
-    src: url("./assets/fonts/Reenie_Beanie,Rock_Salt/Rock_Salt/RockSalt-Regular.ttf") format("truetype");
+    src: url("./assets/fonts/Permanent_Marker/PermanentMarker_Regular.ttf") format("truetype");
 }
 
 @theme {
     --column-width: 9;
     --font-dots: "Doto", monospace, sans-serif;
     --font-hand: "Hand", monospace, sans-serif;
+    --font-hand: "marker", monospace, sans-serif;
     /* --font-cyberpunk: "Cyberpunk", monospace, sans-serif;
     --color-yellow: #fcee0a;
     --color-red: #db0d15; */

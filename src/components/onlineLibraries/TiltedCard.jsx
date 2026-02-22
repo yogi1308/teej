@@ -76,7 +76,7 @@ export default function TiltedCard({
   return (
     <figure
       ref={ref}
-      className="tilted-card-figure absolute! top-1/3 -translate-y-1/2 left-1/2 -translate-x-1/2 !text-black font-hand"
+      className="tilted-card-figure"
       style={{
         height: containerHeight,
         width: containerWidth
@@ -116,7 +116,7 @@ export default function TiltedCard({
 
       {showTooltip && (
         <motion.figcaption
-          className="tilted-card-caption"
+          className="tilted-card-caption "
           style={{
             x,
             y,

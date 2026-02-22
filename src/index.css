@@ -25,11 +25,27 @@
     src: url("./assets/fonts/Permanent_Marker/PermanentMarker_Regular.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: rock;
+    font-style: normal;
+    font-display: swap;
+    src: url("./assets/fonts/Reenie_Beanie\,Rock_Salt/Rock_Salt/RockSalt_Regular.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: caveat;
+    font-style: normal;
+    font-display: swap;
+    src: url("./assets/fonts/Caveat/Caveat-VariableFont_wght.ttf") format("truetype")
+}
+
 @theme {
     --column-width: 9;
     --font-dots: "Doto", monospace, sans-serif;
     --font-hand: "Hand", monospace, sans-serif;
     --font-hand: "marker", monospace, sans-serif;
+    --font-rock: "rock", monospace, sans-serif;
+    --font-caveat: "caveat", monospace, sans-serif;
     /* --font-cyberpunk: "Cyberpunk", monospace, sans-serif;
     --color-yellow: #fcee0a;
     --color-red: #db0d15; */
@@ -41,13 +57,26 @@
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+    display: none !important;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;
+    -ms-overflow-style: none !important;
     /* IE and Edge */
+    scrollbar-width: none !important;
+    /* Firefox */
+}
+
+/* hide scrollbar but allow scrolling */
+.no-scrollbar {
     scrollbar-width: none;
     /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari */
 }

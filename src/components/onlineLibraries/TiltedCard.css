@@ -47,6 +47,8 @@
   z-index: 2;
   will-change: transform;
   transform: translateZ(30px);
+  height: 100%;
+  width: 100%;
 }
 
 .tilted-card-caption {

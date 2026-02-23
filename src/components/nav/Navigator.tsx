@@ -25,16 +25,13 @@ const Navigator = forwardRef<
     return Math.atan2(clientY - centerY, clientX - centerX) * (180 / Math.PI);
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current = true;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
     lastAngle.current = getAngle(e.clientX, e.clientY);
   };
 
-  const handleMouseUp = () => {
-    dragging.current = false;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
 
     const currentAngle = getAngle(e.clientX, e.clientY);
@@ -42,6 +39,11 @@ const Navigator = forwardRef<
 
     setRotation((prev) => prev + delta);
     lastAngle.current = currentAngle;
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    dragging.current = false;
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
   };
 
   const toggleNavigatorVisibility = () =>
@@ -94,10 +96,11 @@ const Navigator = forwardRef<
         ●
       </div>
       <div
-        className="flex justify-between border border-white w-32 h-32 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center cursor-grab"
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseDown={handleMouseDown}
+        className="flex justify-between border border-white w-32 h-32 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center cursor-grab touch-none"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         style={{ transform: `rotate(0deg) rotate(${rotation}deg)` }}
         ref={circleRef}
       >

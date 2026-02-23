@@ -35,13 +35,13 @@ export default function Music() {
         ))}
       </div> */}
       <MainContent music={music} />
-      <div className="absolute! top-1/3 -translate-y-1/2 left-1/2 -translate-x-1/2">
+      <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
         <TiltedCard
           imageSrc={logo}
-          containerHeight="25rem"
-          containerWidth="25rem"
-          imageHeight="25rem"
-          imageWidth="25rem"
+          containerHeight="min-content"
+          containerWidth="min-content"
+          imageHeight="clamp(10rem, 60vh, 90vw)"
+          imageWidth="clamp(10rem, 60vh, 90vw)"
           rotateAmplitude={12}
           scaleOnHover={1}
           showMobileWarning={false}
@@ -49,7 +49,7 @@ export default function Music() {
           displayOverlayContent
           overlayContent={
             <p
-              className="tilted-card-demo-text absolute left-[calc(50%+18.5rem)] top-[calc(50%+4rem)]
+              className="tilted-card-demo-text absolute right-[2rem] top-[3rem]
                 text-black! font-hand text-2xl z-2 rotate-45 w-min"
             >
               Cool Song

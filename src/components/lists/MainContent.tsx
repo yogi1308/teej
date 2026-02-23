@@ -63,13 +63,13 @@ export default function MainContent({
         {music.map((song) => (
           <li
             key={song.id}
-            className={`song flex justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
+            className={`song flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
               hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-pointer ${song.id === 0 ? "invisible" : ""}
             `}
             onClick={toTop}
           >
             <p
-              className={`transition-all duration-300 ease-in-out text-yellow ${song.id === currSong.id && "opacity-0"}`}
+              className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${song.id === currSong.id && "opacity-0"}`}
             >
               {song.title}
             </p>

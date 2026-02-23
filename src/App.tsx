@@ -7,8 +7,8 @@ export default function App() {
   return (
     <>
       <Nav />
-      <Music />
-      {/* <Home /> */}
+      {/* <Music /> */}
+      <Home />
     </>
   );
 }

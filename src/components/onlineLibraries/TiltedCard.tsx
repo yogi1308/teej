@@ -3,19 +3,20 @@ import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 
 interface TiltedCardProps {
-  imageSrc: React.ComponentProps<'img'>['src'];
+  imageSrc: React.ComponentProps<"img">["src"];
   altText?: string;
   captionText?: string;
-  containerHeight?: React.CSSProperties['height'];
-  containerWidth?: React.CSSProperties['width'];
-  imageHeight?: React.CSSProperties['height'];
-  imageWidth?: React.CSSProperties['width'];
+  containerHeight?: React.CSSProperties["height"];
+  containerWidth?: React.CSSProperties["width"];
+  imageHeight?: React.CSSProperties["height"];
+  imageWidth?: React.CSSProperties["width"];
   scaleOnHover?: number;
   rotateAmplitude?: number;
   showMobileWarning?: boolean;
   showTooltip?: boolean;
   overlayContent?: React.ReactNode;
   displayOverlayContent?: boolean;
+  imageClassName?: string;
 }
 
 const springValues: SpringOptions = {
@@ -37,7 +38,8 @@ export default function TiltedCard({
   showMobileWarning = true,
   showTooltip = true,
   overlayContent = null,
-  displayOverlayContent = false
+  displayOverlayContent = false,
+  imageClassName = ''
 }: TiltedCardProps) {
   const ref = useRef<HTMLElement>(null);
   const x = useMotionValue(0);
@@ -94,7 +96,7 @@ export default function TiltedCard({
       className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center"
       style={{
         height: containerHeight,
-        width: containerWidth
+        width: containerWidth,
       }}
       onMouseMove={handleMouse}
       onMouseEnter={handleMouseEnter}
@@ -113,16 +115,16 @@ export default function TiltedCard({
           height: imageHeight,
           rotateX,
           rotateY,
-          scale
+          scale,
         }}
       >
         <motion.img
           src={imageSrc}
           alt={altText}
-          className="absolute top-0 left-0 object-contain will-change-transform [transform:translateZ(0)]"
+          className={`absolute top-0 left-0 object-contain will-change-transform [transform:translateZ(0)] ${imageClassName}`}
           style={{
             width: imageWidth,
-            height: imageHeight
+            height: imageHeight,
           }}
         />
 
@@ -140,7 +142,7 @@ export default function TiltedCard({
             x,
             y,
             opacity,
-            rotate: rotateFigcaption
+            rotate: rotateFigcaption,
           }}
         >
           {captionText}

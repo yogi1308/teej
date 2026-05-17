@@ -6,8 +6,9 @@
     font-style: normal;
     font-weight: 200 700;
     font-display: swap;
-    src: url("./assets/fonts/minecart-lcd.regular.ttf") format("truetype"); 
+    src: url("./assets/fonts/minecart-lcd.regular.ttf") format("truetype");
 }
+
 /* 
 @font-face {
     font-family: Cyberpunk;
@@ -29,14 +30,14 @@
     font-family: rock;
     font-style: normal;
     font-display: swap;
-    src: url("./assets/fonts/Reenie_Beanie\,Rock_Salt/Rock_Salt/RockSalt_Regular.ttf") format("truetype")
+    src: url("./assets/fonts/Reenie_Beanie\,Rock_Salt/Rock_Salt/RockSalt_Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: caveat;
     font-style: normal;
     font-display: swap;
-    src: url("./assets/fonts/Caveat/Caveat-VariableFont_wght.ttf") format("truetype")
+    src: url("./assets/fonts/Caveat/Caveat-VariableFont_wght.ttf") format("truetype");
 }
 
 @theme {
@@ -53,7 +54,23 @@
 
 /* global.css */
 .navigator::backdrop {
-    @apply bg-black/50 backdrop-blur-sm ;
+    @apply bg-black/50 backdrop-blur-sm;
+}
+
+dialog {
+    transition:
+        display 1s allow-discrete,
+        overlay 1s allow-discrete,
+        all 0.3s ease-in allow-discrete;
+    transform: scaleY(0);
+
+    &[open] {
+        transform: scaleY(1);
+
+        @starting-style {
+            transform: scaleY(0);
+        }
+    }
 }
 
 .scrollbar-hide::-webkit-scrollbar {

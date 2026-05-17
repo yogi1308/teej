@@ -84,7 +84,7 @@ export default function Navigator({
     return (
         <dialog
             ref={dialogRef}
-            className="navigator select-none hidden overflow-hidden h-100 w-80 font-dots absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white z-6 border border-white p-8 origin-center"
+            className="navigator select-none overflow-hidden h-100 w-80 font-dots absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white z-6 border border-white p-8 origin-center"
         >
             <div className="flex justify-between gap-4 bg-black absolute text-center p-2 border-white border-2 left-[50%] -translate-x-1/2 min-w-[calc(100%-2rem)] ">
                 <MusicNote />

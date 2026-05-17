@@ -1,140 +1,133 @@
 import MusicNote from "../../assets/svg/MusicNote";
-import { useState, useRef, forwardRef } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router";
 
-const Navigator = forwardRef<
-  HTMLDialogElement,
-  { setNavigatorVisibility: React.Dispatch<React.SetStateAction<boolean>> }
->(({ setNavigatorVisibility }, ref) => {
-  const items = ["Home", "Music", "Merch", "Blog"];
+interface NavigatorProps {
+    setNavigatorVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+    dialogRef: React.RefObject<HTMLDialogElement | null>;
+}
 
-  const [rotation, setRotation] = useState(0);
-  const [leftMost, setLeftMost] = useState("Music");
-  const dragging = useRef(false);
-  const circleRef = useRef<HTMLDivElement | null>(null);
-  const lastAngle = useRef<number>(0);
+export default function Navigator({
+    setNavigatorVisibility,
+    dialogRef,
+}: NavigatorProps) {
+    const items = ["Home", "Music", "Merch", "Blog"];
+    const navigate = useNavigate();
+    const [rotation, setRotation] = useState(0);
+    const dragging = useRef(false);
+    const circleRef = useRef<HTMLDivElement | null>(null);
+    const lastAngle = useRef<number>(0);
 
-  const getAngle = (clientX: number, clientY: number): number => {
-    if (!circleRef.current) {
-      return 0; // safe fallback
-    }
+    // Calculate which item is currently "active" based on rotation
+    const itemAngleStep = 180 / items.length;
+    // We want the item that is at the -110px position (left side)
+    // The rotation formula in map is: rotate(${angle}deg) translate(-110px)
+    // So the item is at "home" when rotation + angle = 0 (or 360)
+    const activeIndex =
+        Math.round(((360 - (rotation % 360)) % 360) / itemAngleStep) % items.length;
+    const leftMost =
+        items[activeIndex >= 0 ? activeIndex : items.length + activeIndex] ||
+        items[0];
 
-    const rect = circleRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    return Math.atan2(clientY - centerY, clientX - centerX) * (180 / Math.PI);
-  };
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    dragging.current = true;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    lastAngle.current = getAngle(e.clientX, e.clientY);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-
-    const currentAngle = getAngle(e.clientX, e.clientY);
-    const delta = currentAngle - lastAngle.current;
-
-    setRotation((prev) => prev + delta);
-    lastAngle.current = currentAngle;
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    dragging.current = false;
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-  };
-
-  const toggleNavigatorVisibility = () =>
-    setNavigatorVisibility((visibility: boolean) => !visibility);
-
-  const rotateToItem = (index: number) => {
-    const target = 0 - index * (180 / items.length);
-
-    let frame: number;
-
-    const animate = () => {
-      setRotation((prev) => {
-        const diff = target - prev;
-
-        if (Math.abs(diff) < 0.5) {
-          cancelAnimationFrame(frame);
-
-          // snap exactly to target
-          setTimeout(() => {
-            setNavigatorVisibility(() => false);
-          }, 100);
-
-          return target;
-        }
-
-        return prev + diff * 0.15;
-      });
-
-      frame = requestAnimationFrame(animate);
+    const getAngle = (clientX: number, clientY: number): number => {
+        if (!circleRef.current) return 0;
+        const rect = circleRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        return Math.atan2(clientY - centerY, clientX - centerX) * (180 / Math.PI);
     };
 
-    frame = requestAnimationFrame(animate);
-  };
-  
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        dragging.current = true;
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+        lastAngle.current = getAngle(e.clientX, e.clientY);
+    };
 
-  return (
-    <dialog
-      ref={ref}
-      className="navigator select-none hidden overflow-hidden h-100 w-80 font-dots absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white z-6 border border-white p-8 origin-center"
-    >
-      <div className="flex justify-between gap-4 bg-black absolute text-center p-2 border-white border-2 left-[50%] -translate-x-1/2 min-w-[calc(100%-2rem)] ">
-        <MusicNote />
-        <p>{leftMost}</p>
-        <p onClick={toggleNavigatorVisibility} className="cursor-pointer">
-          {" "}
-          ×{" "}
-        </p>
-      </div>
-      <div className="absolute top-[55%] left-[calc(50%-4rem)] -translate-x-1/2 -translate-y-1/2 z-1 select-none">
-        ●
-      </div>
-      <div
-        className="flex justify-between border border-white w-32 h-32 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center cursor-grab touch-none"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-        style={{ transform: `rotate(0deg) rotate(${rotation}deg)` }}
-        ref={circleRef}
-      >
-        {items.map((item, i) => {
-          const angle = (180 / items.length) * i; // fixed position
-          const effectiveAngle = (rotation + angle + 360) % 360; // normalize 0–360
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!dragging.current) return;
+        const currentAngle = getAngle(e.clientX, e.clientY);
+        const delta = currentAngle - lastAngle.current;
+        setRotation((prev) => prev + delta);
+        lastAngle.current = currentAngle;
+    };
 
-          if (Math.abs(effectiveAngle) < 10) {
-            setLeftMost(`${item}`);
-          }
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        dragging.current = false;
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    };
 
-          return (
-            <p
-              key={i}
-              className="absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 select-none hover:opacity-80 cursor-pointer"
-              style={{
-                transform: `
+    const toggleNavigatorVisibility = () =>
+        setNavigatorVisibility((visibility: boolean) => !visibility);
+
+    const rotateToItem = (index: number) => {
+        const target = 0 - index * itemAngleStep;
+        let frame: number;
+        const animate = () => {
+            setRotation((prev) => {
+                const diff = target - prev;
+                if (Math.abs(diff) < 0.5) {
+                    cancelAnimationFrame(frame);
+                    setTimeout(() => {
+                        setNavigatorVisibility(false);
+                        const path = items[index] === "Home" ? "/" : `/${items[index].toLowerCase()}`;
+                        navigate(path);
+                    }, 100);
+                    return target;
+                }
+                return prev + diff * 0.15;
+            });
+            frame = requestAnimationFrame(animate);
+        };
+        frame = requestAnimationFrame(animate);
+    };
+
+    return (
+        <dialog
+            ref={dialogRef}
+            className="navigator select-none hidden overflow-hidden h-100 w-80 font-dots absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white z-6 border border-white p-8 origin-center"
+        >
+            <div className="flex justify-between gap-4 bg-black absolute text-center p-2 border-white border-2 left-[50%] -translate-x-1/2 min-w-[calc(100%-2rem)] ">
+                <MusicNote />
+                <p>{leftMost}</p>
+                <p onClick={toggleNavigatorVisibility} className="cursor-pointer">
+                    {" "}
+                    ×{" "}
+                </p>
+            </div>
+            <div className="absolute top-[55%] left-[calc(50%-4rem)] -translate-x-1/2 -translate-y-1/2 z-1 select-none">
+                ●
+            </div>
+            <div
+                className="flex justify-between border border-white w-32 h-32 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center cursor-grab touch-none"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                style={{ transform: `rotate(${rotation}deg)` }}
+                ref={circleRef}
+            >
+                {items.map((item, i) => {
+                    const angle = itemAngleStep * i;
+                    return (
+                        <p
+                            key={i}
+                            className="absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 select-none hover:opacity-80 cursor-pointer"
+                            style={{
+                                transform: `
                   rotate(${angle}deg)
                   translate(-110px)
                 `,
-                opacity: leftMost === item ? 1 : 0.4,
-              }}
-              onClick={() => rotateToItem(i)}
-            >
-              {item}
-            </p>
-          );
-        })}
-      </div>
-      <div className=" border border-white w-12 h-12 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 "></div>
-      <div className="border border-white absolute bottom-[10%] w-[calc(100%-4rem)]"></div>
-    </dialog>
-  );
-});
-
-Navigator.displayName = "Navigator";
-export default Navigator;
+                                opacity: leftMost === item ? 1 : 0.4,
+                            }}
+                            onClick={() => rotateToItem(i)}
+                        >
+                            {item}
+                        </p>
+                    );
+                })}
+            </div>
+            <div className=" border border-white w-12 h-12 rounded-full absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 "></div>
+            <div className="border border-white absolute bottom-[10%] w-[calc(100%-4rem)]"></div>
+        </dialog>
+    );
+}

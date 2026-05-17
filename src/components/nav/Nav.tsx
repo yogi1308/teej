@@ -45,7 +45,7 @@ export default function Nav() {
 
         <Navigator
           setNavigatorVisibility={setNavigatorVisibility}
-          ref={dialogRef}
+          dialogRef={dialogRef}
         />
       </>
     );

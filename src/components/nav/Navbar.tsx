@@ -4,7 +4,8 @@ import ThreeDots from "../../assets/svg/ThreeDots";
 
 export default function Navbar({ onClick }: { onClick?: () => void }) {
     const { pathname } = useLocation();
-    const pageName = pathname === "/" ? "Home" : pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
+    const segment = pathname.split("/").filter(Boolean).pop() || "home";
+    const pageName = segment.charAt(0).toUpperCase() + segment.slice(1);
     return (
         <nav
             onClick={onClick ?? (() => { })}

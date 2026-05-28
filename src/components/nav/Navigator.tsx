@@ -1,6 +1,7 @@
 import MusicNote from "../../assets/svg/MusicNote";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 
 interface NavigatorProps {
     setNavigatorVisibility: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,6 +18,7 @@ export default function Navigator({
     const dragging = useRef(false);
     const circleRef = useRef<HTMLDivElement | null>(null);
     const lastAngle = useRef<number>(0);
+    const location = useLocation();
 
     // Calculate which item is currently "active" based on rotation
     const itemAngleStep = 180 / items.length;
@@ -68,8 +70,19 @@ export default function Navigator({
                 if (Math.abs(diff) < 0.5) {
                     cancelAnimationFrame(frame);
                     setTimeout(() => {
+                        let path = "";
+                        if (location.pathname.includes("admin")) {
+                            path =
+                                items[index] === "Home"
+                                    ? "/"
+                                    : `/admin/${items[index].toLowerCase()}`;
+                        } else {
+                            path =
+                                items[index] === "Home"
+                                    ? "/"
+                                    : `/${items[index].toLowerCase()}`;
+                        }
                         setNavigatorVisibility(false);
-                        const path = items[index] === "Home" ? "/" : `/${items[index].toLowerCase()}`;
                         navigate(path);
                     }, 100);
                     return target;

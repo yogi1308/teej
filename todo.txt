@@ -1,0 +1,45 @@
+TEEJ PROJECT ROADMAP: FULL-STACK INTEGRATION
+
+--- PHASE 1: BACKEND FOUNDATION (EXPRESS & POSTGRES) ---
+[ ] Initialize Express server in a 'server/' directory.
+[ ] Setup PostgreSQL database (Local or Docker).
+[ ] Initialize Prisma ORM.
+[ ] Create Database Schema (Models: User, Music, Merch, Blog).
+[ ] Run initial Prisma migrations to sync database.
+
+--- PHASE 2: AUTHENTICATION SYSTEM ---
+[ ] Create 'User' registration script (password hashing with bcrypt).
+[ ] Implement Login endpoint (/api/auth/login).
+[ ] Generate JWT (JSON Web Tokens) on successful login.
+[ ] Create Auth Middleware to protect sensitive Express routes.
+
+--- PHASE 3: IMAGE HANDLING & CLOUD STORAGE ---
+[ ] Setup Cloudinary or AWS S3 account for hosting photos.
+[ ] Implement Multer middleware for handling multipart/form-data.
+[ ] Create image upload utility to ship files to the cloud.
+
+--- PHASE 4: CRUD API DEVELOPMENT ---
+[ ] Music API: GET (public), POST (admin), DELETE (admin).
+[ ] Merch API: GET (public), POST (admin), DELETE (admin).
+[ ] Blog API: GET (public), POST (admin), DELETE (admin).
+[ ] Ensure all POST/DELETE routes require a valid JWT.
+
+--- PHASE 5: ADMIN DASHBOARD (REACT FRONTEND) ---
+[ ] Create ProtectedRoute component using 'react-router-dom'.
+[ ] Build Login Page UI.
+[ ] Create Admin Layout with Navigation (Music, Merch, Blog tabs).
+[ ] Build Music/Merch Forms (Title, Meta, File Upload).
+[ ] Integrate TinyMCE for the Blog Editor.
+[ ] Implement 'Delete' functionality for all items.
+
+--- PHASE 6: PUBLIC SITE INTEGRATION ---
+[ ] Replace 'Music.tsx' mock data with fetch() from Express API.
+[ ] Replace 'Merch.tsx' mock data with fetch() from Express API.
+[ ] Replace 'Blog.tsx' mock data with fetch() from Express API.
+[ ] Update 'MainContent' to handle dynamic images from database.
+
+--- PHASE 7: POLISH & DEPLOYMENT ---
+[ ] Add loading states/spinners for data fetching.
+[ ] Implement basic Error Boundaries for API failures.
+[ ] Finalize environment variables (.env) for security.
+[ ] Deployment plan (e.g., Render, Railway, or VPS).

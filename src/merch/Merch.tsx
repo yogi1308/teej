@@ -2,15 +2,15 @@ import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 
-export default function Blog() {
-    const blog = Array.from({ length: 20 }, (_, i) => ({
+export default function Merch() {
+    const merch = Array.from({ length: 20 }, (_, i) => ({
         id: i,
-        title: `Blog ${i}`,
-        meta: "27th May 2026"
+        title: `Hoodie ${i}`,
+        meta: "$10.00",
     }));
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
-            <MainContent content={blog} />
+            <MainContent content={merch} />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
                     imageSrc={logo}

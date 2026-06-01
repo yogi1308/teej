@@ -26,3 +26,5 @@ dist-ssr
 # Internal agent and roadmap files
 .agents/
 todo.txt
+node_modules
+/server/generated/prisma

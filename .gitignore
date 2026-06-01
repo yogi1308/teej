@@ -28,3 +28,4 @@ dist-ssr
 todo.txt
 node_modules
 /server/generated/prisma
+.env

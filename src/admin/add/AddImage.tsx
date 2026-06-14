@@ -18,6 +18,7 @@ export default function AddImage({ defaultText }: { defaultText: string }) {
                 onChange={handleChange}
                 ref={inputRef}
                 className="hidden"
+                required
             />
             {preview ? (
                 <img

@@ -22,6 +22,7 @@ export default function AddInput({
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 className="border-b border-white bg-transparent outline-none text-white placeholder:text-white/20"
+                required
             />
         </div>
     );

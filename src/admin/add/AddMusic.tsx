@@ -1,12 +1,33 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import AddImage from "./AddImage";
 import AddInput from "./AddInput";
 
-export default function AddMusic() {
+export default function AddMusic({
+    submitRef,
+}: {
+    submitRef: React.RefObject<HTMLButtonElement | null>;
+}) {
     const audioRef = useRef<HTMLInputElement>(null);
+
     const [audioName, setAudioName] = useState<string>("Upload track");
+
+    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
+        console.log("submitted music");
+        const data = new FormData(event.currentTarget);
+        try {
+            console.log(data);
+            const response = await fetch()
+        } catch (error) {
+            console.error("Error from line 20 Addmusic", error);
+        }
+    }
+
     return (
-        <div className="flex w-full text-white p-4 gap-8 items-center">
+        <form
+            onSubmit={handleSubmit}
+            className="flex w-full text-white p-4 gap-8 items-center"
+        >
             <div className="flex flex-col flex-1 gap-4">
                 <AddImage defaultText={"Upload Cover Art"} />
                 <input
@@ -14,9 +35,12 @@ export default function AddMusic() {
                     accept="audio/*"
                     className="hidden"
                     ref={audioRef}
-                    onChange={(e) =>
-                        setAudioName(e.target.files?.[0]?.name ?? "Upload track")
-                    }
+                    onChange={(e) => {
+                        {
+                            setAudioName(e.target.files?.[0]?.name ?? "Upload track");
+                        }
+                    }}
+                    required
                 />
                 <button
                     onClick={() => audioRef.current?.click()}
@@ -31,13 +55,13 @@ export default function AddMusic() {
                     placeholder={"Enter Your Track Name"}
                     type={"text"}
                     name={"track-name"}
+                    defaultValue={audioName}
                 />
                 <AddInput
                     label={"Album"}
                     placeholder={"Enter Your Album Name"}
                     type={"text"}
                     name={"album-name"}
-                    defaultValue={"Single"}
                 />
                 <AddInput
                     label={"Release Date"}
@@ -53,7 +77,7 @@ export default function AddMusic() {
                 />
                 <div className="flex flex-col gap-1">
                     <label className="text-white/50 text-sm uppercase tracking-widest">
-                       Description 
+                        Description
                     </label>
                     <textarea
                         placeholder={"Add a description..."}
@@ -62,6 +86,7 @@ export default function AddMusic() {
                     />
                 </div>
             </div>
-        </div>
+            <button ref={submitRef} type="submit" className="hidden" />
+        </form>
     );
 }

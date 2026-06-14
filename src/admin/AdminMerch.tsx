@@ -1,6 +1,7 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
+import Add from "./add/Add.tsx"
 
 export default function AdminMerch() {
     const merch = Array.from({ length: 20 }, (_, i) => ({
@@ -11,7 +12,7 @@ export default function AdminMerch() {
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
             <MainContent content={merch} />
-            <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
+            <div className="absolute! top-12 left-1/2 -translate-x-1/2">
                 <TiltedCard
                     imageSrc={logo}
                     containerHeight="min-content"
@@ -25,7 +26,7 @@ export default function AdminMerch() {
                     displayOverlayContent
                     overlayContent={
                         <p
-                            className="tilted-card-demo-text absolute right-[2rem] top-[3rem]
+                            className="tilted-card-demo-text absolute right-8 top-12
                 text-black! font-hand text-2xl z-2 rotate-45 w-min"
                         >
                             Cool Song
@@ -33,8 +34,7 @@ export default function AdminMerch() {
                     }
                 />
             </div>
+            <Add />
         </div>
     );
 }
-
-

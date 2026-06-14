@@ -4,7 +4,6 @@ import Music from "./music/Music.tsx";
 import Home from "./home/Home.tsx";
 import Blog from "./blog/Blog.tsx"
 import Merch from "./merch/Merch.tsx"
-import Admin from "./admin/Admin.tsx";
 import AdminMerch from "./admin/AdminMerch.tsx";
 import AdminBlog from "./admin/AdminBlog.tsx";
 import AdminMusic from "./admin/AdminMusic.tsx";
@@ -20,7 +19,6 @@ const routes = [
             { path: "music", element: <Music /> },
             { path: "blog", element: <Blog /> },
             { path: "merch", element: <Merch /> },
-            { path: "admin", element: <Admin /> },
         ],
     },
     {

@@ -34,7 +34,7 @@ export default function AdminMusic() {
                     }
                 />
             </div>
-            <Add />
+            <Add tab={"Music"}/>
         </div>
     );
 }

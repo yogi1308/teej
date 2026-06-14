@@ -34,7 +34,7 @@ export default function AdminMerch() {
                     }
                 />
             </div>
-            <Add />
+            <Add tab={"Merch"}/>
         </div>
     );
 }

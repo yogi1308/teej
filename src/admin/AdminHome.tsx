@@ -35,7 +35,7 @@ export default function AdminHome() {
                 unde odit dicta in nisi repudiandae, accusantium tempore fugiat enim nam
                 vero.
             </p>
-            <Add />
+            <Add tab={"Home"}/>
         </div>
     );
 }

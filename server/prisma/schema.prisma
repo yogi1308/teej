@@ -4,29 +4,31 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+    provider = "prisma-client"
+    output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
 }
 
 model Music {
-    id          String      @id @default(uuid())
+    id          String   @id @default(uuid())
     title       String
-    meta        String   // For duration (e.g., "03:45")
+    meta        String // For duration (e.g., "03:45")
     imageUrl    String?
     album       String?
     description String?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+    link        String
+    order       Int
 }
 
 model Merch {
-    id          String      @id @default(uuid())
+    id          String   @id @default(uuid())
     title       String
-    meta        String   // For price (e.g., "$49.99")
+    meta        String // For price (e.g., "$49.99")
     imageUrl    String?
     description String?
     sizes       String[] // e.g., ["S", "M", "L", "XL"]
@@ -35,25 +37,24 @@ model Merch {
 }
 
 model Blog {
-    id        String      @id @default(uuid())
+    id        String   @id @default(uuid())
     title     String
-    meta      String   // For published date (e.g., "2024-10-24")
-    content   String   // The HTML from TinyMCE
+    meta      String // For published date (e.g., "2024-10-24")
+    content   String // The HTML from TinyMCE
     imageUrl  String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model User {
-    id        String      @id @default(uuid())
+    id        String   @id @default(uuid())
     username  String   @unique
-    password  String   // Hashed
+    password  String // Hashed
     createdAt DateTime @default(now())
 }
 
 model Home {
-    id       String     @id @default(uuid())
+    id       String  @id @default(uuid())
     heroText String?
     favicon  String?
 }
-

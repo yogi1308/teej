@@ -34,7 +34,7 @@ export default function AdminBlog() {
                     }
                 />
             </div>
-            <Add />
+            <Add tab={"Blog"}/>
         </div>
     );
 }

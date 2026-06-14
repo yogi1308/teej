@@ -1,6 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap'); */
 @import "tailwindcss";
 
+:root {
+    color-scheme: dark;
+}
+
 @font-face {
     font-family: Doto;
     font-style: normal;
@@ -99,3 +103,23 @@ dialog {
 }
 
 button {cursor: pointer;}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffffff33;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff66;
+    background-clip: padding-box;
+}

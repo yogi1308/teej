@@ -23,12 +23,12 @@ export default function AddImage({ defaultText }: { defaultText: string }) {
                 <img
                     src={preview}
                     onClick={() => inputRef.current?.click()}
-                    className="cursor-pointer border border-dashed border-white object-cover"
+                    className="cursor-pointer border border-dashed border-white object-cover outline-none"
                 />
             ) : (
                 <button
                     onClick={() => inputRef.current?.click()}
-                    className="border border-dashed border-white aspect-square w-full"
+                    className="border border-dashed border-white aspect-square w-full outline-none"
                 >
                     <p className="text-8xl text-white/30 cursor-pointer">+</p>
                     {defaultText}

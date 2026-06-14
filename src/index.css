@@ -97,3 +97,5 @@ dialog {
     display: none;
     /* Chrome, Safari */
 }
+
+button {cursor: pointer;}

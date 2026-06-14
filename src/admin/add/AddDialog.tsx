@@ -49,6 +49,7 @@ export default function AddDialog({
             {currTab == "Home" && <AddHome />}
             <div className="flex mt-auto text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
                 <button className="cursor-pointer px-20 py-1 mb-1">Upload</button>
+                <button className="cursor-pointer px-20 py-1 mb-1">Add More</button>
                 <button
                     className="cursor-pointer px-20 py-1 mb-1"
                     onClick={() => {

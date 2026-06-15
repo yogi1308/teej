@@ -11,11 +11,11 @@ export default function AddMusic({
 
     const [audioName, setAudioName] = useState<string>("Upload track");
 
-    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("submitted music");
-        const data = new FormData(event.currentTarget);
         try {
+            const data = new FormData(event.currentTarget);
             console.log(data);
             const response = await fetch()
         } catch (error) {
@@ -32,6 +32,7 @@ export default function AddMusic({
                 <AddImage defaultText={"Upload Cover Art"} />
                 <input
                     type="file"
+                    name="track"
                     accept="audio/*"
                     className="hidden"
                     ref={audioRef}

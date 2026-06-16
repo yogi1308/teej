@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
-    const backendPort = env.EXPREES_PORT
+    const backendPort = env.EXPRESS_PORT
 
     return {
         plugins: [

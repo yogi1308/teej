@@ -17,10 +17,15 @@ export default function AddMusic({
         try {
             const data = new FormData(event.currentTarget);
             console.log(data);
-            const response = await fetch('/api/music', {
+            const response = await fetch('/api/music/', {
                 method: 'POST',
                 body: data
-            })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log("Music uploaded successfully:", result);
         } catch (error) {
             console.error("Error from line 20 Addmusic", error);
         }

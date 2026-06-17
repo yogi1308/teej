@@ -36,22 +36,21 @@ export async function uploadToCloudinary(req, res, next) {
         console.log("req.files cover-art:", req.files?.["cover-art"]?.length);
         console.log(folder);
 
-        const song: any = {};
+        req.uploads = {};
 
         if (files?.["track"]?.[0]) {
-            song.track = await uploadVideoToCloudinary(
+            req.uploads.track = await uploadVideoToCloudinary(
                 files["track"][0].buffer,
                 folder,
             );
         }
         if (files?.["cover-art"]?.[0]) {
-            song.cover = await uploadImageToCloudinary(
+            req.uploads.cover = await uploadImageToCloudinary(
                 files["cover-art"][0].buffer,
                 folder,
             );
         }
 
-        req.uploads = [song];
         next();
     } catch (error) {
         console.error("uploadToCloudinary error:", error);
@@ -69,7 +68,7 @@ async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
             })
             .end(buffer);
     });
-    return uploadResult
+    return uploadResult;
 }
 
 async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
@@ -82,5 +81,5 @@ async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
             })
             .end(buffer);
     });
-    return uploadResult
+    return uploadResult;
 }

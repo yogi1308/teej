@@ -12,8 +12,45 @@ export default function AddDialog({
     tab: "Merch" | "Music" | "Blog" | "Home";
 }) {
     const [currTab, setCurrTab] = useState(tab);
-    const submitRef = useRef(null);
-    const [numForms, setNumForms] = useState(1);
+    const [songIds, setSongIds] = useState([0]);
+    const [failedIds, setFailedIds] = useState(new Set<number>());
+    const nextId = useRef(1);
+    const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
+
+    async function handleUpload() {
+        console.log("cliced")
+        const ids = [...songIds]
+        for (const id of ids) {
+            const form = formRefs.current.get(id);
+            if (!form) continue;
+            try {
+                const res = await fetch("/api/music/upload", {
+                    method: "POST",
+                    body: new FormData(form),
+                });
+                if (res.ok) {
+                    setSongIds((prev) => prev.filter((sid) => sid !== id));
+                    setFailedIds((prev) => {
+                        const next = new Set(prev);
+                        next.delete(id);
+                        return next;
+                    });
+                } else {
+                    setFailedIds((prev) => {
+                        const next = new Set(prev);
+                        next.add(id);
+                        return next;
+                    });
+                }
+            } catch {
+                setFailedIds((prev) => {
+                    const next = new Set(prev);
+                    next.add(id);
+                    return next;
+                });
+            }
+        }
+    }
 
     return (
         <dialog
@@ -47,26 +84,33 @@ export default function AddDialog({
                 </p>
             </div>
 
-            {Array.from({ length: numForms }, (_, i) => (
-                <>
-                    {currTab == "Music" && <AddMusic submitRef={submitRef} key={i} />}
-                    {currTab == "Merch" && <AddMerch />}
-                    {currTab == "Blog" && <AddBlog />}
-                    {currTab == "Home" && <AddHome />}
-                </>
-            ))}
+            {currTab == "Music" &&
+                songIds.map((id) => (
+                    <AddMusic
+                        key={id}
+                        songId={id}
+                        failed={failedIds.has(id)}
+                        ref={(el) => {
+                            if (el) formRefs.current.set(id, el);
+                            else formRefs.current.delete(id);
+                        }}
+                    />
+                ))}
+            {currTab == "Merch" && <AddMerch />}
+            {currTab == "Blog" && <AddBlog />}
+            {currTab == "Home" && <AddHome />}
 
             <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
                 <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
                     <button
                         className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => submitRef.current?.click()}
+                        onClick={() => handleUpload()}
                     >
                         Upload
                     </button>
                     <button
                         className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => setNumForms(num => num + 1)}
+                        onClick={() => setSongIds(prev => [...prev, nextId.current++])}
                     >
                         Add More
                     </button>

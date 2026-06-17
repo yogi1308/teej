@@ -1,40 +1,20 @@
-import React, { useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import AddImage from "./AddImage";
 import AddInput from "./AddInput";
 
-export default function AddMusic({
-    submitRef,
-}: {
-    submitRef: React.RefObject<HTMLButtonElement | null>;
-}) {
+const AddMusic = forwardRef<
+    HTMLFormElement,
+    { songId: number; failed: boolean }
+>(({ songId, failed }, ref) => {
     const audioRef = useRef<HTMLInputElement>(null);
 
     const [audioName, setAudioName] = useState<string>("Upload track");
 
-    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
-        console.log("submitted music");
-        try {
-            const data = new FormData(event.currentTarget);
-            console.log(data);
-            const response = await fetch('/api/music/', {
-                method: 'POST',
-                body: data
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const result = await response.json();
-            console.log("Music uploaded successfully:", result);
-        } catch (error) {
-            console.error("Error from line 20 Addmusic", error);
-        }
-    }
-
     return (
         <form
-            onSubmit={handleSubmit}
-            className="flex w-full text-white p-4 gap-8 items-center"
+            ref={ref}
+            data-song-id={songId}
+            className={`flex w-full text-white p-4 gap-8 items-center ${failed ? "border border-red-500" : ""}`}
         >
             <div className="flex flex-col flex-1 gap-4">
                 <AddImage defaultText={"Upload Cover Art"} />
@@ -96,7 +76,8 @@ export default function AddMusic({
                     />
                 </div>
             </div>
-            <button ref={submitRef} type="submit" className="hidden" />
         </form>
     );
-}
+});
+
+export default AddMusic;

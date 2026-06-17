@@ -23,7 +23,7 @@ model Music {
     songUrl     String?
     createdAt   DateTime @default(now())
     link        String
-    order       Int
+    order       Int?
 }
 
 model Merch {

@@ -89,6 +89,7 @@ export default function AddMusic({
                         Description
                     </label>
                     <textarea
+                        name="description"
                         placeholder={"Add a description..."}
                         rows={5}
                         className="border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20"

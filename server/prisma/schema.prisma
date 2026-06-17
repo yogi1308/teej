@@ -19,8 +19,9 @@ model Music {
     imageUrl    String?
     album       String?
     description String?
+    releaseDate String?
+    songUrl     String?
     createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
     link        String
     order       Int
 }

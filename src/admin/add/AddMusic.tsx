@@ -63,20 +63,20 @@ export default function AddMusic({
                     label={"Track Name"}
                     placeholder={"Enter Your Track Name"}
                     type={"text"}
-                    name={"track-name"}
+                    name={"title"}
                     defaultValue={audioName}
                 />
                 <AddInput
                     label={"Album"}
                     placeholder={"Enter Your Album Name"}
                     type={"text"}
-                    name={"album-name"}
+                    name={"album"}
                 />
                 <AddInput
                     label={"Release Date"}
                     placeholder="Release Date"
                     type="date"
-                    name="release-date"
+                    name="release"
                 />
                 <AddInput
                     label={"Link"}

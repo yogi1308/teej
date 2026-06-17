@@ -12,7 +12,9 @@ export default function AddDialog({
     tab: "Merch" | "Music" | "Blog" | "Home";
 }) {
     const [currTab, setCurrTab] = useState(tab);
-    const submitRef = useRef(null)
+    const submitRef = useRef(null);
+    const [numForms, setNumForms] = useState(1);
+
     return (
         <dialog
             className="dialog relative flex flex-col h-[90vh] w-[80vw] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-white bg-black text-white "
@@ -44,12 +46,16 @@ export default function AddDialog({
                     Blog
                 </p>
             </div>
-            <div className="flex-1 overflow-y-auto">
-                {currTab == "Music" && <AddMusic submitRef={submitRef} />}
-                {currTab == "Merch" && <AddMerch />}
-                {currTab == "Blog" && <AddBlog />}
-                {currTab == "Home" && <AddHome />}
-            </div>
+
+            {Array.from({ length: numForms }, (_, i) => (
+                <>
+                    {currTab == "Music" && <AddMusic submitRef={submitRef} key={i} />}
+                    {currTab == "Merch" && <AddMerch />}
+                    {currTab == "Blog" && <AddBlog />}
+                    {currTab == "Home" && <AddHome />}
+                </>
+            ))}
+
             <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
                 <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
                     <button
@@ -58,7 +64,12 @@ export default function AddDialog({
                     >
                         Upload
                     </button>
-                    <button className="cursor-pointer px-20 py-1 mb-1">Add More</button>
+                    <button
+                        className="cursor-pointer px-20 py-1 mb-1"
+                        onClick={() => setNumForms(num => num + 1)}
+                    >
+                        Add More
+                    </button>
                     <button
                         className="cursor-pointer px-20 py-1 mb-1"
                         onClick={() => {

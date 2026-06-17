@@ -15,52 +15,10 @@ cloudinary.config({
     api_secret: apiSecret,
 });
 
-// export async function uploadToCloudinary(req, res, next) {
-//     try {
-//         const uploads = req.files;
-//         let uploadURLS = [];
-//         for (const file of uploads) {
-//             const b64 = Buffer.from(file.buffer).toString("base64");
-//             let dataURI = "data:" + file.mimetype + ";base64," + b64;
-//
-//             const parsedName = path.parse(file.originalname);
-//             let public_id = parsedName.base;
-//             let counter = 1;
-//             let result;
-//
-//             while (true) {
-//                 result = await cloudinary.uploader.upload(dataURI, {
-//                     resource_type: "auto",
-//                     public_id: `${req.query.folder}/${public_id}`,
-//                     overwrite: false,
-//                     asset_folder: req.query.folder,
-//                 });
-//                 if (result.existing) {
-//                     public_id = `${parsedName.name} (${counter})${parsedName.ext}`;
-//                     counter++;
-//                 } else {
-//                     break;
-//                 }
-//             }
-//             uploadURLS.push({
-//                 name: result.display_name,
-//                 dateCreated: new Date(result.created_at),
-//                 url: result.secure_url,
-//                 folder: result.asset_folder,
-//                 size: result.bytes,
-//                 asset_id: result.asset_id,
-//                 public_id: result.public_id,
-//             });
-//         }
-//         req.uploads = uploadURLS;
-//         next();
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
 export async function uploadToCloudinary(req, res, next) {
     try {
+        // Tell TypeScript that req.files has named fields (like "track", "cover-art"),
+        // each containing an array of uploaded file objects — or might be undefined.
         const files = req.files as
             | Record<string, Express.Multer.File[]>
             | undefined;
@@ -78,20 +36,22 @@ export async function uploadToCloudinary(req, res, next) {
         console.log("req.files cover-art:", req.files?.["cover-art"]?.length);
         console.log(folder);
 
-        req.uploads = {};
+        const song: any = {};
 
         if (files?.["track"]?.[0]) {
-            req.uploads.track = await uploadVideoToCloudinary(
+            song.track = await uploadVideoToCloudinary(
                 files["track"][0].buffer,
                 folder,
             );
         }
         if (files?.["cover-art"]?.[0]) {
-            req.uploads.cover = await uploadImageToCloudinary(
+            song.cover = await uploadImageToCloudinary(
                 files["cover-art"][0].buffer,
                 folder,
             );
         }
+
+        req.uploads = [song];
         next();
     } catch (error) {
         console.error("uploadToCloudinary error:", error);
@@ -100,6 +60,7 @@ export async function uploadToCloudinary(req, res, next) {
 }
 
 async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
+    // Wrap Cloudinary's callback-based upload in a Promise so we can await it
     const uploadResult = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader
             .upload_stream({ folder }, (error, result) => {
@@ -108,10 +69,11 @@ async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
             })
             .end(buffer);
     });
-    return { url: uploadResult.secure_url };
+    return uploadResult
 }
 
 async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
+    // Wrap Cloudinary's callback-based upload in a Promise so we can await it
     const uploadResult = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader
             .upload_stream({ resource_type: "video", folder }, (error, result) => {
@@ -120,5 +82,5 @@ async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
             })
             .end(buffer);
     });
-    return { url: uploadResult.secure_url, duration: uploadResult.duration };
+    return uploadResult
 }

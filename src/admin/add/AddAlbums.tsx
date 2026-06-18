@@ -1,11 +1,12 @@
 import { forwardRef, useRef, useState } from "react";
 import AddImage from "./AddImage";
 import AddInput from "./AddInput";
+import Delete from "../../assets/svg/Delete";
 
 const AddSingles = forwardRef<
     HTMLFormElement,
-    { songId: number; failed: boolean }
->(({ songId, failed }, ref) => {
+    { songId: number; failed: boolean; onDelete: (id: number) => void  }
+>(({ songId, failed, onDelete }, ref) => {
     const audioRef = useRef<HTMLInputElement>(null);
 
     const [audioName, setAudioName] = useState<string | null>(null);
@@ -14,7 +15,7 @@ const AddSingles = forwardRef<
         <form
             ref={ref}
             data-song-id={songId}
-            className={`flex w-full text-white p-4 gap-8 items-center ${failed ? "border border-red-500" : ""}`}
+            className={`flex w-full text-white p-4 gap-8 items-center ${failed ? "border border-red-500" : ""} items-end`}
         >
             <input
                 type="file"
@@ -29,7 +30,7 @@ const AddSingles = forwardRef<
             />
             <button
                 onClick={() => audioRef.current?.click()}
-                className="border border-dashed border-black py-2 bg-white text-black"
+                className="border border-dashed border-black py-2 bg-white text-black px-4"
             >
                 {audioName ?? "Upload Track"}
             </button>
@@ -42,6 +43,9 @@ const AddSingles = forwardRef<
                     defaultValue={audioName}
                 />
             </div>
+            <button className="scale-[1.1] hover:scale-[1.2]" onClick={() => onDelete(songId)}>
+                <Delete />
+            </button>
         </form>
     );
 });

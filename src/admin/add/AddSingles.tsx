@@ -1,11 +1,12 @@
 import { forwardRef, useRef, useState } from "react";
 import AddImage from "./AddImage";
 import AddInput from "./AddInput";
+import Delete from "../../assets/svg/Delete";
 
 const AddSingles = forwardRef<
     HTMLFormElement,
-    { songId: number; failed: boolean }
->(({ songId, failed }, ref) => {
+    { songId: number; failed: boolean; onDelete: (id: number) => void }
+>(({ songId, failed, onDelete }, ref) => {
     const audioRef = useRef<HTMLInputElement>(null);
 
     const [audioName, setAudioName] = useState<string | null>(null);
@@ -68,6 +69,9 @@ const AddSingles = forwardRef<
                     />
                 </div>
             </div>
+            <button className="scale-[1.1] hover:scale-[1.2]" onClick={() => onDelete(songId)}>
+                <Delete />
+            </button>
         </form>
     );
 });

@@ -58,6 +58,10 @@ export default function AddDialog({
         refetch();
     }
 
+    function handleDelete(id:number) {
+        setSongIds(prev => prev.filter((sid) => sid !== id))
+    }
+
     return (
         <dialog
             className="dialog relative flex flex-col h-[90vh] w-[80vw] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-white bg-black text-white "
@@ -106,19 +110,32 @@ export default function AddDialog({
                             if (el) formRefs.current.set(id, el);
                             else formRefs.current.delete(id);
                         }}
+                        onDelete={handleDelete}
                     />
                 ))}
             {currTab === "Album" && (
                 <>
-                    <div className="m-4">
-                        <AddInput
-                            label={"Album"}
-                            placeholder={"Enter Your Album Name"}
-                            type={"text"}
-                            name={"album"}
-                        />
+                    <div className="flex flex-row p-4 w-full gap-4">
+                        <AddImage defaultText={"Upload Cover Art"} />
+                        <div className="flex-1 flex flex-col gap-4">
+                            <AddInput
+                                label={"Album"}
+                                placeholder={"Enter Your Album Name"}
+                                type={"text"}
+                                name={"album"}
+                            />
+                            <div className="flex flex-col gap-2 flex-1">
+                                <label className="text-white/50 text-sm uppercase tracking-widest">
+                                    Description
+                                </label>
+                                <textarea
+                                    name="description"
+                                    placeholder={"Add a description..."}
+                                    className="flex-1 border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 resize-none"
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <AddImage defaultText={"Upload Cover Art"} />
                     {songIds.map((id) => (
                         <AddAlbums
                             key={id}
@@ -128,6 +145,7 @@ export default function AddDialog({
                                 if (el) formRefs.current.set(id, el);
                                 else formRefs.current.delete(id);
                             }}
+                        onDelete={handleDelete}
                         />
                     ))}
                 </>

@@ -3,7 +3,7 @@ import { useScroll, useMotionValueEvent } from "framer-motion";
 import PlayArrow from "../../assets/svg/PlayArrow";
 
 export default function MainContent({content}) {
-    const [currItem, setCurrItem] = useState(content[0]);
+    const [currItem, setCurrItem] = useState(content.length > 0 ? content[0] : null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollY } = useScroll({ container: containerRef });
@@ -22,7 +22,7 @@ export default function MainContent({content}) {
         if (targetIndex >= 0 && targetIndex < content.length) {
             const exitedSong = content[targetIndex];
 
-            if (exitedSong.id !== currItem.id) {
+            if (exitedSong.id !== currItem?.id) {
                 setCurrItem(exitedSong);
             }
         } else if (targetIndex < 0) {
@@ -48,9 +48,9 @@ export default function MainContent({content}) {
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
         >
             <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]">
-                <p className="text-yellow"> {currItem.title} </p>
+                <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">
-                    <span>{currItem.meta}</span>
+                    <span>{currItem?.meta}</span>
                     <PlayArrow />
                 </div>
             </div>
@@ -65,12 +65,12 @@ export default function MainContent({content}) {
                         onClick={toTop}
                     >
                         <p
-                            className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${item.id === currItem.id && "opacity-0"}`}
+                            className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${item.id === currItem?.id && "opacity-0"}`}
                         >
                             {item.title}
                         </p>
                         <p
-                            className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem.id && "opacity-0"}`}
+                            className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}
                         >
                             {item.meta}
                         </p>

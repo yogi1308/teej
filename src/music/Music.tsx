@@ -1,13 +1,10 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
+import { useMusic } from "../hooks/useMusic.ts";
 
 export default function Music() {
-    const music = Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        title: `lorem ipsum dolor amit ${i}`,
-        meta: "0:00",
-    }));
+    const {music} = useMusic()
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
             <MainContent content={music} />

@@ -7,9 +7,11 @@ import AddHome from "./AddHome";
 export default function AddDialog({
     dialogRef,
     tab,
+    refetch
 }: {
     dialogRef: React.RefObject<HTMLDialogElement | null>;
     tab: "Merch" | "Music" | "Blog" | "Home";
+    refetch: () => void;
 }) {
     const [currTab, setCurrTab] = useState(tab);
     const [songIds, setSongIds] = useState([0]);
@@ -55,6 +57,7 @@ export default function AddDialog({
                 });
             }
         }
+        refetch()
     }
 
     return (

@@ -6,7 +6,7 @@ export async function musicUpload(req, res, next) {
         await prisma.music.create({
             data: {
                 title: req.body.title,
-                imageUrl: req.uploads.cover.asset_id,
+                imageUrl: req.uploads.cover.secure_url,
                 album: req.body.album,
                 description: req.body.description,
                 releaseDate: req.body.release,

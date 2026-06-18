@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
 import PlayArrow from "../../assets/svg/PlayArrow";
 
-export default function MainContent({content}) {
-    const [currItem, setCurrItem] = useState(content.length > 0 ? content[0] : null);
+export default function MainContent({content, currItem, setCurrItem}) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollY } = useScroll({ container: containerRef });

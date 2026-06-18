@@ -7,7 +7,7 @@ import AddHome from "./AddHome";
 export default function AddDialog({
     dialogRef,
     tab,
-    refetch
+    refetch,
 }: {
     dialogRef: React.RefObject<HTMLDialogElement | null>;
     tab: "Merch" | "Music" | "Blog" | "Home";
@@ -24,40 +24,34 @@ export default function AddDialog({
         }
     }, [songIds]);
 
-    async function handleUpload() {
-        console.log("cliced");
-        const ids = [...songIds];
-        for (const id of ids) {
-            const form = formRefs.current.get(id);
-            if (!form) continue;
-            try {
-                const res = await fetch("/api/music/upload", {
-                    method: "POST",
-                    body: new FormData(form),
-                });
-                if (res.ok) {
-                    setSongIds((prev) => prev.filter((sid) => sid !== id));
-                    setFailedIds((prev) => {
-                        const next = new Set(prev);
-                        next.delete(id);
-                        return next;
-                    });
-                } else {
-                    setFailedIds((prev) => {
-                        const next = new Set(prev);
-                        next.add(id);
-                        return next;
-                    });
-                }
-            } catch {
-                setFailedIds((prev) => {
-                    const next = new Set(prev);
-                    next.add(id);
-                    return next;
-                });
-            }
+    async function uploadSong(id: number) {
+        const form = formRefs.current.get(id);
+        if (!form) return false;
+        try {
+            const res = await fetch("/api/music/upload", {
+                method: "POST",
+                body: new FormData(form),
+            });
+            return res.ok;
+        } catch {
+            return false;
         }
-        refetch()
+    }
+
+    async function handleUpload() {
+        const results = await Promise.all(
+            songIds.map(async (id) => ({
+                id,
+                ok: await uploadSong(id),
+            })),
+        );
+
+        const succeeded = results.filter((r) => r.ok).map((r) => r.id);
+        const failed = results.filter((r) => !r.ok).map((r) => r.id);
+
+        setSongIds((prev) => prev.filter((id) => !succeeded.includes(id)));
+        setFailedIds(new Set(failed));
+        refetch();
     }
 
     return (

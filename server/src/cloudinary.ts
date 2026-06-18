@@ -31,11 +31,6 @@ export async function uploadToCloudinary(req, res, next) {
                     ? "blog"
                     : "";
         const folder = `${stage}/${entity}`;
-        console.log("req.files keys:", Object.keys(req.files || {}));
-        console.log("req.files track:", req.files?.["track"]?.length);
-        console.log("req.files cover-art:", req.files?.["cover-art"]?.length);
-        console.log(folder);
-
         req.uploads = {};
 
         if (files?.["track"]?.[0]) {

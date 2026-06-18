@@ -3,6 +3,10 @@ import AddMusic from "./AddMusic";
 import AddMerch from "./AddMerch";
 import AddBlog from "./AddBlog";
 import AddHome from "./AddHome";
+import AddSingles from "./AddSingles";
+import AddAlbums from "./AddAlbums";
+import AddInput from "./AddInput";
+import AddImage from "./AddImage";
 
 export default function AddDialog({
     dialogRef,
@@ -10,7 +14,7 @@ export default function AddDialog({
     refetch,
 }: {
     dialogRef: React.RefObject<HTMLDialogElement | null>;
-    tab: "Merch" | "Music" | "Blog" | "Home";
+    tab: "Merch" | "Music" | "Blog" | "Home" | "Singles" | "Album";
     refetch: () => void;
 }) {
     const [currTab, setCurrTab] = useState(tab);
@@ -67,10 +71,16 @@ export default function AddDialog({
                     Home
                 </p>
                 <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Music" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Music")}
+                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Album" ? "text-white!" : "text-white/30"}`}
+                    onClick={() => setCurrTab("Album")}
                 >
-                    Music
+                    Album
+                </p>
+                <p
+                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Singles" || currTab === "Music" ? "text-white!" : "text-white/30"}`}
+                    onClick={() => setCurrTab("Singles")}
+                >
+                    Singles
                 </p>
                 <p
                     className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
@@ -86,9 +96,9 @@ export default function AddDialog({
                 </p>
             </div>
 
-            {currTab == "Music" &&
+            {(currTab === "Singles" || currTab === "Music") &&
                 songIds.map((id) => (
-                    <AddMusic
+                    <AddSingles
                         key={id}
                         songId={id}
                         failed={failedIds.has(id)}
@@ -98,6 +108,40 @@ export default function AddDialog({
                         }}
                     />
                 ))}
+            {currTab === "Album" && (
+                <>
+                    <div className="m-4">
+                        <AddInput
+                            label={"Album"}
+                            placeholder={"Enter Your Album Name"}
+                            type={"text"}
+                            name={"album"}
+                        />
+                    </div>
+                    <AddImage defaultText={"Upload Cover Art"} />
+                    {songIds.map((id) => (
+                        <AddAlbums
+                            key={id}
+                            songId={id}
+                            failed={failedIds.has(id)}
+                            ref={(el) => {
+                                if (el) formRefs.current.set(id, el);
+                                else formRefs.current.delete(id);
+                            }}
+                        />
+                    ))}
+                </>
+            )}
+            {/* {currTab == "Music" && */}
+            {/*     songIds.map((id) => ( */}
+            {/*         <AddMusic */}
+            {/*             key={id} */}
+            {/*             songId={id} */}
+            {/*             failed={failedIds.has(id)} */}
+            {/*             ref={(el) => { */}
+            {/*                 if (el) formRefs.current.set(id, el); */}
+            {/*                 else formRefs.current.delete(id); */}
+            {/*             }} */}
             {currTab == "Merch" && <AddMerch />}
             {currTab == "Blog" && <AddBlog />}
             {currTab == "Home" && <AddHome />}
@@ -114,7 +158,7 @@ export default function AddDialog({
                         className="cursor-pointer px-20 py-1 mb-1"
                         onClick={() => setSongIds((prev) => [...prev, nextId.current++])}
                     >
-                        Add More
+                        {currTab === "Album" ? "Add more tracks" : "Add More"}
                     </button>
                     <button
                         className="cursor-pointer px-20 py-1 mb-1"

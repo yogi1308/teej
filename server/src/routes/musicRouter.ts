@@ -17,7 +17,6 @@ musicRouter.post(
 musicRouter.get("/get", async (req, res) => {
     try {
         const music = await getMusic();
-        console.log(music)
         res.status(200).json({ success: true, data: music });
     } catch (error) {
         res.status(500).json({ success: false, error: "Failed to fetch music" });

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddMusic from "./AddMusic";
 import AddMerch from "./AddMerch";
 import AddBlog from "./AddBlog";
@@ -16,10 +16,15 @@ export default function AddDialog({
     const [failedIds, setFailedIds] = useState(new Set<number>());
     const nextId = useRef(1);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
+    useEffect(() => {
+        if (songIds.length === 0) {
+            setSongIds([nextId.current++]);
+        }
+    }, [songIds]);
 
     async function handleUpload() {
-        console.log("cliced")
-        const ids = [...songIds]
+        console.log("cliced");
+        const ids = [...songIds];
         for (const id of ids) {
             const form = formRefs.current.get(id);
             if (!form) continue;
@@ -110,7 +115,7 @@ export default function AddDialog({
                     </button>
                     <button
                         className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => setSongIds(prev => [...prev, nextId.current++])}
+                        onClick={() => setSongIds((prev) => [...prev, nextId.current++])}
                     >
                         Add More
                     </button>

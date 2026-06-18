@@ -1,11 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
 import PlayArrow from "../../assets/svg/PlayArrow";
 
-export default function MainContent({content, currItem, setCurrItem}) {
+export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollY } = useScroll({ container: containerRef });
+    const [currAlbum, setCurrAlbum] = useState()
+
+    useEffect(() => {
+        if (currItem === null && content.length > 0) {
+            setCurrItem(content[0])
+        }
+    }, [content, currItem, setCurrItem]);
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const firstItem = containerRef.current?.querySelector(

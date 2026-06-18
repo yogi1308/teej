@@ -8,7 +8,7 @@ const AddMusic = forwardRef<
 >(({ songId, failed }, ref) => {
     const audioRef = useRef<HTMLInputElement>(null);
 
-    const [audioName, setAudioName] = useState<string>("Upload track");
+    const [audioName, setAudioName] = useState<string | null>(null);
 
     return (
         <form
@@ -25,9 +25,7 @@ const AddMusic = forwardRef<
                     className="hidden"
                     ref={audioRef}
                     onChange={(e) => {
-                        {
-                            setAudioName(e.target.files?.[0]?.name ?? "Upload track");
-                        }
+                        setAudioName(e.target.files?.[0]?.name ?? null);
                     }}
                     required
                 />
@@ -35,7 +33,7 @@ const AddMusic = forwardRef<
                     onClick={() => audioRef.current?.click()}
                     className="border border-dashed border-black py-2 bg-white text-black"
                 >
-                    {audioName ?? "Upload Audio"}
+                    {audioName ?? "Upload Track"}
                 </button>
             </div>
             <div className="flex flex-col flex-1 gap-4">
@@ -48,9 +46,10 @@ const AddMusic = forwardRef<
                 />
                 <AddInput
                     label={"Album"}
-                    placeholder={"Enter Your Album Name"}
+                    placeholder={"Album Name/Single"}
                     type={"text"}
                     name={"album"}
+                    defaultValue={"Single"}
                 />
                 <AddInput
                     label={"Release Date"}

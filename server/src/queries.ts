@@ -3,6 +3,8 @@ import { prisma } from "../prisma/prisma";
 export async function musicUpload(req, res, next) {
     try {
         console.log(req.body, "from queies");
+        const minutes = String(Math.floor(req.uploads.track.duration / 60)).padStart(2, "0");
+        const seconds = String(Math.floor(req.uploads.track.duration % 60)).padStart(2, "0");
         await prisma.music.create({
             data: {
                 title: req.body.title,
@@ -10,9 +12,9 @@ export async function musicUpload(req, res, next) {
                 album: req.body.album,
                 description: req.body.description,
                 releaseDate: req.body.release,
-                songUrl: req.uploads.track.asset_id,
+                songUrl: req.uploads.track.secure_url,
                 link: req.body.link,
-                meta: `${String(Math.floor(req.uploads.track.duration / 60)).padStart(2, "0")}:${String(req.uploads.track.duration % 60).padStart(2, "0")}`,
+                meta: `${minutes}:${seconds}`,
             },
         });
         next();

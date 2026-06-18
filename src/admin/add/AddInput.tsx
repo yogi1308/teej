@@ -2,8 +2,8 @@ export default function AddInput({
     label,
     type,
     name,
-   defaultValue,
-   placeholder
+    defaultValue,
+    placeholder,
 }: {
     label: string;
     type: string;
@@ -21,8 +21,13 @@ export default function AddInput({
                 name={name}
                 placeholder={placeholder}
                 defaultValue={defaultValue}
+                onBlur={(event) => {
+                    if (event.currentTarget.value.trim() === "" && defaultValue) {
+                        event.currentTarget.value = defaultValue;
+                    }
+                }}
                 className="border-b border-white bg-transparent outline-none text-white placeholder:text-white/20"
-                required
+                required={!!defaultValue}
             />
         </div>
     );

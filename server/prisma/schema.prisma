@@ -12,18 +12,35 @@ datasource db {
     provider = "postgresql"
 }
 
-model Music {
-    id          String   @id @default(uuid())
-    title       String
-    meta        String // For duration (e.g., "03:45")
-    imageUrl    String?
-    album       String?
-    description String?
-    releaseDate String?
-    songUrl     String?
-    createdAt   DateTime @default(now())
-    link        String
-    order       Int?
+model Album {
+    id               String   @id @default(uuid())
+    title            String
+    coverUrl         String?
+    coverAssetid String?
+    description      String?
+    releaseDate      String?
+    displayPosition  Int?      // position on the public display page
+    createdAt        DateTime @default(now())
+    tracks           Track[]
+}
+
+model Track {
+    id             String   @id @default(uuid())
+    title          String
+    meta           String   // duration (MM:SS)
+    songUrl        String?
+    songAssetId String
+    link           String
+    imageUrl       String?  // cover art (singles). Album tracks fall back to album.coverUrl
+    imageAssetid String?
+    description    String?
+    releaseDate    String?
+    trackPosition  Int?     // order within album (null for singles)
+    plays          Int      @default(0)
+    createdAt      DateTime @default(now())
+    displayPosition Int?    // position on the public display page (singles only)
+    albumId        String?
+    album          Album?   @relation(fields: [albumId], references: [id])
 }
 
 model Merch {

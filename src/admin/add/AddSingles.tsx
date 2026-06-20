@@ -69,7 +69,11 @@ const AddSingles = forwardRef<
                     />
                 </div>
             </div>
-            <button className="scale-[1.1] hover:scale-[1.2]" onClick={() => onDelete(songId)}>
+            <button
+                type="button"
+                className="scale-[1.1] hover:scale-[1.2]"
+                onClick={() => onDelete(songId)}
+            >
                 <Delete />
             </button>
         </form>

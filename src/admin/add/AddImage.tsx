@@ -1,6 +1,10 @@
 import { useState, useRef } from "react";
 
-export default function AddImage({ defaultText }: { defaultText: string }) {
+export default function AddImage({
+    defaultText,
+}: {
+    defaultText: string;
+}) {
     const [preview, setPreview] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 

@@ -3,7 +3,7 @@ import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import Add from "./add/Add.tsx"
 import { useMusic } from "../hooks/useMusic.ts";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 export default function AdminMusic() {
     const {music, refetch} = useMusic()
@@ -13,7 +13,7 @@ export default function AdminMusic() {
             <MainContent content={music} currItem={currItem} setCurrItem={setCurrItem} />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
-                    imageSrc={currItem ? currItem.imageUrl : logo}
+                    imageSrc={currItem ? currItem.imageUrl || currItem.coverUrl : logo}
                     containerHeight="min-content"
                     containerWidth="min-content"
                     imageHeight="clamp(10rem, 60vh, 90vw)"

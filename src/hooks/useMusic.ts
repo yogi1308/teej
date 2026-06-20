@@ -4,7 +4,7 @@ export function useMusic() {
     const [music, setMusic] = useState([]);
 
     useEffect(() => {
-        fetch("/api/music/get")
+        fetch("/api/music/")
             .then(r => r.json())
             .then(body => setMusic(body.data ?? []))
             .catch(() => setMusic([]));
@@ -12,7 +12,7 @@ export function useMusic() {
 
     async function refetch() {
         try {
-            const res = await fetch("/api/music/get");
+            const res = await fetch("/api/music/");
             const body = await res.json();
             setMusic(body.data ?? []);
         } catch {

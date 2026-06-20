@@ -1,6 +1,6 @@
 import TiltedCard from "../components/onlineLibraries/TiltedCard";
 import myNameIs from "../assets/bg/a7470465-2ae4-4569-b1fe-a74cbd832fa9.png";
-import Add from "./add/Add.tsx"
+import Add from "./add/Add.tsx";
 
 export default function AdminHome() {
     return (
@@ -35,7 +35,7 @@ export default function AdminHome() {
                 unde odit dicta in nisi repudiandae, accusantium tempore fugiat enim nam
                 vero.
             </p>
-            <Add tab={"Home"}/>
+            <Add tab={"Home"} />
         </div>
     );
 }

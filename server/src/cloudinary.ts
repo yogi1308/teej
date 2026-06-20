@@ -53,7 +53,7 @@ export async function uploadToCloudinary(req, res, next) {
     }
 }
 
-async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
+export async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
     // Wrap Cloudinary's callback-based upload in a Promise so we can await it
     const uploadResult = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader
@@ -66,7 +66,7 @@ async function uploadImageToCloudinary(buffer: Buffer, folder: string) {
     return uploadResult;
 }
 
-async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
+export async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
     // Wrap Cloudinary's callback-based upload in a Promise so we can await it
     const uploadResult = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader

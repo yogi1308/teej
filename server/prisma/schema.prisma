@@ -16,11 +16,10 @@ model Album {
     id               String   @id @default(uuid())
     title            String
     coverUrl         String?
-    coverAssetid String?
+    coverAssetId String?
     description      String?
     releaseDate      String?
     displayPosition  Int?      // position on the public display page
-    createdAt        DateTime @default(now())
     tracks           Track[]
 }
 
@@ -32,7 +31,7 @@ model Track {
     songAssetId String
     link           String
     imageUrl       String?  // cover art (singles). Album tracks fall back to album.coverUrl
-    imageAssetid String?
+    imageAssetId String?
     description    String?
     releaseDate    String?
     trackPosition  Int?     // order within album (null for singles)

@@ -4,6 +4,7 @@ import PlayArrow from "../../assets/svg/PlayArrow";
 import ArrowRight from "../../assets/ArrowRight";
 import { useNavigate } from "react-router-dom";
 import { MusicPlayerBar } from "../MusicPlayerBar";
+import { usePlayer } from "../../hooks/PlayerContext";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,11 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const { setPlayingLink } = usePlayer();
+
+    useEffect(() => {
+        setPlayingLink(playing?.link ?? null);
+    }, [playing, setPlayingLink]);
 
     const { scrollY } = useScroll({ container: containerRef });
 

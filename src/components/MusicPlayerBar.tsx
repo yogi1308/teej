@@ -29,25 +29,22 @@ export function MusicPlayerBar({
                 <span className="text-xl">{playing.title}</span>
                 <span className="text-white/50 "> / {playing.albumTitle}</span>
             </p>
-            <div className="flex gap-2">
-                <p>{formatTime(currentTime)}</p>
-                <div
-                    className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden cursor-pointer"
-                    onClick={(e) => {
-                        const r = e.currentTarget.getBoundingClientRect();
-                        onSeek(((e.clientX - r.left) / r.width) * playing.meta);
-                    }}
-                >
-                    <div
-                        className="h-full bg-yellow rounded-full"
-                        style={{
-                            width: playing.meta
-                                ? `${(currentTime / playing.meta) * 100}%`
-                                : "0%",
-                        }}
-                    />
-                </div>
-                <p>{playing.meta}</p>
+            <div className="flex gap-2 items-center font-mono text-sm">
+                <p className="text-white/50">{formatTime(currentTime)}</p>
+                {(() => {
+                    const total = playing.meta?.split(":").reduce((m, s) => m * 60 + +s, 0) ?? 0;
+                    const pct = total ? currentTime / total : 0;
+                    const n = Math.round(pct * 120);
+                    return (
+                        <span className="cursor-pointer hover:text-yellow"
+                            onClick={(e) => {
+                                const r = e.currentTarget.getBoundingClientRect();
+                                onSeek(((e.clientX - r.left) / r.width) * total);
+                            }}
+                        >{'='.repeat(n)}{'-'.repeat(120 - n)}</span>
+                    );
+                })()}
+                <p className="text-white/50">{playing.meta}</p>
             </div>
             <div className="flex gap-8">
                 <button onClick={onPrevious} className="scale-150">

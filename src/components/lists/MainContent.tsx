@@ -9,6 +9,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
     const [playing, setPlaying] = useState(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const { scrollY } = useScroll({ container: containerRef });
 
@@ -62,6 +65,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         }
     }
 
+    function onNext() {
+        const next = content.slice(playingIndex + 1).find((c) => c.songUrl);
+        if (next) setPlaying(next);
+    }
+    function onPrevious() {
+        const prev = content
+            .slice(0, playingIndex)
+            .reverse()
+            .find((c) => c.songUrl);
+        if (prev) setPlaying(prev);
+    }
+
     return (
         <div
             ref={containerRef}
@@ -98,7 +113,34 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     </li>
                 ))}
             </ul>
-            {playing !== null && <MusicPlayerBar playing={playing} />}
+            {playing !== null && (
+                <MusicPlayerBar
+                    playing={playing}
+                    currentTime={currentTime}
+                    isPlaying={isPlaying}
+                    onToggle={() => {
+                        const a = audioRef.current;
+                        if (a) a.paused ? a.play() : a.pause();
+                    }}
+                    onSeek={(t) => {
+                        const a = audioRef.current;
+                        if (a) {
+                            a.currentTime = t;
+                            setCurrentTime(t);
+                        }
+                    }}
+                    onNext={onNext}
+                    onPrevious={onPrevious}
+                />
+            )}
+            <audio
+                ref={audioRef}
+                src={playing?.songUrl ?? ""}
+                onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                onEnded={() => setIsPlaying(false)}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+            />
         </div>
     );
 }

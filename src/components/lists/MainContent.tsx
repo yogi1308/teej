@@ -41,6 +41,10 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     }, [content, currItem, setCurrItem]);
 
     useEffect(() => {
+        containerRef.current?.scrollTo({ top: 0 });
+    }, [content[0]?.id]);
+
+    useEffect(() => {
         const a = audioRef.current;
         if (!a || !playing) return;
         a.play().catch(() => { });
@@ -125,10 +129,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         >
             <div
                 className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
-                onClick={() => {
-                    setIsPlaying(true);
-                    setPlaying(currItem);
-                }}
+                onClick={(e) => { toTop(e, currItem)}}
             >
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">

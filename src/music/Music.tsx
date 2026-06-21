@@ -17,8 +17,6 @@ export default function Music() {
                 setCurrItem={setCurrItem}
             />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
-            {console.log(currItem)}
-
                 <TiltedCard
                     imageSrc={currItem?.imageUrl || currItem?.coverUrl || logo}
                     containerHeight="min-content"

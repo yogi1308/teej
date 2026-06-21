@@ -3,10 +3,12 @@ import { useScroll, useMotionValueEvent } from "framer-motion";
 import PlayArrow from "../../assets/svg/PlayArrow";
 import ArrowRight from "../../assets/ArrowRight";
 import { useNavigate } from "react-router-dom";
+import { MusicPlayerBar } from "../MusicPlayerBar";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+    const [playing, setPlaying] = useState(null);
 
     const { scrollY } = useScroll({ container: containerRef });
 
@@ -39,6 +41,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     });
 
     function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
+        console.log(item);
         const container = containerRef.current;
         if (!container) return;
 
@@ -49,8 +52,13 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             behavior: "smooth",
         });
 
-        if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
+        if (
+            item.albumId === undefined &&
+            window.location.pathname !== `/music/album/${item.albumId}`
+        ) {
             navigate(`/music/album/${item.id}`);
+        } else if (item.songUrl) {
+            setPlaying(item);
         }
     }
 
@@ -59,14 +67,12 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             ref={containerRef}
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
         >
-            <div
-                className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
-            >
+            <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]">
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
-                    {currItem?.albumId === null ? "Single" : "Album"}
-                    {currItem?.albumId === null ? <PlayArrow /> : <ArrowRight />}
+                    {currItem?.songUrl === undefined ? "Album" : currItem?.meta}
+                    {currItem?.songUrl !== null ? <PlayArrow /> : <ArrowRight />}
                 </div>
             </div>
 
@@ -87,12 +93,12 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         <p
                             className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}
                         >
-                            {item?.albumId === null ? "Single" : "Album"}
-                            {/* {item.meta} */}
+                            {item?.songUrl === undefined ? "Album" : item?.meta}
                         </p>
                     </li>
                 ))}
             </ul>
+            {playing !== null && <MusicPlayerBar playing={playing} />}
         </div>
     );
 }

@@ -14,6 +14,7 @@ export function useMusic(albumId?: string) {
                         body.data.tracks.map((t) => ({
                             ...t,
                             coverUrl: t.imageUrl ?? body.data.coverUrl,
+                            albumTitle: body.data.title,
                         })),
                     );
                 } else {
@@ -33,6 +34,7 @@ export function useMusic(albumId?: string) {
                     body.data.tracks.map((t) => ({
                         ...t,
                         coverUrl: t.imageUrl ?? body.data.coverUrl,
+                        albumTitle: body.data.title,
                     })),
                 );
             } else {

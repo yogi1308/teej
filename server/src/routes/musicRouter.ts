@@ -52,7 +52,6 @@ musicRouter.post(
 
 musicRouter.get("/albums/:id", async (req, res) => {
     try {
-        console.log(`${req.params.id}`)
         const music = await getAlbum(req.params.id);
         res.status(200).json({ success: true, data: music });
     } catch (error) {

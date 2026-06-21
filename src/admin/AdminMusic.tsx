@@ -1,19 +1,23 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
-import Add from "./add/Add.tsx"
+import Add from "./add/Add.tsx";
 import { useMusic } from "../hooks/useMusic.ts";
-import {  useState } from "react";
+import { useState } from "react";
 
 export default function AdminMusic() {
-    const {music, refetch} = useMusic()
+    const { music, refetch } = useMusic();
     const [currItem, setCurrItem] = useState(music.length > 0 ? music[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
-            <MainContent content={music} currItem={currItem} setCurrItem={setCurrItem} />
+            <MainContent
+                content={music}
+                currItem={currItem}
+                setCurrItem={setCurrItem}
+            />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
-                    imageSrc={currItem ? currItem.imageUrl || currItem.coverUrl : logo}
+                    imageSrc={currItem?.imageUrl || currItem?.coverUrl || logo}
                     containerHeight="min-content"
                     containerWidth="min-content"
                     imageHeight="clamp(10rem, 60vh, 90vw)"
@@ -33,7 +37,7 @@ export default function AdminMusic() {
                     }
                 />
             </div>
-            <Add tab={"Music"} refetch={refetch}/>
+            <Add tab={"Music"} refetch={refetch} />
         </div>
     );
 }

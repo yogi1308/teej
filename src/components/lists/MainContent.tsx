@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
 import PlayArrow from "../../assets/svg/PlayArrow";
+import ArrowRight from "../../assets/ArrowRight";
+import { useNavigate } from "react-router-dom";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const { scrollY } = useScroll({ container: containerRef });
-    const [currAlbum, setCurrAlbum] = useState()
 
     useEffect(() => {
         if (currItem === null && content.length > 0) {
-            setCurrItem(content[0])
+            setCurrItem(content[0]);
         }
     }, [content, currItem, setCurrItem]);
 
@@ -36,7 +38,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         }
     });
 
-    const toTop = (e: React.MouseEvent<HTMLLIElement>) => {
+    function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
         const container = containerRef.current;
         if (!container) return;
 
@@ -46,18 +48,25 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             top: element.offsetTop + 8,
             behavior: "smooth",
         });
-    };
+
+        if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
+            navigate(`/music/album/${item.id}`);
+        }
+    }
 
     return (
         <div
             ref={containerRef}
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
         >
-            <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]">
+            <div
+                className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
+            >
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">
-                    <span>{currItem?.meta}</span>
-                    <PlayArrow />
+                    {/* <span>{currItem?.meta}</span> */}
+                    {currItem?.albumId === null ? "Single" : "Album"}
+                    {currItem?.albumId === null ? <PlayArrow /> : <ArrowRight />}
                 </div>
             </div>
 
@@ -68,7 +77,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
               hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-pointer ${item.id === 0 ? "invisible" : ""}
             `}
-                        onClick={toTop}
+                        onClick={(e) => toTop(e, item)}
                     >
                         <p
                             className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${item.id === currItem?.id && "opacity-0"}`}
@@ -78,7 +87,8 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         <p
                             className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}
                         >
-                            {item.meta}
+                            {item?.albumId === null ? "Single" : "Album"}
+                            {/* {item.meta} */}
                         </p>
                     </li>
                 ))}

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { uploadImageToCloudinary, uploadToCloudinary } from "../cloudinary";
 import { upload } from "../multer";
-import { musicUpload, getMusic, albumArtUploadQuery } from "../queries";
+import { musicUpload, getMusic, albumArtUploadQuery, getAlbum } from "../queries";
 
 const musicRouter = Router();
 musicRouter.post(
@@ -49,5 +49,15 @@ musicRouter.post(
         res.status(200).json({ success: true, message: "Music uploaded" });
     },
 )
+
+musicRouter.get("/albums/:id", async (req, res) => {
+    try {
+        console.log(`${req.params.id}`)
+        const music = await getAlbum(req.params.id);
+        res.status(200).json({ success: true, data: music });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to fetch music" });
+    }
+});
 
 export default musicRouter;

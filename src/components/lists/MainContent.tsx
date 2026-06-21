@@ -14,6 +14,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     const [currentTime, setCurrentTime] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const { setPlayingLink } = usePlayer();
+    const isProgrammaticScroll = useRef(false);
 
     useEffect(() => {
         setPlayingLink(playing?.link ?? null);
@@ -22,12 +23,27 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     const { scrollY } = useScroll({ container: containerRef });
 
     useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        const onEnd = () => { isProgrammaticScroll.current = false; };
+        el.addEventListener("scrollend", onEnd);
+        return () => el.removeEventListener("scrollend", onEnd);
+    }, []);
+
+    useEffect(() => {
         if (currItem === null && content.length > 0) {
             setCurrItem(content[0]);
         }
     }, [content, currItem, setCurrItem]);
 
+    useEffect(() => {
+        const a = audioRef.current;
+        if (!a || !playing) return;
+        a.play().catch(() => { });
+    }, [playing]);
+
     useMotionValueEvent(scrollY, "change", (latest) => {
+        if (isProgrammaticScroll.current) return;
         const firstItem = containerRef.current?.querySelector(
             ".item",
         ) as HTMLElement;
@@ -49,17 +65,21 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         }
     });
 
-    function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
-        console.log(item);
+    function scrollToItem(item) {
         const container = containerRef.current;
         if (!container) return;
+        const items = container.querySelectorAll(".item");
+        const idx = content.indexOf(item);
+        const el = items[idx] as HTMLElement;
+        if (el) {
+            isProgrammaticScroll.current = true;
+            container.scrollTo({ top: el.offsetTop + 8, behavior: "smooth" });
+        }
+        setCurrItem(item)
+    }
 
-        const element = e.currentTarget;
-
-        container.scrollTo({
-            top: element.offsetTop + 8,
-            behavior: "smooth",
-        });
+    function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
+        scrollToItem(item);
 
         if (
             item.albumId === undefined &&
@@ -68,19 +88,29 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             navigate(`/music/album/${item.id}`);
         } else if (item.songUrl) {
             setPlaying(item);
+            setIsPlaying(true);
         }
     }
 
     function onNext() {
-        const next = content.slice(playingIndex + 1).find((c) => c.songUrl);
-        if (next) setPlaying(next);
+        const idx = content.findIndex((c) => c.id === playing?.id);
+        const next = content.slice(idx + 1).find((c) => c.songUrl)
+            ?? content.find((c) => c.songUrl);
+        setIsPlaying(true);
+        scrollToItem(next);
+        setPlaying(next);
     }
+
     function onPrevious() {
+        const idx = content.findIndex((c) => c.id === playing?.id);
         const prev = content
-            .slice(0, playingIndex)
+            .slice(0, idx)
             .reverse()
-            .find((c) => c.songUrl);
-        if (prev) setPlaying(prev);
+            .find((c) => c.songUrl)
+            ?? content.toReversed().find((c) => c.songUrl);
+        setIsPlaying(true);
+        scrollToItem(prev);
+        setPlaying(prev);
     }
 
     return (
@@ -93,7 +123,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
                     {currItem?.songUrl === undefined ? "Album" : currItem?.meta}
-                    {currItem?.songUrl === undefined ?  <ArrowRight />: <PlayArrow />}
+                    {currItem?.songUrl === undefined ? <ArrowRight /> : <PlayArrow />}
                 </div>
             </div>
 

@@ -87,7 +87,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
                     {currItem?.songUrl === undefined ? "Album" : currItem?.meta}
-                    {currItem?.songUrl !== null ? <PlayArrow /> : <ArrowRight />}
+                    {currItem?.songUrl === undefined ?  <ArrowRight />: <PlayArrow />}
                 </div>
             </div>
 

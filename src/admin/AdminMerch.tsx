@@ -24,14 +24,6 @@ export default function AdminMerch() {
                     showMobileWarning={false}
                     showTooltip={false}
                     displayOverlayContent
-                    overlayContent={
-                        <p
-                            className="tilted-card-demo-text absolute right-8 top-12
-                text-black! font-hand text-2xl z-2 rotate-45 w-min"
-                        >
-                            Cool Song
-                        </p>
-                    }
                 />
             </div>
             <Add tab={"Merch"}/>

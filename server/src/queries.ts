@@ -31,7 +31,7 @@ export async function musicUpload(req, res, next) {
 export async function getMusic() {
     try {
         const [albums, singles] = await Promise.all([
-            prisma.album.findMany(),
+            prisma.album.findMany({ include: { tracks: true } }),
             prisma.track.findMany({ where: { albumId: null } }),
         ]);
         return [...albums, ...singles];

@@ -24,14 +24,6 @@ export default function AdminBlog() {
                     showMobileWarning={false}
                     showTooltip={false}
                     displayOverlayContent
-                    overlayContent={
-                        <p
-                            className="tilted-card-demo-text absolute right-[2rem] top-[3rem]
-                text-black! font-hand text-2xl z-2 rotate-45 w-min"
-                        >
-                            Cool Song
-                        </p>
-                    }
                 />
             </div>
             <Add tab={"Blog"}/>

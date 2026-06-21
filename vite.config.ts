@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
                     secure: false
                 }
             },
-            allowedHosts: ["ac56-72-223-0-116.ngrok-free.app"],
+            allowedHosts: ["f82c-2600-8800-11c3-ab00-00-6489.ngrok-free.app"],
         },
     }
 });

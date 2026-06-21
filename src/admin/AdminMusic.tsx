@@ -29,7 +29,7 @@ export default function AdminMusic() {
                     displayOverlayContent
                 />
             </div>
-            <Add tab={"Music"} refetch={refetch} />
+            <Add tab={"Music"} refetch={async () => { const d = await refetch(); setCurrItem(d[0]); }} />
         </div>
     );
 }

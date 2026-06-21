@@ -26,14 +26,17 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
-        const onEnd = () => { isProgrammaticScroll.current = false; };
+        const onEnd = () => {
+            isProgrammaticScroll.current = false;
+        };
         el.addEventListener("scrollend", onEnd);
         return () => el.removeEventListener("scrollend", onEnd);
     }, []);
 
     useEffect(() => {
-        if (currItem === null && content.length > 0) {
-            setCurrItem(content[0]);
+        if (content.length > 0) {
+            const exists = currItem && content.some((c) => c.id === currItem.id);
+            if (!currItem || !exists) setCurrItem(content[0]);
         }
     }, [content, currItem, setCurrItem]);
 
@@ -76,7 +79,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             isProgrammaticScroll.current = true;
             container.scrollTo({ top: el.offsetTop + 8, behavior: "smooth" });
         }
-        setCurrItem(item)
+        setCurrItem(item);
     }
 
     function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
@@ -95,8 +98,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
 
     function onNext() {
         const idx = content.findIndex((c) => c.id === playing?.id);
-        const next = content.slice(idx + 1).find((c) => c.songUrl)
-            ?? content.find((c) => c.songUrl);
+        const next =
+            content.slice(idx + 1).find((c) => c.songUrl) ??
+            content.find((c) => c.songUrl);
         setIsPlaying(true);
         scrollToItem(next);
         setPlaying(next);
@@ -104,11 +108,11 @@ export default function MainContent({ content, currItem, setCurrItem }) {
 
     function onPrevious() {
         const idx = content.findIndex((c) => c.id === playing?.id);
-        const prev = content
-            .slice(0, idx)
-            .reverse()
-            .find((c) => c.songUrl)
-            ?? content.toReversed().find((c) => c.songUrl);
+        const prev =
+            content
+                .slice(0, idx)
+                .reverse()
+                .find((c) => c.songUrl) ?? content.toReversed().find((c) => c.songUrl);
         setIsPlaying(true);
         scrollToItem(prev);
         setPlaying(prev);
@@ -119,12 +123,24 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             ref={containerRef}
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
         >
-            <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]" onClick={() => { setIsPlaying(true); setPlaying(currItem) }}>
+            <div
+                className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
+                onClick={() => {
+                    setIsPlaying(true);
+                    setPlaying(currItem);
+                }}
+            >
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
                     {currItem?.songUrl === undefined ? "Album" : currItem?.meta}
-                    {currItem?.songUrl === undefined ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                    {currItem?.songUrl === undefined ? (
+                        <ArrowRight />
+                    ) : isPlaying ? (
+                        <Pause />
+                    ) : (
+                        <PlayArrow />
+                    )}
                 </div>
             </div>
 
@@ -150,36 +166,34 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     </li>
                 ))}
             </ul>
-            {
-        playing !== null && (
-            <MusicPlayerBar
-                playing={playing}
-                currentTime={currentTime}
-                isPlaying={isPlaying}
-                onToggle={() => {
-                    const a = audioRef.current;
-                    if (a) a.paused ? a.play() : a.pause();
-                }}
-                onSeek={(t) => {
-                    const a = audioRef.current;
-                    if (a) {
-                        a.currentTime = t;
-                        setCurrentTime(t);
-                    }
-                }}
-                onNext={onNext}
-                onPrevious={onPrevious}
+            {playing !== null && (
+                <MusicPlayerBar
+                    playing={playing}
+                    currentTime={currentTime}
+                    isPlaying={isPlaying}
+                    onToggle={() => {
+                        const a = audioRef.current;
+                        if (a) a.paused ? a.play() : a.pause();
+                    }}
+                    onSeek={(t) => {
+                        const a = audioRef.current;
+                        if (a) {
+                            a.currentTime = t;
+                            setCurrentTime(t);
+                        }
+                    }}
+                    onNext={onNext}
+                    onPrevious={onPrevious}
+                />
+            )}
+            <audio
+                ref={audioRef}
+                src={playing?.songUrl ?? ""}
+                onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                onEnded={() => setIsPlaying(false)}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
             />
-        )
-    }
-    <audio
-        ref={audioRef}
-        src={playing?.songUrl ?? ""}
-        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        onEnded={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-    />
-        </div >
+        </div>
     );
 }

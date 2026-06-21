@@ -5,6 +5,7 @@ import ArrowRight from "../../assets/ArrowRight";
 import { useNavigate } from "react-router-dom";
 import { MusicPlayerBar } from "../MusicPlayerBar";
 import { usePlayer } from "../../hooks/PlayerContext";
+import Pause from "../../assets/svg/Pause";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -118,12 +119,12 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             ref={containerRef}
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
         >
-            <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]">
+            <div className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]" onClick={() => { setIsPlaying(true); setPlaying(currItem) }}>
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
                     {currItem?.songUrl === undefined ? "Album" : currItem?.meta}
-                    {currItem?.songUrl === undefined ? <ArrowRight /> : <PlayArrow />}
+                    {currItem?.songUrl === undefined ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                 </div>
             </div>
 
@@ -149,34 +150,36 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     </li>
                 ))}
             </ul>
-            {playing !== null && (
-                <MusicPlayerBar
-                    playing={playing}
-                    currentTime={currentTime}
-                    isPlaying={isPlaying}
-                    onToggle={() => {
-                        const a = audioRef.current;
-                        if (a) a.paused ? a.play() : a.pause();
-                    }}
-                    onSeek={(t) => {
-                        const a = audioRef.current;
-                        if (a) {
-                            a.currentTime = t;
-                            setCurrentTime(t);
-                        }
-                    }}
-                    onNext={onNext}
-                    onPrevious={onPrevious}
-                />
-            )}
-            <audio
-                ref={audioRef}
-                src={playing?.songUrl ?? ""}
-                onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                onEnded={() => setIsPlaying(false)}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
+            {
+        playing !== null && (
+            <MusicPlayerBar
+                playing={playing}
+                currentTime={currentTime}
+                isPlaying={isPlaying}
+                onToggle={() => {
+                    const a = audioRef.current;
+                    if (a) a.paused ? a.play() : a.pause();
+                }}
+                onSeek={(t) => {
+                    const a = audioRef.current;
+                    if (a) {
+                        a.currentTime = t;
+                        setCurrentTime(t);
+                    }
+                }}
+                onNext={onNext}
+                onPrevious={onPrevious}
             />
-        </div>
+        )
+    }
+    <audio
+        ref={audioRef}
+        src={playing?.songUrl ?? ""}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onEnded={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+    />
+        </div >
     );
 }

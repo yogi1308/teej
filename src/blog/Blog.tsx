@@ -1,6 +1,7 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
+import { useState } from "react";
 
 export default function Blog() {
     const blog = Array.from({ length: 20 }, (_, i) => ({
@@ -8,9 +9,13 @@ export default function Blog() {
         title: `Blog ${i}`,
         meta: "27th May 2026"
     }));
+    const [currItem, setCurrItem] = useState(blog.length > 0 ? blog[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
-            <MainContent content={blog} />
+            <MainContent content={blog} 
+                currItem={currItem}
+                setCurrItem={setCurrItem}
+            />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
                     imageSrc={logo}

@@ -56,11 +56,17 @@ model Merch {
 model Blog {
     id        String   @id @default(uuid())
     title     String
+    subtitle String
     meta      String // For published date (e.g., "2024-10-24")
-    content   String // The HTML from TinyMCE
+    contentUrl   String // The HTML from TinyMCE
+    contentAssetId String
+    pdfUrl String?
+    pdfAssetId String?
     imageUrl  String?
+    imageAssetId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    displayPosition Int?
 }
 
 model User {

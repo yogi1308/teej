@@ -129,7 +129,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         >
             <div
                 className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
-                onClick={(e) => { toTop(e, currItem)}}
+                onClick={(e) => {
+                    toTop(e, currItem);
+                }}
             >
                 <p className="text-yellow"> {currItem?.title} </p>
                 <div className="text-red flex gap-2 items-center">

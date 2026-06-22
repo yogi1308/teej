@@ -123,3 +123,8 @@ button {cursor: pointer;}
     background: #ffffff66;
     background-clip: padding-box;
 }
+
+/* Ensure the TinyMCE auxiliary container is above the modal */
+.tox-tinymce-aux {
+    z-index: 10000 !important;
+}

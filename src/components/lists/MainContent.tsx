@@ -125,7 +125,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     return (
         <div
             ref={containerRef}
-            className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5"
+            className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5 snap-y snap-mandatory"
         >
             <div
                 className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
@@ -149,7 +149,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 {content.map((item) => (
                     <li
                         key={item.id}
-                        className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
+                        className={`item snap-start flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
               hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-pointer ${item.id === 0 ? "invisible" : ""}
             `}
                         onClick={(e) => toTop(e, item)}

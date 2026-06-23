@@ -1,7 +1,5 @@
 import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
-import { rejects } from "node:assert";
-import { resolve } from "node:dns";
 
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;

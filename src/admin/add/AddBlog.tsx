@@ -1,11 +1,13 @@
 import { useState } from "react";
 import AddImage from "./AddImage";
 import AddInput from "./AddInput";
+import TipTap from "../../components/onlineLibraries/TipTap";
 
 export default function AddBlog({ blogFormRef }) {
     const [blogUploadtype, setBlogUploadType] = useState<"upload" | "type">(
         "upload",
     );
+    const [blogUploadTypeType, setblogUploadTypeType  ] = useState("type")
 
     return (
         <form className="flex flex-col gap-4 p-4" ref={blogFormRef}>
@@ -80,6 +82,41 @@ export default function AddBlog({ blogFormRef }) {
                     )}
                 </div>
             </div>
+            {blogUploadtype === "type" && (
+                <div>
+                    <div className="flex border border-white divide-x divide-white w-full text-center p-1">
+                        <label
+                            className={`flex-1 cursor-pointer ${blogUploadTypeType === "type" ? "bg-white text-black" : ""}`}
+                        >
+                            <input
+                                type="radio"
+                                name="type"
+                                value="upload"
+                                checked={blogUploadTypeType === "type"}
+                                onChange={() => setblogUploadTypeType("type")}
+                                className="hidden"
+                            />
+                            Type
+                        </label>
+                        <label
+                            className={`flex-1 cursor-pointer ${setblogUploadTypeType === "preview" ? "bg-white text-black" : ""}`}
+                        >
+                            <input
+                                type="radio"
+                                name="type"
+                                value="type"
+                                checked={blogUploadTypeType === "preview"}
+                                onChange={() => setblogUploadTypeType("preview")}
+                                className="hidden"
+                            />
+                            Preview
+                        </label>
+                    </div>
+                    {blogUploadTypeType === "type" &&
+                        <TipTap />
+                    }
+                </div>
+            )}
         </form>
     );
 }

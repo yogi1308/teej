@@ -67,3 +67,26 @@ export async function getAlbum(albumId: string) {
         console.error(error);
     }
 }
+
+export async function blogFileUploadQuery(
+    req,
+    thumbnailUploadData,
+    fileUploadData,
+) {
+    try {
+        const upload = await prisma.blog.create({
+            data: {
+                title: req.body.title,
+                subtitle: req.body.subtitle,
+                description: req.body.description,
+                contentUrl: fileUploadData?.secure_url,
+                contentAssetId: fileUploadData?.asset_id,
+                imageUrl: thumbnailUploadData?.secure_url,
+                imageAssetId: thumbnailUploadData?.asset_id,
+            },
+        });
+        return upload
+    } catch (error) {
+        console.error(error);
+    }
+}

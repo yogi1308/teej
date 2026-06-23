@@ -1,5 +1,7 @@
 import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
+import { rejects } from "node:assert";
+import { resolve } from "node:dns";
 
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -71,6 +73,19 @@ export async function uploadVideoToCloudinary(buffer: Buffer, folder: string) {
     const uploadResult = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader
             .upload_stream({ resource_type: "video", folder }, (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            })
+            .end(buffer);
+    });
+    return uploadResult;
+}
+
+export async function uploadRawToCloudinary(buffer: Buffer, folder: string) {
+    // Wrap Cloudinary's callback-based upload in a Promise so we can await it
+    const uploadResult = await new Promise<any>((resolve, reject) => {
+        cloudinary.uploader
+            .upload_stream({ resource_type: "raw", folder }, (error, result) => {
                 if (error) return reject(error);
                 resolve(result);
             })

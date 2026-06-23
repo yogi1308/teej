@@ -8,13 +8,15 @@ import AddInput from "./AddInput";
 import AddImage from "./AddImage";
 
 export default function AddDialog({
-    dialogRef,
+    open,
+    onClose,
     tab,
     refetch,
 }: {
-    dialogRef: React.RefObject<HTMLDialogElement | null>;
+    open: boolean;
+    onClose: () => void;
     tab: "Merch" | "Music" | "Blog" | "Home" | "Singles" | "Album";
-    refetch: () => void;
+    refetch?: () => void;
 }) {
     const [currTab, setCurrTab] = useState(tab);
     const [songIds, setSongIds] = useState([0]);
@@ -22,6 +24,7 @@ export default function AddDialog({
     const nextId = useRef(1);
     const albumMetaRef = useRef<HTMLFormElement>(null);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
+    const blogFormRef = useRef<HTMLFormElement>(null);
     useEffect(() => {
         if (songIds.length === 0) {
             setSongIds([nextId.current++]);
@@ -76,11 +79,26 @@ export default function AddDialog({
         updateResults(succeeded, failed);
     }
 
+    async function handleBlogUpload() {
+        try {
+            const form = blogFormRef.current;
+            if (!form) return;
+            await fetch("/api/blog", {
+                method: "POST",
+                body: new FormData(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleUpload() {
         if (currTab === "Album") {
             await handleAlbumsUpload();
         } else if (currTab === "Singles" || currTab === "Music") {
             await handleSinglesUpload();
+        } else if (currTab === "Blog") {
+            await handleBlogUpload();
         }
     }
 
@@ -89,125 +107,133 @@ export default function AddDialog({
     }
 
     return (
-        <dialog
-            className="dialog relative flex flex-col h-[90vh] w-[80vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border border-white bg-black text-white "
-            ref={dialogRef}
-        >
-            <div className="tabs flex sticky -top-px bg-black justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 font-dots text-md ">
-                <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Home" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Home")}
-                >
-                    Home
-                </p>
-                <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Album" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Album")}
-                >
-                    Album
-                </p>
-                <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Singles" || currTab === "Music" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Singles")}
-                >
-                    Singles
-                </p>
-                <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Merch")}
-                >
-                    Merch
-                </p>
-                <p
-                    className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Blog" ? "text-white!" : "text-white/30"}`}
-                    onClick={() => setCurrTab("Blog")}
-                >
-                    Blog
-                </p>
-            </div>
-
-            {(currTab === "Singles" || currTab === "Music") &&
-                songIds.map((id) => (
-                    <AddSingles
-                        key={id}
-                        songId={id}
-                        failed={failedIds.has(id)}
-                        ref={(el) => {
-                            if (el) formRefs.current.set(id, el);
-                            else formRefs.current.delete(id);
-                        }}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            {currTab === "Album" && (
-                <>
-                    <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
-                        <AddImage defaultText={"Upload Cover Art"} />
-                        <div className="flex-1 flex flex-col gap-4">
-                            <AddInput
-                                label={"Album"}
-                                placeholder={"Enter Your Album Name"}
-                                type={"text"}
-                                name={"album"}
-                            />
-                            <AddInput
-                                label={"Release Date"}
-                                placeholder="Release Date"
-                                type="date"
-                                name="release"
-                            />
-                            <div className="flex flex-col gap-2 flex-1">
-                                <label>Description</label>
-                                <textarea
-                                    name="description"
-                                    placeholder={"Add a description..."}
-                                    className="flex-1 border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 resize-none"
-                                />
-                            </div>
-                        </div>
-                    </form>
-                    {songIds.map((id) => (
-                        <AddAlbums
-                            key={id}
-                            songId={id}
-                            failed={failedIds.has(id)}
-                            ref={(el) => {
-                                if (el) formRefs.current.set(id, el);
-                                else formRefs.current.delete(id);
-                            }}
-                            onDelete={handleDelete}
-                        />
-                    ))}
-                </>
-            )}
-            {currTab == "Merch" && <AddMerch />}
-            {currTab == "Blog" && <AddBlog />}
-            {currTab == "Home" && <AddHome />}
-
-            <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
-                <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
-                    <button
-                        className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => handleUpload()}
+        <>
+            {open && <div className="fixed inset-0  backdrop-blur-sm z-[9998]" />}
+            <dialog
+                className="dialog flex flex-col h-[90vh] w-[80vw] fixed inset-0 m-auto z-[9999] border border-white bg-black text-white overflow-hidden"
+                open={open}
+            >
+                <div className="tabs flex sticky -top-px bg-black justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 font-dots text-md ">
+                    <p
+                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Home" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Home")}
                     >
-                        Upload
-                    </button>
-                    <button
-                        className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => setSongIds((prev) => [...prev, nextId.current++])}
+                        Home
+                    </p>
+                    <p
+                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Album" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Album")}
                     >
-                        {currTab === "Album" ? "Add more tracks" : "Add More"}
-                    </button>
-                    <button
-                        className="cursor-pointer px-20 py-1 mb-1"
-                        onClick={() => {
-                            dialogRef.current?.close();
-                        }}
+                        Album
+                    </p>
+                    <p
+                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Singles" || currTab === "Music" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Singles")}
                     >
-                        Close
-                    </button>
+                        Singles
+                    </p>
+                    <p
+                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Merch")}
+                    >
+                        Merch
+                    </p>
+                    <p
+                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Blog" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Blog")}
+                    >
+                        Blog
+                    </p>
                 </div>
-            </div>
-        </dialog>
+
+                <div className="flex-1 overflow-y-auto">
+                    {(currTab === "Singles" || currTab === "Music") &&
+                        songIds.map((id) => (
+                            <AddSingles
+                                key={id}
+                                songId={id}
+                                failed={failedIds.has(id)}
+                                ref={(el) => {
+                                    if (el) formRefs.current.set(id, el);
+                                    else formRefs.current.delete(id);
+                                }}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    {currTab === "Album" && (
+                        <>
+                            <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
+                                <AddImage defaultText={"Upload Cover Art"} />
+                                <div className="flex-1 flex flex-col gap-4">
+                                    <AddInput
+                                        label={"Album"}
+                                        placeholder={"Enter Your Album Name"}
+                                        type={"text"}
+                                        name={"album"}
+                                    />
+                                    <AddInput
+                                        label={"Release Date"}
+                                        placeholder="Release Date"
+                                        type="date"
+                                        name="release"
+                                    />
+                                    <div className="flex flex-col gap-2 flex-1">
+                                        <label>Description</label>
+                                        <textarea
+                                            name="description"
+                                            placeholder={"Add a description..."}
+                                            className="flex-1 border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 resize-none"
+                                        />
+                                    </div>
+                                </div>
+                            </form>
+                            {songIds.map((id) => (
+                                <AddAlbums
+                                    key={id}
+                                    songId={id}
+                                    failed={failedIds.has(id)}
+                                    ref={(el) => {
+                                        if (el) formRefs.current.set(id, el);
+                                        else formRefs.current.delete(id);
+                                    }}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
+                        </>
+                    )}
+                    {currTab == "Merch" && <AddMerch />}
+                    {currTab == "Blog" && <AddBlog blogFormRef={blogFormRef} />}
+                    {currTab == "Home" && <AddHome />}
+                </div>
+
+                <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
+                    <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
+                        <button
+                            className="cursor-pointer px-20 py-1 mb-1"
+                            onClick={() => handleUpload()}
+                        >
+                            Upload
+                        </button>
+                        {currTab === "Album" ||
+                            (currTab === "Singles" && (
+                                <button
+                                    className="cursor-pointer px-20 py-1 mb-1"
+                                    onClick={() =>
+                                        setSongIds((prev) => [...prev, nextId.current++])
+                                    }
+                                >
+                                    {currTab === "Album" ? "Add more tracks" : "Add More"}
+                                </button>
+                            ))}
+                        <button
+                            className="cursor-pointer px-20 py-1 mb-1"
+                            onClick={onClose}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </dialog>
+        </>
     );
 }

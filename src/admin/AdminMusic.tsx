@@ -1,5 +1,4 @@
 import MainContent from "../components/lists/MainContent.tsx";
-import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import Add from "./add/Add.tsx";
 import { useMusic } from "../hooks/useMusic.ts";

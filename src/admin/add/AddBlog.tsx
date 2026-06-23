@@ -4,34 +4,19 @@ import AddInput from "./AddInput";
 import TipTap from "../../components/onlineLibraries/TipTap";
 
 export default function AddBlog({ blogFormRef }) {
-    const [blogUploadtype, setBlogUploadType] = useState<"upload" | "type">(
-        "upload",
-    );
-    const [blogUploadTypeType, setblogUploadTypeType  ] = useState("type")
+    const [blogUploadtype, setBlogUploadType] = useState<"upload" | "type">("upload");
 
     return (
-        <form className="flex flex-col gap-4 p-4" ref={blogFormRef}>
+        <form className="flex flex-col gap-4 p-4 h-full" ref={blogFormRef}>
             <div className="flex w-full gap-4">
                 <div className="w-[50%]">
                     <AddImage defaultText={"Upload Thumbnail"} />
                 </div>
                 <div className="flex flex-col flex-1 gap-4">
-                    <AddInput
-                        label={"Blog TItle"}
-                        placeholder={"Enter Your Blog Title"}
-                        type={"text"}
-                        name={"title"}
-                    />
-                    <AddInput
-                        label={"Blog Subtitle"}
-                        placeholder={"Enter Your Blog Subtitle"}
-                        type={"text"}
-                        name={"subtitle"}
-                    />
+                    <AddInput label={"Blog TItle"} placeholder={"Enter Your Blog Title"} type={"text"} name={"title"} />
+                    <AddInput label={"Blog Subtitle"} placeholder={"Enter Your Blog Subtitle"} type={"text"} name={"subtitle"} />
                     <div className="flex flex-col gap-1 flex-1">
-                        <label className="text-white/50 text-sm uppercase tracking-widest">
-                            Description
-                        </label>
+                        <label className="text-white/50 text-sm uppercase tracking-widest">Description</label>
                         <textarea
                             name="description"
                             placeholder={"Add a description..."}
@@ -40,9 +25,7 @@ export default function AddBlog({ blogFormRef }) {
                         />
                     </div>
                     <div className="flex border border-white divide-x divide-white w-full text-center p-1">
-                        <label
-                            className={`flex-1 cursor-pointer ${blogUploadtype === "upload" ? "bg-white text-black" : ""}`}
-                        >
+                        <label className={`flex-1 cursor-pointer ${blogUploadtype === "upload" ? "bg-white text-black" : ""}`}>
                             <input
                                 type="radio"
                                 name="type"
@@ -53,9 +36,7 @@ export default function AddBlog({ blogFormRef }) {
                             />
                             Upload
                         </label>
-                        <label
-                            className={`flex-1 cursor-pointer ${blogUploadtype === "type" ? "bg-white text-black" : ""}`}
-                        >
+                        <label className={`flex-1 cursor-pointer ${blogUploadtype === "type" ? "bg-white text-black" : ""}`}>
                             <input
                                 type="radio"
                                 name="type"
@@ -69,54 +50,13 @@ export default function AddBlog({ blogFormRef }) {
                     </div>
                     {blogUploadtype === "upload" && (
                         <div className="flex flex-col gap-1 ">
-                            <label className="text-white/50 text-sm uppercase tracking-widest">
-                                Upload Blog
-                            </label>
-                            <input
-                                type="file"
-                                name="file"
-                                accept=".pdf"
-                                className="border-b border-white"
-                            />
+                            <label className="text-white/50 text-sm uppercase tracking-widest">Upload Blog</label>
+                            <input type="file" name="file" accept=".pdf" className="border-b border-white" />
                         </div>
                     )}
                 </div>
             </div>
-            {blogUploadtype === "type" && (
-                <div>
-                    <div className="flex border border-white divide-x divide-white w-full text-center p-1">
-                        <label
-                            className={`flex-1 cursor-pointer ${blogUploadTypeType === "type" ? "bg-white text-black" : ""}`}
-                        >
-                            <input
-                                type="radio"
-                                name="type"
-                                value="upload"
-                                checked={blogUploadTypeType === "type"}
-                                onChange={() => setblogUploadTypeType("type")}
-                                className="hidden"
-                            />
-                            Type
-                        </label>
-                        <label
-                            className={`flex-1 cursor-pointer ${setblogUploadTypeType === "preview" ? "bg-white text-black" : ""}`}
-                        >
-                            <input
-                                type="radio"
-                                name="type"
-                                value="type"
-                                checked={blogUploadTypeType === "preview"}
-                                onChange={() => setblogUploadTypeType("preview")}
-                                className="hidden"
-                            />
-                            Preview
-                        </label>
-                    </div>
-                    {blogUploadTypeType === "type" &&
-                        <TipTap />
-                    }
-                </div>
-            )}
+            {blogUploadtype === "type" && <TipTap />}
         </form>
     );
 }

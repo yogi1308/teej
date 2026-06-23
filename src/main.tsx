@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
+import "katex/dist/katex.min.css";
 import routes from "./routes";
 
 const router = createBrowserRouter(routes);

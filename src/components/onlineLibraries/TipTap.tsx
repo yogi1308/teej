@@ -9,6 +9,10 @@ import { Details, DetailsSummary, DetailsContent } from "@tiptap/extension-detai
 import { all, createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { TaskList, TaskItem } from "@tiptap/extension-list";
+import { TableKit } from "@tiptap/extension-table";
+import { Mathematics } from "@tiptap/extension-mathematics";
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 
 import type { ReactNode } from "react";
 import BoldSVG from "../../assets/svg/BoldSVG";
@@ -23,6 +27,19 @@ import Codeblock from "../../assets/svg/Codeblock";
 import StrikeSVG from "../../assets/svg/StrikeSVG.tsx";
 import HighlightSVG from "../../assets/svg/HighlightSVG.tsx";
 import TasklistSVG from "../../assets/svg/TasklistSVG.tsx";
+import TableSVG from "../../assets/svg/TableSVG.tsx";
+import ColumnAddSVG from "../../assets/svg/ColumnAddSVG.tsx";
+import RowAddSVG from "../../assets/svg/RowAddSVG.tsx";
+import TableMergeSVG from "../../assets/svg/TableMergeSVG.tsx";
+import Youtube from '@tiptap/extension-youtube'
+
+import ColumnDeleteSVG from "../../assets/svg/ColumnDeleteSVG.tsx";
+import RowDeleteSVG from "../../assets/svg/RowDeleteSVG.tsx";
+import MathSVG from "../../assets/svg/MathSVG.tsx";
+import BlockMathSVG from "../../assets/svg/BlockMathSVG.tsx";
+import YoutubeSVG from "../../assets/svg/YoutubeSVG.tsx";
+import SubscriptSVG from "../../assets/svg/SubscriptSVG.tsx";
+import SuperscriptSVG from "../../assets/svg/SuperscriptSVG.tsx";
 
 const lowlight = createLowlight(all);
 
@@ -44,6 +61,11 @@ function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
         canRedo: ctx.editor.can().chain().redo().run() ?? false,
         isDetails: ctx.editor.isActive("details") ?? false,
         isTask: ctx.editor.isActive("taskList") ?? false,
+        isTable: ctx.editor.isActive("table") ?? false,
+        isInlineMath: ctx.editor.isActive("inlineMath") ?? false,
+        isBlockMath: ctx.editor.isActive("blockMath") ?? false,
+        isSubscript: ctx.editor.isActive("subscript") ?? false,
+        isSuperscript: ctx.editor.isActive("superscript") ?? false,
     };
 }
 
@@ -51,98 +73,179 @@ function MenuBar({ editor }: { editor: Editor }) {
     const s = useEditorState({ editor, selector: menuBarStateSelector });
 
     return (
-        <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1">
-            <div className="flex items-center">
-                <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={s.isBold} label={<BoldSVG />} tooltip="Bold" />
-                <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={s.isItalic} label={<Italic />} tooltip="Italic" />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    active={s.isUnderline}
-                    label={<UnderlineSVG />}
-                    tooltip="Underline"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
-                    active={s.isStike}
-                    label={<StrikeSVG />}
-                    tooltip="Strikethrough"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleHighlight().run()}
-                    active={s.isHightlight}
-                    label={<HighlightSVG />}
-                    tooltip="Highlight"
-                />
+        <div className="flex flex-col items-center border-b border-white">
+            <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1">
+                <div className="flex items-center">
+                    <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={s.isBold} label={<BoldSVG />} tooltip="Bold" />
+                    <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={s.isItalic} label={<Italic />} tooltip="Italic" />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        active={s.isUnderline}
+                        label={<UnderlineSVG />}
+                        tooltip="Underline"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleStrike().run()}
+                        active={s.isStike}
+                        label={<StrikeSVG />}
+                        tooltip="Strikethrough"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleHighlight().run()}
+                        active={s.isHightlight}
+                        label={<HighlightSVG />}
+                        tooltip="Highlight"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleSubscript().run()}
+                        active={s.isSubscript}
+                        label={<SubscriptSVG />}
+                        tooltip="Subscript"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+                        active={s.isSuperscript}
+                        label={<SuperscriptSVG />}
+                        tooltip="Superscript"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        active={s.isHeading1}
+                        label="H1"
+                        tooltip="Heading 1"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        active={s.isHeading2}
+                        label="H2"
+                        tooltip="Heading 2"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                        active={s.isHeading3}
+                        label="H3"
+                        tooltip="Heading 3"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        active={s.isBulletList}
+                        label={<Bullets />}
+                        tooltip="Bullet List"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        active={s.isOrderedList}
+                        label={<NumberedBullets />}
+                        tooltip="Numbered List"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleTaskList().run()}
+                        active={s.isTask}
+                        label={<TasklistSVG />}
+                        tooltip="Task List"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
+                    <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                        active={s.isBlockquote}
+                        label={<BlockQuoteSVG />}
+                        tooltip="Blockquote"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                        active={s.isCodeBlock}
+                        label={<Codeblock />}
+                        tooltip="Code block"
+                    />
+                    <ToolBtn
+                        onClick={() => {
+                            if (editor.isActive("details")) {
+                                editor.chain().focus().unsetDetails().run();
+                            } else {
+                                editor.chain().focus().setDetails().run();
+                            }
+                        }}
+                        active={s.isDetails}
+                        label="▶"
+                        tooltip="Details"
+                    />
+                </div>
             </div>
-            <div className="flex items-center">
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    active={s.isHeading1}
-                    label="H1"
-                    tooltip="Heading 1"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    active={s.isHeading2}
-                    label="H2"
-                    tooltip="Heading 2"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                    active={s.isHeading3}
-                    label="H3"
-                    tooltip="Heading 3"
-                />
-            </div>
-            <div className="flex items-center">
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    active={s.isBulletList}
-                    label={<Bullets />}
-                    tooltip="Bullet List"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    active={s.isOrderedList}
-                    label={<NumberedBullets />}
-                    tooltip="Numbered List"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleTaskList().run()}
-                    active={s.isTask}
-                    label={<TasklistSVG />}
-                    tooltip="Task List"
-                />
-            </div>
-            <div className="flex items-center">
-                <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
-                <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
-            </div>
-            <div className="flex items-center">
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                    active={s.isBlockquote}
-                    label={<BlockQuoteSVG />}
-                    tooltip="Blockquote"
-                />
-                <ToolBtn
-                    onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                    active={s.isCodeBlock}
-                    label={<Codeblock />}
-                    tooltip="Code block"
-                />
-                <ToolBtn
-                    onClick={() => {
-                        if (editor.isActive("details")) {
-                            editor.chain().focus().unsetDetails().run();
-                        } else {
-                            editor.chain().focus().setDetails().run();
-                        }
-                    }}
-                    active={s.isDetails}
-                    label="▶"
-                    tooltip="Details"
-                />
+            <div className="flex flex-wrap gap-0.5 divide-x divide-white p-1">
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().insertTable().run()}
+                        active={s.isTable}
+                        label={<TableSVG />}
+                        tooltip="Insert Table"
+                    />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().addColumnAfter().run()}
+                        active={false}
+                        label={<ColumnAddSVG />}
+                        tooltip="Add Column"
+                    />
+                    <ToolBtn onClick={() => editor.chain().focus().addRowAfter().run()} active={false} label={<RowAddSVG />} tooltip="Add Row" />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().deleteColumn().run()}
+                        active={false}
+                        label={<ColumnDeleteSVG />}
+                        tooltip="Delete Column"
+                    />
+                    <ToolBtn onClick={() => editor.chain().focus().deleteRow().run()} active={false} label={<RowDeleteSVG />} tooltip="Delete Row" />
+                    <ToolBtn
+                        onClick={() => editor.chain().focus().mergeOrSplit().run()}
+                        active={false}
+                        label={<TableMergeSVG />}
+                        tooltip="Merge/Split"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => {
+                            const latex = prompt("Enter LaTeX (inline math):", "x^2 + y^2 = z^2");
+                            if (latex != null) {
+                                editor.chain().focus().insertInlineMath({ latex }).run();
+                            }
+                        }}
+                        active={s.isInlineMath}
+                        label={<MathSVG />}
+                        tooltip="Inline Math"
+                    />
+                    <ToolBtn
+                        onClick={() => {
+                            const latex = prompt("Enter LaTeX (block math):", "\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}");
+                            if (latex != null) {
+                                editor.chain().focus().insertBlockMath({ latex }).run();
+                            }
+                        }}
+                        active={s.isBlockMath}
+                        label={<BlockMathSVG />}
+                        tooltip="Block Math"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn
+                        onClick={() => {
+                            const url = prompt("Enter YouTube URL:", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                            if (url) {
+                                editor.chain().focus().setYoutubeVideo({ src: url }).run();
+                            }
+                        }}
+                        active={false}
+                        label={<YoutubeSVG />}
+                        tooltip="YouTube"
+                    />
+                </div>
             </div>
         </div>
     );
@@ -201,6 +304,33 @@ export default function TipTap({ value }: { value?: string }) {
             DetailsContent,
             TaskList,
             TaskItem.configure({ nested: true }),
+            TableKit.configure({
+                resizable: true,
+            }),
+            Youtube.configure({ inline: false, controls: true, nocookie: false, allowFullscreen: true }),
+            Mathematics.configure({
+                inlineOptions: {
+                    onClick: (node, pos) => {
+                        const latex = prompt("Edit LaTeX:", node.attrs.latex);
+                        if (latex != null) {
+                            editor.chain().setNodeSelection(pos).updateInlineMath({ latex }).focus().run();
+                        }
+                    },
+                },
+                blockOptions: {
+                    onClick: (node, pos) => {
+                        const latex = prompt("Edit LaTeX:", node.attrs.latex);
+                        if (latex != null) {
+                            editor.chain().setNodeSelection(pos).updateBlockMath({ latex }).focus().run();
+                        }
+                    },
+                },
+                katexOptions: {
+                    throwOnError: false,
+                },
+            }),
+            Subscript,
+            Superscript,
         ],
         content: value ?? "",
     });

@@ -283,3 +283,76 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
     text-decoration: line-through;
     color: #888;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.5rem 0;
+    overflow: auto;
+}
+
+table th,
+table td {
+    border: 1px solid #555;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    min-width: 80px;
+    vertical-align: top;
+}
+
+table th {
+    background: #2a2a2a;
+    font-weight: 600;
+}
+
+table td {
+    background: #1e1e1e;
+}
+
+table .selectedCell {
+    background: #333;
+    outline: 1px solid #666;
+}
+
+table .column-resize-handle {
+    background: #888;
+    width: 2px;
+    position: absolute;
+    pointer-events: none;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+
+.tiptap-mathematics-render {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0 0.15rem;
+    transition: background 0.15s;
+}
+
+.tiptap-mathematics-render:hover,
+.tiptap-mathematics-render--editable:hover {
+    background: #333;
+}
+
+.tiptap-mathematics-render--editable {
+    cursor: pointer;
+}
+
+[data-type="block-math"] {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 0;
+    margin: 0.5rem 0;
+    background: #1a1a1a;
+    border-radius: 6px;
+    font-size: 1.4rem;
+}
+
+[data-type="inline-math"] {
+    display: inline;
+    padding: 0 0.15rem;
+}

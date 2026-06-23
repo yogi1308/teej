@@ -2,11 +2,14 @@ import type { Editor } from "@tiptap/core";
 import { useEditor, EditorContent, useEditorState } from "@tiptap/react";
 import type { EditorStateSnapshot } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+
 import UnderlineExtension from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
 import { Details, DetailsSummary, DetailsContent } from "@tiptap/extension-details";
 import { all, createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { TaskList, TaskItem } from "@tiptap/extension-list";
+
 import type { ReactNode } from "react";
 import BoldSVG from "../../assets/svg/BoldSVG";
 import Italic from "../../assets/svg/Italic";
@@ -19,6 +22,7 @@ import BlockQuoteSVG from "../../assets/svg/BlockQuoteSVG";
 import Codeblock from "../../assets/svg/Codeblock";
 import StrikeSVG from "../../assets/svg/StrikeSVG.tsx";
 import HighlightSVG from "../../assets/svg/HighlightSVG.tsx";
+import TasklistSVG from "../../assets/svg/TasklistSVG.tsx";
 
 const lowlight = createLowlight(all);
 
@@ -39,13 +43,12 @@ function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
         canUndo: ctx.editor.can().chain().undo().run() ?? false,
         canRedo: ctx.editor.can().chain().redo().run() ?? false,
         isDetails: ctx.editor.isActive("details") ?? false,
+        isTask: ctx.editor.isActive("taskList") ?? false,
     };
 }
 
-function MenuBar({ editor }: { editor: Editor | null }) {
+function MenuBar({ editor }: { editor: Editor }) {
     const s = useEditorState({ editor, selector: menuBarStateSelector });
-
-    if (!editor) return null;
 
     return (
         <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1">
@@ -103,6 +106,12 @@ function MenuBar({ editor }: { editor: Editor | null }) {
                     active={s.isOrderedList}
                     label={<NumberedBullets />}
                     tooltip="Numbered List"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleTaskList().run()}
+                    active={s.isTask}
+                    label={<TasklistSVG />}
+                    tooltip="Task List"
                 />
             </div>
             <div className="flex items-center">
@@ -167,7 +176,7 @@ function ToolBtn({
 export default function TipTap({ value }: { value?: string }) {
     const editor = useEditor({
         extensions: [
-            StarterKit.configure({ codeBlock: false }),
+            StarterKit.configure({ codeBlock: false, underline: false }),
             UnderlineExtension,
             Highlight.configure({ multicolor: true }),
             CodeBlockLowlight.configure({ lowlight, enableTabIndentation: true, tabSize: 2 }),
@@ -190,6 +199,8 @@ export default function TipTap({ value }: { value?: string }) {
             }),
             DetailsSummary,
             DetailsContent,
+            TaskList,
+            TaskItem.configure({ nested: true }),
         ],
         content: value ?? "",
     });

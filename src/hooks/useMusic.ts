@@ -4,11 +4,11 @@ export function useMusic(albumId?: string) {
     const [music, setMusic] = useState([]);
 
     useEffect(() => {
-        const url = albumId ? `/api/music/albums/${albumId}` : "/api/music/";
-
-        fetch(url)
-            .then((r) => r.json())
-            .then((body) => {
+        (async () => {
+            try {
+                const url = albumId ? `/api/music/albums/${albumId}` : "/api/music/";
+                const res = await fetch(url);
+                const body = await res.json();
                 if (body.data?.tracks) {
                     setMusic(
                         body.data.tracks.map((t) => ({
@@ -20,8 +20,10 @@ export function useMusic(albumId?: string) {
                 } else {
                     setMusic(body.data ?? []);
                 }
-            })
-            .catch(() => setMusic([]));
+            } catch {
+                setMusic([]);
+            }
+        })();
     }, [albumId]);
 
     async function refetch() {

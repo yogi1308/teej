@@ -2,12 +2,8 @@ import { prisma } from "../prisma/prisma";
 
 export async function musicUpload(req, res, next) {
     try {
-        const minutes = String(
-            Math.floor(req.uploads.track.duration / 60),
-        ).padStart(2, "0");
-        const seconds = String(
-            Math.floor(req.uploads.track.duration % 60),
-        ).padStart(2, "0");
+        const minutes = String(Math.floor(req.uploads.track.duration / 60)).padStart(2, "0");
+        const seconds = String(Math.floor(req.uploads.track.duration % 60)).padStart(2, "0");
         await prisma.track.create({
             data: {
                 title: req.body.title,
@@ -68,11 +64,7 @@ export async function getAlbum(albumId: string) {
     }
 }
 
-export async function blogFileUploadQuery(
-    req,
-    thumbnailUploadData,
-    fileUploadData,
-) {
+export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadData) {
     try {
         const upload = await prisma.blog.create({
             data: {
@@ -85,7 +77,16 @@ export async function blogFileUploadQuery(
                 imageAssetId: thumbnailUploadData?.asset_id,
             },
         });
-        return upload
+        return upload;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getBlog() {
+    try {
+        const blogs = await prisma.blog.findMany();
+        return blogs;
     } catch (error) {
         console.error(error);
     }

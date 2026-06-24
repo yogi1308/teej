@@ -3,13 +3,10 @@ import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import { useState } from "react";
 import Add from "./add/Add.tsx";
+import { useBlog } from "../hooks/useBlog.tsx";
 
 export default function Blog() {
-    const blog = Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        title: `Blog ${i}`,
-        meta: "27th May 2026"
-    }));
+    const { blog, refetch } = useBlog();
     const [currItem, setCurrItem] = useState(blog.length > 0 ? blog[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
@@ -19,7 +16,7 @@ export default function Blog() {
             />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
-                    imageSrc={logo}
+                    imageSrc={currItem?.imageUrl}
                     containerHeight="min-content"
                     containerWidth="min-content"
                     imageHeight="clamp(10rem, 60vh, 90vw)"
@@ -31,7 +28,7 @@ export default function Blog() {
                     displayOverlayContent
                 />
             </div>
-            <Add tab={"Blog"}/>
+            <Add tab={"Blog"} refetch={async () => { const d = await refetch(); setCurrItem(d[0]); }}/>
         </div>
     );
 }

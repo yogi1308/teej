@@ -36,7 +36,7 @@ export default function AddImage({
                     onClick={() => inputRef.current?.click()}
                     className="border border-dashed border-white aspect-square w-full outline-none min-w-60"
                 >
-                    <p className="text-8xl text-white/30 cursor-pointer">+</p>
+                    <p className="!text-4xl text-white/30 cursor-pointer">+</p>
                     {defaultText}
                 </button>
             )}

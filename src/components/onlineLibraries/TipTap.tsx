@@ -13,9 +13,11 @@ import { TableKit } from "@tiptap/extension-table";
 import { Mathematics } from "@tiptap/extension-mathematics";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
-import { TextStyle, FontSize } from "@tiptap/extension-text-style";
+import { TextStyle, FontSize, Color } from "@tiptap/extension-text-style";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
 import { Video } from "./video";
 
 import type { ReactNode } from "react";
@@ -73,6 +75,14 @@ function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
         isSubscript: ctx.editor.isActive("subscript") ?? false,
         isSuperscript: ctx.editor.isActive("superscript") ?? false,
         fontSize: ctx.editor.getAttributes("textStyle").fontSize ?? "",
+        color: ctx.editor.getAttributes("textStyle").color ?? "",
+        textAlign: ctx.editor.isActive({ textAlign: "center" })
+            ? "center"
+            : ctx.editor.isActive({ textAlign: "right" })
+                ? "right"
+                : ctx.editor.isActive({ textAlign: "justify" })
+                    ? "justify"
+                    : "left",
         isLink: ctx.editor.isActive("link") ?? false,
     };
 }
@@ -81,251 +91,317 @@ function MenuBar({ editor }: { editor: Editor }) {
     const s = useEditorState({ editor, selector: menuBarStateSelector });
 
     return (
-        <div className="flex flex-col items-center border-b border-white">
-            <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1">
-                <div className="flex items-center gap-1">
-                    <select
-                        value={s.fontSize || ""}
-                        onChange={e => {
-                            const val = e.target.value;
-                            if (val) {
-                                editor.chain().focus().setFontSize(val).run();
-                            } else {
-                                editor.chain().focus().unsetFontSize().run();
-                            }
-                        }}
-                        className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
-                    >
-                        <option value="" className="bg-black">
-                            Font size
-                        </option>
-                        <option value="12px" className="bg-black">
-                            12px
-                        </option>
-                        <option value="14px" className="bg-black">
-                            14px
-                        </option>
-                        <option value="16px" className="bg-black">
-                            16px
-                        </option>
-                        <option value="18px" className="bg-black">
-                            18px
-                        </option>
-                        <option value="20px" className="bg-black">
-                            20px
-                        </option>
-                        <option value="24px" className="bg-black">
-                            24px
-                        </option>
-                        <option value="28px" className="bg-black">
-                            28px
-                        </option>
-                        <option value="32px" className="bg-black">
-                            32px
-                        </option>
-                        <option value="36px" className="bg-black">
-                            36px
-                        </option>
-                        <option value="48px" className="bg-black">
-                            48px
-                        </option>
-                        <option value="72px" className="bg-black">
-                            72px
-                        </option>
-                    </select>
-                    <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={s.isBold} label={<BoldSVG />} tooltip="Bold" />
-                    <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={s.isItalic} label={<Italic />} tooltip="Italic" />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleUnderline().run()}
-                        active={s.isUnderline}
-                        label={<UnderlineSVG />}
-                        tooltip="Underline"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleStrike().run()}
-                        active={s.isStike}
-                        label={<StrikeSVG />}
-                        tooltip="Strikethrough"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleHighlight().run()}
-                        active={s.isHightlight}
-                        label={<HighlightSVG />}
-                        tooltip="Highlight"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleSubscript().run()}
-                        active={s.isSubscript}
-                        label={<SubscriptSVG />}
-                        tooltip="Subscript"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleSuperscript().run()}
-                        active={s.isSuperscript}
-                        label={<SuperscriptSVG />}
-                        tooltip="Superscript"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                        active={s.isHeading1}
-                        label="H1"
-                        tooltip="Heading 1"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                        active={s.isHeading2}
-                        label="H2"
-                        tooltip="Heading 2"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                        active={s.isHeading3}
-                        label="H3"
-                        tooltip="Heading 3"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleBulletList().run()}
-                        active={s.isBulletList}
-                        label={<Bullets />}
-                        tooltip="Bullet List"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                        active={s.isOrderedList}
-                        label={<NumberedBullets />}
-                        tooltip="Numbered List"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleTaskList().run()}
-                        active={s.isTask}
-                        label={<TasklistSVG />}
-                        tooltip="Task List"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                        active={s.isBlockquote}
-                        label={<BlockQuoteSVG />}
-                        tooltip="Blockquote"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                        active={s.isCodeBlock}
-                        label={<Codeblock />}
-                        tooltip="Code block"
-                    />
-                    <ToolBtn
-                        onClick={() => {
-                            if (editor.isActive("details")) {
-                                editor.chain().focus().unsetDetails().run();
-                            } else {
-                                editor.chain().focus().setDetails().run();
-                            }
-                        }}
-                        active={s.isDetails}
-                        label="▶"
-                        tooltip="Details"
-                    />
-                </div>
+        <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1 items-center">
+            <div className="flex items-center gap-1">
+                <select
+                    value={s.fontSize || ""}
+                    onChange={e => {
+                        const val = e.target.value;
+                        if (val) {
+                            editor.chain().focus().setFontSize(val).run();
+                        } else {
+                            editor.chain().focus().unsetFontSize().run();
+                        }
+                    }}
+                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                >
+                    <option value="" className="bg-black">
+                        Font size
+                    </option>
+                    <option value="12px" className="bg-black">
+                        12px
+                    </option>
+                    <option value="14px" className="bg-black">
+                        14px
+                    </option>
+                    <option value="16px" className="bg-black">
+                        16px
+                    </option>
+                    <option value="18px" className="bg-black">
+                        18px
+                    </option>
+                    <option value="20px" className="bg-black">
+                        20px
+                    </option>
+                    <option value="24px" className="bg-black">
+                        24px
+                    </option>
+                    <option value="28px" className="bg-black">
+                        28px
+                    </option>
+                    <option value="32px" className="bg-black">
+                        32px
+                    </option>
+                    <option value="36px" className="bg-black">
+                        36px
+                    </option>
+                    <option value="48px" className="bg-black">
+                        48px
+                    </option>
+                    <option value="72px" className="bg-black">
+                        72px
+                    </option>
+                </select>
+                <select
+                    value={s.color || ""}
+                    onChange={e => {
+                        const val = e.target.value;
+                        if (val === "custom") {
+                            const hex = prompt("Enter hex color (e.g. #ff0000):");
+                            if (hex) editor.chain().focus().setColor(hex).run();
+                        } else if (val) {
+                            editor.chain().focus().setColor(val).run();
+                        } else {
+                            editor.chain().focus().unsetColor().run();
+                        }
+                    }}
+                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                    style={s.color ? { color: s.color } : undefined}
+                >
+                    <option value="" className="bg-black">
+                        Color
+                    </option>
+                    <option value="#ff0000" className="bg-black" style={{ color: "#ff0000" }}>
+                        Red
+                    </option>
+                    <option value="#0000ff" className="bg-black" style={{ color: "#0000ff" }}>
+                        Blue
+                    </option>
+                    <option value="#ffff00" className="bg-black" style={{ color: "#ffff00" }}>
+                        Yellow
+                    </option>
+                    <option value="#00ff00" className="bg-black" style={{ color: "#00ff00" }}>
+                        Green
+                    </option>
+                    <option value="#800080" className="bg-black" style={{ color: "#800080" }}>
+                        Purple
+                    </option>
+                    <option value="#ffa500" className="bg-black" style={{ color: "#ffa500" }}>
+                        Orange
+                    </option>
+                    <option value="#808080" className="bg-black" style={{ color: "#808080" }}>
+                        Gray
+                    </option>
+                    <option value="#ffffff" className="bg-black" style={{ color: "#ffffff" }}>
+                        White
+                    </option>
+                    <option value="custom" className="bg-black">
+                        Custom...
+                    </option>
+                </select>
+                <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={s.isBold} label={<BoldSVG />} tooltip="Bold" />
+                <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={s.isItalic} label={<Italic />} tooltip="Italic" />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    active={s.isUnderline}
+                    label={<UnderlineSVG />}
+                    tooltip="Underline"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                    active={s.isStike}
+                    label={<StrikeSVG />}
+                    tooltip="Strikethrough"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleHighlight().run()}
+                    active={s.isHightlight}
+                    label={<HighlightSVG />}
+                    tooltip="Highlight"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleSubscript().run()}
+                    active={s.isSubscript}
+                    label={<SubscriptSVG />}
+                    tooltip="Subscript"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleSuperscript().run()}
+                    active={s.isSuperscript}
+                    label={<SuperscriptSVG />}
+                    tooltip="Superscript"
+                />
             </div>
-            <div className="flex flex-wrap gap-0.5 divide-x divide-white p-1">
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().insertTable().run()}
-                        active={s.isTable}
-                        label={<TableSVG />}
-                        tooltip="Insert Table"
-                    />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().addColumnAfter().run()}
-                        active={false}
-                        label={<ColumnAddSVG />}
-                        tooltip="Add Column"
-                    />
-                    <ToolBtn onClick={() => editor.chain().focus().addRowAfter().run()} active={false} label={<RowAddSVG />} tooltip="Add Row" />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().deleteColumn().run()}
-                        active={false}
-                        label={<ColumnDeleteSVG />}
-                        tooltip="Delete Column"
-                    />
-                    <ToolBtn onClick={() => editor.chain().focus().deleteRow().run()} active={false} label={<RowDeleteSVG />} tooltip="Delete Row" />
-                    <ToolBtn
-                        onClick={() => editor.chain().focus().mergeOrSplit().run()}
-                        active={false}
-                        label={<TableMergeSVG />}
-                        tooltip="Merge/Split"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => {
-                            const latex = prompt("Enter LaTeX (inline math):", "x^2 + y^2 = z^2");
-                            if (latex != null) {
-                                editor.chain().focus().insertInlineMath({ latex }).run();
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    active={s.isHeading1}
+                    label="H1"
+                    tooltip="Heading 1"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    active={s.isHeading2}
+                    label="H2"
+                    tooltip="Heading 2"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    active={s.isHeading3}
+                    label="H3"
+                    tooltip="Heading 3"
+                />
+                <select
+                    value={s.textAlign}
+                    onChange={e => {
+                        const val = e.target.value;
+                        if (val === "left") {
+                            editor.chain().focus().setTextAlign("left").run();
+                        } else {
+                            editor.chain().focus().setTextAlign(val).run();
+                        }
+                    }}
+                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                >
+                    <option value="left" className="bg-black">
+                        Left
+                    </option>
+                    <option value="center" className="bg-black">
+                        Center
+                    </option>
+                    <option value="right" className="bg-black">
+                        Right
+                    </option>
+                </select>
+            </div>
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    active={s.isBulletList}
+                    label={<Bullets />}
+                    tooltip="Bullet List"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    active={s.isOrderedList}
+                    label={<NumberedBullets />}
+                    tooltip="Numbered List"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleTaskList().run()}
+                    active={s.isTask}
+                    label={<TasklistSVG />}
+                    tooltip="Task List"
+                />
+            </div>
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                    active={s.isBlockquote}
+                    label={<BlockQuoteSVG />}
+                    tooltip="Blockquote"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                    active={s.isCodeBlock}
+                    label={<Codeblock />}
+                    tooltip="Code block"
+                />
+                <ToolBtn
+                    onClick={() => {
+                        if (editor.isActive("details")) {
+                            editor.chain().focus().unsetDetails().run();
+                        } else {
+                            editor.chain().focus().setDetails().run();
+                        }
+                    }}
+                    active={s.isDetails}
+                    label="▶"
+                    tooltip="Details"
+                />
+            </div>
+
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => editor.chain().focus().insertTable().run()}
+                    active={s.isTable}
+                    label={<TableSVG />}
+                    tooltip="Insert Table"
+                />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().addColumnAfter().run()}
+                    active={false}
+                    label={<ColumnAddSVG />}
+                    tooltip="Add Column"
+                />
+                <ToolBtn onClick={() => editor.chain().focus().addRowAfter().run()} active={false} label={<RowAddSVG />} tooltip="Add Row" />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().deleteColumn().run()}
+                    active={false}
+                    label={<ColumnDeleteSVG />}
+                    tooltip="Delete Column"
+                />
+                <ToolBtn onClick={() => editor.chain().focus().deleteRow().run()} active={false} label={<RowDeleteSVG />} tooltip="Delete Row" />
+                <ToolBtn
+                    onClick={() => editor.chain().focus().mergeOrSplit().run()}
+                    active={false}
+                    label={<TableMergeSVG />}
+                    tooltip="Merge/Split"
+                />
+            </div>
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => {
+                        const latex = prompt("Enter LaTeX (inline math):", "x^2 + y^2 = z^2");
+                        if (latex != null) {
+                            editor.chain().focus().insertInlineMath({ latex }).run();
+                        }
+                    }}
+                    active={s.isInlineMath}
+                    label={<MathSVG />}
+                    tooltip="Inline Math"
+                />
+                <ToolBtn
+                    onClick={() => {
+                        const latex = prompt("Enter LaTeX (block math):", "\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}");
+                        if (latex != null) {
+                            editor.chain().focus().insertBlockMath({ latex }).run();
+                        }
+                    }}
+                    active={s.isBlockMath}
+                    label={<BlockMathSVG />}
+                    tooltip="Block Math"
+                />
+            </div>
+            <div className="flex items-center">
+                <ToolBtn
+                    onClick={() => {
+                        const url = prompt("Enter YouTube URL:", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                        if (url) {
+                            editor.chain().focus().setYoutubeVideo({ src: url }).run();
+                        }
+                    }}
+                    active={false}
+                    label={<YoutubeSVG />}
+                    tooltip="Insert YouTube Video"
+                />
+                <ToolBtn
+                    onClick={() => {
+                        editor.chain().focus().toggleLink().run();
+                    }}
+                    active={false}
+                    label={<LinkSVG />}
+                    tooltip="Insert Link"
+                />
+                <ToolBtn
+                    onClick={() => {
+                        const url = prompt("Enter image or video URL:");
+                        if (url) {
+                            if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) {
+                                editor.chain().focus().setVideo(url).run();
+                            } else {
+                                editor.chain().focus().setImage({ src: url }).run();
                             }
-                        }}
-                        active={s.isInlineMath}
-                        label={<MathSVG />}
-                        tooltip="Inline Math"
-                    />
-                    <ToolBtn
-                        onClick={() => {
-                            const latex = prompt("Enter LaTeX (block math):", "\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}");
-                            if (latex != null) {
-                                editor.chain().focus().insertBlockMath({ latex }).run();
-                            }
-                        }}
-                        active={s.isBlockMath}
-                        label={<BlockMathSVG />}
-                        tooltip="Block Math"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn
-                        onClick={() => {
-                            const url = prompt("Enter YouTube URL:", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                            if (url) {
-                                editor.chain().focus().setYoutubeVideo({ src: url }).run();
-                            }
-                        }}
-                        active={false}
-                        label={<YoutubeSVG />}
-                        tooltip="Insert YouTube Video"
-                    />
-                    <ToolBtn
-                        onClick={() => {
-                            editor.chain().focus().toggleLink().run();
-                        }}
-                        active={false}
-                        label={<LinkSVG />}
-                        tooltip="Insert Link"
-                    />
-                    <ToolBtn
-                        onClick={() => {
-                            const url = prompt("Enter image or video URL:");
-                            if (url) {
-                                if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) {
-                                    editor.chain().focus().setVideo(url).run();
-                                } else {
-                                    editor.chain().focus().setImage({ src: url }).run();
-                                }
-                            }
-                        }}
-                        active={false}
-                        label={<UploadSVG />}
-                        tooltip="Insert Image or Video"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
-                    <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
-                </div>
+                        }
+                    }}
+                    active={false}
+                    label={<UploadSVG />}
+                    tooltip="Insert Image or Video"
+                />
+            </div>
+            <div className="flex items-center">
+                <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
+                <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
             </div>
         </div>
     );
@@ -360,6 +436,7 @@ export default function TipTap({ value }: { value?: string }) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ codeBlock: false, underline: false }),
+            Placeholder.configure({ placeholder: "Start writing your blog..." }),
             UnderlineExtension,
             Highlight.configure({ multicolor: true }),
             CodeBlockLowlight.configure({ lowlight, enableTabIndentation: true, tabSize: 2 }),
@@ -414,6 +491,12 @@ export default function TipTap({ value }: { value?: string }) {
             TextStyle,
             FontSize.configure({
                 types: ["textStyle"],
+            }),
+            Color.configure({
+                types: ["textStyle"],
+            }),
+            TextAlign.configure({
+                types: ["heading", "paragraph"],
             }),
             Link.configure({
                 openOnClick: false,

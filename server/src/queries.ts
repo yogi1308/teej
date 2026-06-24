@@ -83,9 +83,20 @@ export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadDa
     }
 }
 
-export async function getBlog() {
+export async function getAllBlog() {
     try {
         const blogs = await prisma.blog.findMany();
+        return blogs;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getBlog(blogId: string) {
+    try {
+        const blogs = await prisma.blog.findUnique({
+            where: {id: blogId}
+        });
         return blogs;
     } catch (error) {
         console.error(error);

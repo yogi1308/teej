@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { upload } from "../multer";
 import { uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary";
-import { blogFileUploadQuery, getBlog } from "../queries";
+import { blogFileUploadQuery, getAllBlog, getBlog } from "../queries";
 
 const blogRouter = Router();
 
@@ -28,10 +28,19 @@ blogRouter.post("/", upload.fields([{ name: "file" }, { name: "cover-art" }]), a
 
 blogRouter.get("/", async (req, res) => {
     try {
-        const blog = await getBlog();
+        const blog = await getAllBlog();
         res.status(200).json({ success: true, data: blog });
     } catch (error) {
         res.status(500).json({ success: false, error: "Failed to fetch blog" });
+    }
+});
+
+blogRouter.get("/:id", async (req, res) => {
+    try {
+        const blog = await getBlog(req.params.id);
+        res.status(200).json({ success: true, data: blog });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to fetch music" });
     }
 });
 

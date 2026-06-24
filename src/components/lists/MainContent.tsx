@@ -88,7 +88,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
         scrollToItem(item);
 
-        if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
+        if (window.location.pathname.includes("blog")) {
+            navigate(`/blog/${item.id}`);
+        } else if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
             navigate(`/music/album/${item.id}`);
         } else if (item.songUrl) {
             setPlaying(item);

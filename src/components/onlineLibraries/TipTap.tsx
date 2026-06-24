@@ -15,6 +15,8 @@ import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { TextStyle, FontSize } from "@tiptap/extension-text-style";
 import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import { Video } from "./video";
 
 import type { ReactNode } from "react";
 import BoldSVG from "../../assets/svg/BoldSVG";
@@ -43,6 +45,7 @@ import YoutubeSVG from "../../assets/svg/YoutubeSVG.tsx";
 import SubscriptSVG from "../../assets/svg/SubscriptSVG.tsx";
 import SuperscriptSVG from "../../assets/svg/SuperscriptSVG.tsx";
 import LinkSVG from "../../assets/svg/LinkSVG.tsx";
+import UploadSVG from "../../assets/svg/UploadSVG.tsx";
 
 const lowlight = createLowlight(all);
 
@@ -303,6 +306,21 @@ function MenuBar({ editor }: { editor: Editor }) {
                         label={<LinkSVG />}
                         tooltip="Insert Link"
                     />
+                    <ToolBtn
+                        onClick={() => {
+                            const url = prompt("Enter image or video URL:");
+                            if (url) {
+                                if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) {
+                                    editor.chain().focus().setVideo(url).run();
+                                } else {
+                                    editor.chain().focus().setImage({ src: url }).run();
+                                }
+                            }
+                        }}
+                        active={false}
+                        label={<UploadSVG />}
+                        tooltip="Insert Image or Video"
+                    />
                 </div>
                 <div className="flex items-center">
                     <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
@@ -404,15 +422,12 @@ export default function TipTap({ value }: { value?: string }) {
                 protocols: ["http", "https"],
                 isAllowedUri: (url, ctx) => {
                     try {
-                        // construct URL
                         const parsedUrl = url.includes(":") ? new URL(url) : new URL(`${ctx.defaultProtocol}://${url}`);
 
-                        // use default validation
                         if (!ctx.defaultValidate(parsedUrl.href)) {
                             return false;
                         }
 
-                        // disallowed protocols
                         const disallowedProtocols = ["ftp", "file", "mailto"];
                         const protocol = parsedUrl.protocol.replace(":", "");
 
@@ -420,14 +435,12 @@ export default function TipTap({ value }: { value?: string }) {
                             return false;
                         }
 
-                        // only allow protocols specified in ctx.protocols
                         const allowedProtocols = ctx.protocols.map(p => (typeof p === "string" ? p : p.scheme));
 
                         if (!allowedProtocols.includes(protocol)) {
                             return false;
                         }
 
-                        // all checks have passed
                         return true;
                     } catch {
                         return false;
@@ -435,10 +448,8 @@ export default function TipTap({ value }: { value?: string }) {
                 },
                 shouldAutoLink: url => {
                     try {
-                        // construct URL
                         const parsedUrl = url.includes(":") ? new URL(url) : new URL(`https://${url}`);
 
-                        // only auto-link if the domain is not in the disallowed list
                         const disallowedDomains = ["example-no-autolink.com", "another-no-autolink.com"];
                         const domain = parsedUrl.hostname;
 
@@ -448,6 +459,8 @@ export default function TipTap({ value }: { value?: string }) {
                     }
                 },
             }),
+            Image,
+            Video,
         ],
         content: value ?? "",
     });

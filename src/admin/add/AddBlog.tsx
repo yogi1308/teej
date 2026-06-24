@@ -57,7 +57,11 @@ export default function AddBlog({ blogFormRef }) {
                     )}
                 </div>
             </div>
-            {blogUploadtype === "type" && <TipTap value={editorContent} onChange={setEditorContent} />}
+            {blogUploadtype === "type" && (
+                <>
+                    <input type="hidden" name="html" value={editorContent} /> <TipTap value={editorContent} onChange={setEditorContent} />
+                </>
+            )}
         </form>
     );
 }

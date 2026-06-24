@@ -356,3 +356,10 @@ table .column-resize-handle {
     display: inline;
     padding: 0 0.15rem;
 }
+
+a {
+    color: #02aef0;
+    text-decoration-color: #02aef0;
+    text-decoration: underline;
+    cursor: pointer;
+}

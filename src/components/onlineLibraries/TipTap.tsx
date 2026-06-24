@@ -11,8 +11,10 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { TaskList, TaskItem } from "@tiptap/extension-list";
 import { TableKit } from "@tiptap/extension-table";
 import { Mathematics } from "@tiptap/extension-mathematics";
-import Subscript from '@tiptap/extension-subscript'
-import Superscript from '@tiptap/extension-superscript'
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import { TextStyle, FontSize } from "@tiptap/extension-text-style";
+import Link from "@tiptap/extension-link";
 
 import type { ReactNode } from "react";
 import BoldSVG from "../../assets/svg/BoldSVG";
@@ -31,7 +33,7 @@ import TableSVG from "../../assets/svg/TableSVG.tsx";
 import ColumnAddSVG from "../../assets/svg/ColumnAddSVG.tsx";
 import RowAddSVG from "../../assets/svg/RowAddSVG.tsx";
 import TableMergeSVG from "../../assets/svg/TableMergeSVG.tsx";
-import Youtube from '@tiptap/extension-youtube'
+import Youtube from "@tiptap/extension-youtube";
 
 import ColumnDeleteSVG from "../../assets/svg/ColumnDeleteSVG.tsx";
 import RowDeleteSVG from "../../assets/svg/RowDeleteSVG.tsx";
@@ -40,6 +42,7 @@ import BlockMathSVG from "../../assets/svg/BlockMathSVG.tsx";
 import YoutubeSVG from "../../assets/svg/YoutubeSVG.tsx";
 import SubscriptSVG from "../../assets/svg/SubscriptSVG.tsx";
 import SuperscriptSVG from "../../assets/svg/SuperscriptSVG.tsx";
+import LinkSVG from "../../assets/svg/LinkSVG.tsx";
 
 const lowlight = createLowlight(all);
 
@@ -66,6 +69,8 @@ function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
         isBlockMath: ctx.editor.isActive("blockMath") ?? false,
         isSubscript: ctx.editor.isActive("subscript") ?? false,
         isSuperscript: ctx.editor.isActive("superscript") ?? false,
+        fontSize: ctx.editor.getAttributes("textStyle").fontSize ?? "",
+        isLink: ctx.editor.isActive("link") ?? false,
     };
 }
 
@@ -75,7 +80,56 @@ function MenuBar({ editor }: { editor: Editor }) {
     return (
         <div className="flex flex-col items-center border-b border-white">
             <div className="flex flex-wrap gap-0.5 divide-x divide-white border-b border-white p-1">
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
+                    <select
+                        value={s.fontSize || ""}
+                        onChange={e => {
+                            const val = e.target.value;
+                            if (val) {
+                                editor.chain().focus().setFontSize(val).run();
+                            } else {
+                                editor.chain().focus().unsetFontSize().run();
+                            }
+                        }}
+                        className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                    >
+                        <option value="" className="bg-black">
+                            Font size
+                        </option>
+                        <option value="12px" className="bg-black">
+                            12px
+                        </option>
+                        <option value="14px" className="bg-black">
+                            14px
+                        </option>
+                        <option value="16px" className="bg-black">
+                            16px
+                        </option>
+                        <option value="18px" className="bg-black">
+                            18px
+                        </option>
+                        <option value="20px" className="bg-black">
+                            20px
+                        </option>
+                        <option value="24px" className="bg-black">
+                            24px
+                        </option>
+                        <option value="28px" className="bg-black">
+                            28px
+                        </option>
+                        <option value="32px" className="bg-black">
+                            32px
+                        </option>
+                        <option value="36px" className="bg-black">
+                            36px
+                        </option>
+                        <option value="48px" className="bg-black">
+                            48px
+                        </option>
+                        <option value="72px" className="bg-black">
+                            72px
+                        </option>
+                    </select>
                     <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={s.isBold} label={<BoldSVG />} tooltip="Bold" />
                     <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={s.isItalic} label={<Italic />} tooltip="Italic" />
                     <ToolBtn
@@ -148,10 +202,6 @@ function MenuBar({ editor }: { editor: Editor }) {
                         label={<TasklistSVG />}
                         tooltip="Task List"
                     />
-                </div>
-                <div className="flex items-center">
-                    <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
-                    <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
                 </div>
                 <div className="flex items-center">
                     <ToolBtn
@@ -243,8 +293,20 @@ function MenuBar({ editor }: { editor: Editor }) {
                         }}
                         active={false}
                         label={<YoutubeSVG />}
-                        tooltip="YouTube"
+                        tooltip="Insert YouTube Video"
                     />
+                    <ToolBtn
+                        onClick={() => {
+                            editor.chain().focus().toggleLink().run();
+                        }}
+                        active={false}
+                        label={<LinkSVG />}
+                        tooltip="Insert Link"
+                    />
+                </div>
+                <div className="flex items-center">
+                    <ToolBtn onClick={() => editor.chain().focus().undo().run()} active={false} label={<Undo />} tooltip="Undo" />
+                    <ToolBtn onClick={() => editor.chain().focus().redo().run()} active={false} label={<Redo />} tooltip="Redo" />
                 </div>
             </div>
         </div>
@@ -331,6 +393,61 @@ export default function TipTap({ value }: { value?: string }) {
             }),
             Subscript,
             Superscript,
+            TextStyle,
+            FontSize.configure({
+                types: ["textStyle"],
+            }),
+            Link.configure({
+                openOnClick: false,
+                autolink: true,
+                defaultProtocol: "https",
+                protocols: ["http", "https"],
+                isAllowedUri: (url, ctx) => {
+                    try {
+                        // construct URL
+                        const parsedUrl = url.includes(":") ? new URL(url) : new URL(`${ctx.defaultProtocol}://${url}`);
+
+                        // use default validation
+                        if (!ctx.defaultValidate(parsedUrl.href)) {
+                            return false;
+                        }
+
+                        // disallowed protocols
+                        const disallowedProtocols = ["ftp", "file", "mailto"];
+                        const protocol = parsedUrl.protocol.replace(":", "");
+
+                        if (disallowedProtocols.includes(protocol)) {
+                            return false;
+                        }
+
+                        // only allow protocols specified in ctx.protocols
+                        const allowedProtocols = ctx.protocols.map(p => (typeof p === "string" ? p : p.scheme));
+
+                        if (!allowedProtocols.includes(protocol)) {
+                            return false;
+                        }
+
+                        // all checks have passed
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                },
+                shouldAutoLink: url => {
+                    try {
+                        // construct URL
+                        const parsedUrl = url.includes(":") ? new URL(url) : new URL(`https://${url}`);
+
+                        // only auto-link if the domain is not in the disallowed list
+                        const disallowedDomains = ["example-no-autolink.com", "another-no-autolink.com"];
+                        const domain = parsedUrl.hostname;
+
+                        return !disallowedDomains.includes(domain);
+                    } catch {
+                        return false;
+                    }
+                },
+            }),
         ],
         content: value ?? "",
     });

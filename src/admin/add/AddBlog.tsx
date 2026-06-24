@@ -5,6 +5,7 @@ import TipTap from "../../components/onlineLibraries/TipTap";
 
 export default function AddBlog({ blogFormRef }) {
     const [blogUploadtype, setBlogUploadType] = useState<"upload" | "type">("upload");
+    const [editorContent, setEditorContent] = useState("");
 
     return (
         <form className="flex flex-col gap-4 p-4 h-full" ref={blogFormRef}>
@@ -56,7 +57,7 @@ export default function AddBlog({ blogFormRef }) {
                     )}
                 </div>
             </div>
-            {blogUploadtype === "type" && <TipTap />}
+            {blogUploadtype === "type" && <TipTap value={editorContent} onChange={setEditorContent} />}
         </form>
     );
 }

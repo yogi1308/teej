@@ -251,7 +251,7 @@ function MenuBar({ editor }: { editor: Editor }) {
                             editor.chain().focus().setTextAlign(val).run();
                         }
                     }}
-                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer mr-1.25"
                 >
                     <option value="left" className="bg-black">
                         Left
@@ -432,7 +432,7 @@ function ToolBtn({
     );
 }
 
-export default function TipTap({ value }: { value?: string }) {
+export default function TipTap({ value, onChange }: { value?: string; onChange?: (html: string) => void }) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ codeBlock: false, underline: false }),
@@ -546,6 +546,7 @@ export default function TipTap({ value }: { value?: string }) {
             Video,
         ],
         content: value ?? "",
+        onUpdate: ({ editor }) => onChange?.(editor.getHTML()),
     });
 
     if (!editor) return null;

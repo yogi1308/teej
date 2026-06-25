@@ -64,7 +64,7 @@ export async function getAlbum(albumId: string) {
     }
 }
 
-export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadData) {
+export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadData, contentType?: string) {
     try {
         const upload = await prisma.blog.create({
             data: {
@@ -73,6 +73,7 @@ export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadDa
                 description: req.body.description,
                 contentUrl: fileUploadData?.secure_url,
                 contentAssetId: fileUploadData?.asset_id,
+                contentType: contentType ?? null,
                 imageUrl: thumbnailUploadData?.secure_url,
                 imageAssetId: thumbnailUploadData?.asset_id,
             },

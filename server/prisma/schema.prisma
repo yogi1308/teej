@@ -59,8 +59,9 @@ model Blog {
     subtitle String
     description String?
     meta      DateTime? @default(now())
-    contentUrl   String // The HTML from TinyMCE
+    contentUrl   String
     contentAssetId String
+    contentType String?
     imageUrl  String?
     imageAssetId String
     createdAt DateTime @default(now())

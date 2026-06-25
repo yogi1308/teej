@@ -1,0 +1,1 @@
+ALTER TABLE "Blog" ADD COLUMN IF NOT EXISTS "contentType" TEXT;

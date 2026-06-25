@@ -88,8 +88,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
         scrollToItem(item);
 
-        if (window.location.pathname.includes("blog")) {navigate(`/blog/${item.id}`)}
-        else if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
+        if (window.location.pathname.includes("blog")) {
+            navigate(`/blog/${item.id}`);
+        } else if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
             navigate(`/music/album/${item.id}`);
         } else if (item.songUrl) {
             setPlaying(item);
@@ -120,15 +121,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     return (
         <div
             ref={containerRef}
-            className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5 snap-y snap-mandatory"
+            className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5 "
         >
             <div
-                className="flex justify-between fixed top-[calc(50vh-1.2rem)] z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]"
+                className={`flex justify-between fixed ${location.pathname.includes("blog") ? "top-[calc(50vh-3rem)]" : "top-[calc(50vh-1.2rem)]"} z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]`}
                 onClick={e => {
                     toTop(e, currItem);
                 }}
             >
-                <p className="text-yellow"> {currItem?.title} </p>
+                <div className="flex flex-col gap-2">
+                    <p className=""> {currItem?.title} </p>
+                    <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
+                </div>
                 <div className="text-red flex gap-2 items-center">
                     {/* <span>{currItem?.meta}</span> */}
                     {location.pathname.includes("blog")
@@ -144,7 +148,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 {content.map(item => (
                     <li
                         key={item.id}
-                        className={`item snap-start flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
+                        className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] hover:relative
               hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-pointer ${item.id === 0 ? "invisible" : ""}
             `}
                         onClick={e => toTop(e, item)}

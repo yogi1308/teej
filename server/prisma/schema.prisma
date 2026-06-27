@@ -13,60 +13,64 @@ datasource db {
 }
 
 model Album {
-    id               String   @id @default(uuid())
-    title            String
-    coverUrl         String?
-    coverAssetId String?
-    description      String?
-    releaseDate      String?
-    displayPosition  Int?      // position on the public display page
-    tracks           Track[]
+    id              String  @id @default(uuid())
+    title           String
+    coverUrl        String?
+    coverAssetId    String?
+    description     String?
+    releaseDate     String?
+    displayPosition Int? // position on the public display page
+    tracks          Track[]
+    env             String
 }
 
 model Track {
-    id             String   @id @default(uuid())
-    title          String
-    meta           String   // duration (MM:SS)
-    songUrl        String?
-    songAssetId String
-    link           String
-    imageUrl       String?  // cover art (singles). Album tracks fall back to album.coverUrl
-    imageAssetId String?
-    description    String?
-    releaseDate    String?
-    trackPosition  Int?     // order within album (null for singles)
-    plays          Int      @default(0)
-    createdAt      DateTime @default(now())
-    displayPosition Int?    // position on the public display page (singles only)
-    albumId        String?
-    album          Album?   @relation(fields: [albumId], references: [id])
+    id              String   @id @default(uuid())
+    title           String
+    meta            String // duration (MM:SS)
+    songUrl         String?
+    songAssetId     String
+    link            String
+    imageUrl        String? // cover art (singles). Album tracks fall back to album.coverUrl
+    imageAssetId    String?
+    description     String?
+    releaseDate     String?
+    trackPosition   Int? // order within album (null for singles)
+    plays           Int      @default(0)
+    createdAt       DateTime @default(now())
+    displayPosition Int? // position on the public display page (singles only)
+    albumId         String?
+    album           Album?   @relation(fields: [albumId], references: [id])
+    env             String
 }
 
 model Merch {
     id          String   @id @default(uuid())
     title       String
     meta        String // For price (e.g., "$49.99")
-    imageUrl    String?
+    imageUrl    String[]
     description String?
     sizes       String[] // e.g., ["S", "M", "L", "XL"]
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+    env         String
 }
 
 model Blog {
-    id        String   @id @default(uuid())
-    title     String
-    subtitle String
-    description String?
-    meta      DateTime? @default(now())
-    contentUrl   String
-    contentAssetId String
-    contentType String?
-    imageUrl  String?
-    imageAssetId String
-    createdAt DateTime @default(now())
-    updatedAt DateTime? 
+    id              String    @id @default(uuid())
+    title           String
+    subtitle        String
+    description     String?
+    meta            DateTime? @default(now())
+    contentUrl      String
+    contentAssetId  String
+    contentType     String?
+    imageUrl        String?
+    imageAssetId    String
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime?
     displayPosition Int?
+    env             String
 }
 
 model User {
@@ -74,10 +78,12 @@ model User {
     username  String   @unique
     password  String // Hashed
     createdAt DateTime @default(now())
+    env       String
 }
 
 model Home {
     id       String  @id @default(uuid())
     heroText String?
     favicon  String?
+    env      String
 }

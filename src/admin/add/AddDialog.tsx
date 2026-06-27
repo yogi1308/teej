@@ -19,27 +19,32 @@ export default function AddDialog({
     refetch?: () => void;
 }) {
     const [currTab, setCurrTab] = useState(tab);
-    const [songIds, setSongIds] = useState([0]);
+    const [singlesSongIds, setSinglesSongIds] = useState([0]);
+    const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0])
     const [failedIds, setFailedIds] = useState(new Set<number>());
     const nextId = useRef(1);
     const albumMetaRef = useRef<HTMLFormElement>(null);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
     const blogFormRef = useRef<HTMLFormElement>(null);
     useEffect(() => {
-        if (songIds.length === 0) {
-            setSongIds([nextId.current++]);
+        if (albumTracksSongsIds.length === 0) {
+            setAlbumTracksSongsIds([nextId.current++]);
         }
-    }, [songIds]);
+        if (singlesSongIds.length === 0) {
+            setSinglesSongIds([nextId.current++]);
+        }
+    }, [singlesSongIds, albumTracksSongsIds]);
 
     function updateResults(succeeded: number[], failed: number[]) {
-        setSongIds((prev) => prev.filter((id) => !succeeded.includes(id)));
+        setSinglesSongIds(prev => prev.filter(id => !succeeded.includes(id)));
         setFailedIds(new Set(failed));
         refetch();
     }
 
     async function uploadSongs(url: string) {
+        const songIds = currTab === "Singles" || currTab === "Music" ? singlesSongIds : currTab === "Album" && albumTracksSongsIds
         const results = await Promise.all(
-            songIds.map(async (id) => {
+            songIds.map(async id => {
                 const form = formRefs.current.get(id);
                 if (!form) return { id, ok: false };
                 try {
@@ -54,8 +59,8 @@ export default function AddDialog({
             }),
         );
         return {
-            succeeded: results.filter((r) => r.ok).map((r) => r.id),
-            failed: results.filter((r) => !r.ok).map((r) => r.id),
+            succeeded: results.filter(r => r.ok).map(r => r.id),
+            failed: results.filter(r => !r.ok).map(r => r.id),
         };
     }
 
@@ -73,9 +78,7 @@ export default function AddDialog({
         if (!albumRes.ok) return;
         const { albumId } = await albumRes.json();
 
-        const { succeeded, failed } = await uploadSongs(
-            `/api/music/albums/${albumId}/tracks`,
-        );
+        const { succeeded, failed } = await uploadSongs(`/api/music/albums/${albumId}/tracks`);
         updateResults(succeeded, failed);
     }
 
@@ -103,7 +106,7 @@ export default function AddDialog({
     }
 
     function handleDelete(id: number) {
-        setSongIds((prev) => prev.filter((sid) => sid !== id));
+        setSinglesSongIds(prev => prev.filter(sid => sid !== id));
     }
 
     return (
@@ -148,12 +151,12 @@ export default function AddDialog({
 
                 <div className="flex-1 overflow-y-auto">
                     {(currTab === "Singles" || currTab === "Music") &&
-                        songIds.map((id) => (
+                        singlesSongIds.map(id => (
                             <AddSingles
                                 key={id}
                                 songId={id}
                                 failed={failedIds.has(id)}
-                                ref={(el) => {
+                                ref={el => {
                                     if (el) formRefs.current.set(id, el);
                                     else formRefs.current.delete(id);
                                 }}
@@ -165,18 +168,8 @@ export default function AddDialog({
                             <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
                                 <AddImage defaultText={"Upload Cover Art"} />
                                 <div className="flex-1 flex flex-col gap-4">
-                                    <AddInput
-                                        label={"Album"}
-                                        placeholder={"Enter Your Album Name"}
-                                        type={"text"}
-                                        name={"album"}
-                                    />
-                                    <AddInput
-                                        label={"Release Date"}
-                                        placeholder="Release Date"
-                                        type="date"
-                                        name="release"
-                                    />
+                                    <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />
+                                    <AddInput label={"Release Date"} placeholder="Release Date" type="date" name="release" />
                                     <div className="flex flex-col gap-2 flex-1">
                                         <label>Description</label>
                                         <textarea
@@ -187,12 +180,12 @@ export default function AddDialog({
                                     </div>
                                 </div>
                             </form>
-                            {songIds.map((id) => (
+                            {albumTracksSongsIds.map(id => (
                                 <AddAlbums
                                     key={id}
                                     songId={id}
                                     failed={failedIds.has(id)}
-                                    ref={(el) => {
+                                    ref={el => {
                                         if (el) formRefs.current.set(id, el);
                                         else formRefs.current.delete(id);
                                     }}
@@ -208,32 +201,23 @@ export default function AddDialog({
 
                 <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
                     <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
-                        <button
-                            className="cursor-pointer px-20 py-1 mb-1"
-                            onClick={() => handleUpload()}
-                        >
+                        <button className="cursor-pointer px-20 py-1 mb-1" onClick={() => handleUpload()}>
                             Upload
                         </button>
-                        {currTab === "Album" ||
-                            (currTab === "Singles" && (
-                                <button
-                                    className="cursor-pointer px-20 py-1 mb-1"
-                                    onClick={() =>
-                                        setSongIds((prev) => [...prev, nextId.current++])
-                                    }
-                                >
-                                    {currTab === "Album" ? "Add more tracks" : "Add More"}
-                                </button>
-                            ))}
-                        <button
-                            className="cursor-pointer px-20 py-1 mb-1"
-                            onClick={onClose}
-                        >
-                            Close
-                        </button>
-                    </div>
+                        {(currTab === "Album" || currTab === "Singles" || currTab === "Music") && (
+                            <button className="cursor-pointer px-20 py-1 mb-1" onClick={() => {
+                                if (currTab === "Singles" || currTab === "Music") setSinglesSongIds(prev => [...prev, nextId.current++]);
+                                else setAlbumTracksSongsIds(prev => [...prev, nextId.current++]);
+                            }}>
+                                {currTab === "Album" ? "Add more tracks" : "Add More"}
+                            </button>
+                        )}
+                    <button className="cursor-pointer px-20 py-1 mb-1" onClick={onClose}>
+                        Close
+                    </button>
                 </div>
-            </dialog>
+            </div>
+        </dialog >
         </>
     );
 }

@@ -1,4 +1,7 @@
 import { prisma } from "../prisma/prisma";
+import "dotenv/config";
+
+const env = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
 export async function musicUpload(req, res, next) {
     try {
@@ -16,6 +19,7 @@ export async function musicUpload(req, res, next) {
                 description: req.body.description ?? null,
                 releaseDate: req.body.release ?? null,
                 albumId: req.params.id ?? null,
+                env: env,
             },
         });
         next();
@@ -27,8 +31,8 @@ export async function musicUpload(req, res, next) {
 export async function getMusic() {
     try {
         const [albums, singles] = await Promise.all([
-            prisma.album.findMany({ include: { tracks: true } }),
-            prisma.track.findMany({ where: { albumId: null } }),
+            prisma.album.findMany({ where: { env: env }, include: { tracks: true } }),
+            prisma.track.findMany({ where: { albumId: null, env: env } }),
         ]);
         return [...albums, ...singles];
     } catch (error) {
@@ -45,6 +49,7 @@ export async function albumArtUploadQuery(req, cloudinaryData) {
                 coverAssetId: cloudinaryData.asset_id,
                 description: req.body.description,
                 releaseDate: req.body.releaseDate,
+                env: env,
             },
         });
         return album.id;
@@ -76,6 +81,7 @@ export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadDa
                 contentType: contentType ?? null,
                 imageUrl: thumbnailUploadData?.secure_url,
                 imageAssetId: thumbnailUploadData?.asset_id,
+                env: env,
             },
         });
         return upload;
@@ -86,7 +92,7 @@ export async function blogFileUploadQuery(req, thumbnailUploadData, fileUploadDa
 
 export async function getAllBlog() {
     try {
-        const blogs = await prisma.blog.findMany();
+        const blogs = await prisma.blog.findMany({ where: { env: env } });
         return blogs;
     } catch (error) {
         console.error(error);
@@ -96,7 +102,7 @@ export async function getAllBlog() {
 export async function getBlog(blogId: string) {
     try {
         const blogs = await prisma.blog.findUnique({
-            where: {id: blogId}
+            where: { id: blogId },
         });
         return blogs;
     } catch (error) {

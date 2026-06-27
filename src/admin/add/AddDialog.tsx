@@ -20,7 +20,7 @@ export default function AddDialog({
 }) {
     const [currTab, setCurrTab] = useState(tab);
     const [singlesSongIds, setSinglesSongIds] = useState([0]);
-    const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0])
+    const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0]);
     const [failedIds, setFailedIds] = useState(new Set<number>());
     const nextId = useRef(1);
     const albumMetaRef = useRef<HTMLFormElement>(null);
@@ -42,7 +42,7 @@ export default function AddDialog({
     }
 
     async function uploadSongs(url: string) {
-        const songIds = currTab === "Singles" || currTab === "Music" ? singlesSongIds : currTab === "Album" && albumTracksSongsIds
+        const songIds = currTab === "Singles" || currTab === "Music" ? singlesSongIds : currTab === "Album" && albumTracksSongsIds;
         const results = await Promise.all(
             songIds.map(async id => {
                 const form = formRefs.current.get(id);
@@ -107,6 +107,10 @@ export default function AddDialog({
 
     function handleDelete(id: number) {
         setSinglesSongIds(prev => prev.filter(sid => sid !== id));
+    }
+
+    function handleAlbumTracksDelete(id: number) {
+        setAlbumTracksSongsIds(prev => prev.filter(sid => sid !== id));
     }
 
     return (
@@ -189,7 +193,7 @@ export default function AddDialog({
                                         if (el) formRefs.current.set(id, el);
                                         else formRefs.current.delete(id);
                                     }}
-                                    onDelete={handleDelete}
+                                    onDelete={handleAlbumTracksDelete}
                                 />
                             ))}
                         </>
@@ -205,19 +209,22 @@ export default function AddDialog({
                             Upload
                         </button>
                         {(currTab === "Album" || currTab === "Singles" || currTab === "Music") && (
-                            <button className="cursor-pointer px-20 py-1 mb-1" onClick={() => {
-                                if (currTab === "Singles" || currTab === "Music") setSinglesSongIds(prev => [...prev, nextId.current++]);
-                                else setAlbumTracksSongsIds(prev => [...prev, nextId.current++]);
-                            }}>
+                            <button
+                                className="cursor-pointer px-20 py-1 mb-1"
+                                onClick={() => {
+                                    if (currTab === "Singles" || currTab === "Music") setSinglesSongIds(prev => [...prev, nextId.current++]);
+                                    else setAlbumTracksSongsIds(prev => [...prev, nextId.current++]);
+                                }}
+                            >
                                 {currTab === "Album" ? "Add more tracks" : "Add More"}
                             </button>
                         )}
-                    <button className="cursor-pointer px-20 py-1 mb-1" onClick={onClose}>
-                        Close
-                    </button>
+                        <button className="cursor-pointer px-20 py-1 mb-1" onClick={onClose}>
+                            Close
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </dialog >
+            </dialog>
         </>
     );
 }

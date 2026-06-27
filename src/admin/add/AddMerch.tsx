@@ -66,7 +66,7 @@ export default function AddMerch() {
                 <div className="flex gap-2">
                     <button
                         type="button"
-                        className="border border-dashed border-black py-2 bg-white text-black flex-1"
+                        className="border border-dashed border-black py-2 bg-white text-black flex-1 px-16"
                         onClick={() => inputRef.current?.click()}
                     >
                         Upload Image
@@ -87,7 +87,14 @@ export default function AddMerch() {
                         className="border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 h-full"
                     />
                 </div>
-                <AddInput label={"Price"} placeholder={"Enter the price"} type={"number"} name={"price"} />
+                <div className="flex gap-4">
+                    <div className="w-full">
+                        <AddInput label={"Price"} placeholder={"Enter the price"} type={"number"} name={"price"} />
+                    </div>
+                    <div className="w-full">
+                        <AddInput label={"Available Sizes"} placeholder={"Sizes"} type={"text"} name={"sizes"} />
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -4,13 +4,12 @@ import Delete from "../../assets/svg/Delete";
 import SleekLeftArrow from "../../assets/svg/SleekLeftArrow";
 import SleekRightArrow from "../../assets/svg/SleekRightArrow";
 
-export default function AddMerch() {
-    const [numImages, setNumImages] = useState(1);
+export default function AddMerch({merchFormRef}) {
     const [imgs, setImgs] = useState([]);
     const [currImgPos, setCurrImgPos] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
     return (
-        <div className="flex p-4 gap-4">
+        <form className="flex p-4 gap-4" ref={merchFormRef}>
             <div className="flex flex-col gap-4">
                 {imgs.length > 0 ? (
                     <div className="relative">
@@ -57,7 +56,7 @@ export default function AddMerch() {
                     ref={inputRef}
                     accept="image/*"
                     className="hidden"
-                    name="cover-art"
+                    name="images"
                     required
                     multiple
                     onChange={e => {
@@ -72,11 +71,11 @@ export default function AddMerch() {
                     className="border border-dashed border-black py-2 bg-white text-black px-16"
                     onClick={() => inputRef.current?.click()}
                 >
-                    Upload Images
+                    {imgs.length === 0 ? "Upload Images" : "Add More Images"}
                 </button>
             </div>
             <div className="flex flex-col flex-1 gap-4 min-w-[50%] ">
-                <AddInput label={"Track Name"} placeholder={"Enter Your Track Name"} type={"text"} name={"title"} />
+                <AddInput label={"Title"} placeholder={"Enter Title"} type={"text"} name={"title"} />
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="text-white/50 text-sm uppercase tracking-widest">Description</label>
                     <textarea
@@ -93,8 +92,11 @@ export default function AddMerch() {
                     <div className="w-full">
                         <AddInput label={"Available Sizes"} placeholder={"Sizes"} type={"text"} name={"sizes"} />
                     </div>
+                    <div className="w-full">
+                        <AddInput label={"Stock"} placeholder={"Available in Stock"} type={"number"} name={"stock"} />
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     );
 }

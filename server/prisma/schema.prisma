@@ -45,15 +45,17 @@ model Track {
 }
 
 model Merch {
-    id          String   @id @default(uuid())
-    title       String
-    meta        String // For price (e.g., "$49.99")
-    imageUrl    String[]
-    description String?
-    sizes       String[] // e.g., ["S", "M", "L", "XL"]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    env         String
+    id           String   @id @default(uuid())
+    title        String
+    meta         String // For price (e.g., "$49.99")
+    imageUrl     String[]
+    imageAssetId String[]
+    description  String?
+    sizes        String // e.g., ["S", "M", "L", "XL"]
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    inStock      Int
+    env          String
 }
 
 model Blog {

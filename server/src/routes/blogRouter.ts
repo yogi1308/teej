@@ -8,7 +8,7 @@ const blogRouter = Router();
 blogRouter.post("/", upload.fields([{ name: "file" }, { name: "cover-art" }]), async (req, res, next) => {
     try {
         const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
-        if (!req.files?.["cover-art"] && !req.files?.["file"]) return res.status(400).json({ success: false, error: "Cover or file required" });
+        if (!req.files?.["cover-art"] && !req.files?.["file"]) return res.status(400).json({ success: false, error: "Blog Thumbnail Required" });
         const isPdf = !!req.files?.["file"]?.[0];
         const [thumbnailUpload, blogUpload] = await Promise.all([
             req.files?.["cover-art"]?.[0]

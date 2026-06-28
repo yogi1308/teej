@@ -35,6 +35,7 @@ const routes = [
             { path: "blog", element: <AdminBlog /> },
             { path: "blog/:blogId", element: <BlogPost /> },
             { path: "merch", element: <AdminMerch /> },
+            // { path: "merch/:merchId", element: <BlogPost /> },
         ],
     },
 ];

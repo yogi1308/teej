@@ -1,19 +1,20 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
+import { useParams } from "react-router-dom";
+import { useMerch } from "../hooks/useMerch.tsx";
+import { useState } from "react";
 
 export default function Merch() {
-    const merch = Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        title: `Hoodie ${i}`,
-        meta: "$10.00",
-    }));
+    const { merchId } = useParams();
+    const { merch } = useMerch(merchId);
+    const [currItem, setCurrItem] = useState(merch.length > 0 ? merch[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
-            <MainContent content={merch} />
+            <MainContent content={merch} currItem={currItem} setCurrItem={setCurrItem} />
             <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
                 <TiltedCard
-                    imageSrc={logo}
+                    imageSrc={currItem?.imageUrl[0] || logo}
                     containerHeight="min-content"
                     containerWidth="min-content"
                     imageHeight="clamp(10rem, 60vh, 90vw)"
@@ -28,4 +29,3 @@ export default function Merch() {
         </div>
     );
 }
-

@@ -73,22 +73,30 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     });
 
     function scrollToItem(item) {
-        const container = containerRef.current;
-        if (!container) return;
-        const items = container.querySelectorAll(".item");
-        const idx = content.indexOf(item);
-        const el = items[idx] as HTMLElement;
-        if (el) {
+        return new Promise<void>(resolve => {
+            const container = containerRef.current;
+            if (!container) { resolve(); return; }
+            const items = container.querySelectorAll(".item");
+            const idx = content.indexOf(item);
+            const el = items[idx] as HTMLElement;
+            if (!el) { setCurrItem(item); resolve(); return; }
             isProgrammaticScroll.current = true;
             container.scrollTo({ top: el.offsetTop + 8, behavior: "smooth" });
-        }
-        setCurrItem(item);
+            const onScrollEnd = () => {
+                container.removeEventListener("scrollend", onScrollEnd);
+                setCurrItem(item);
+                resolve();
+            };
+            container.addEventListener("scrollend", onScrollEnd, { once: true });
+        });
     }
 
-    function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
-        scrollToItem(item);
+    async function toTop(e: React.MouseEvent<HTMLLIElement>, item) {
+        await scrollToItem(item);
 
-        if (window.location.pathname.includes("blog")) {
+        if (window.location.pathname.includes("merch")) {
+            navigate(`/merch/${item.id}`);
+        } else if (window.location.pathname.includes("blog")) {
             navigate(`/blog/${item.id}`);
         } else if (item.albumId === undefined && window.location.pathname !== `/music/album/${item.albumId}`) {
             navigate(`/music/album/${item.id}`);
@@ -134,12 +142,13 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
                 </div>
                 <div className="text-red flex gap-2 items-center">
-                    {/* <span>{currItem?.meta}</span> */}
-                    {location.pathname.includes("blog")
-                        ? new Date(currItem?.meta).toLocaleDateString()
-                        : currItem?.songUrl === undefined
-                            ? "Album"
-                            : currItem?.meta}
+                    {location.pathname.includes("merch")
+                        ? currItem?.meta
+                        : location.pathname.includes("blog")
+                            ? new Date(currItem?.meta).toLocaleDateString()
+                            : currItem?.songUrl === undefined
+                                ? "Album"
+                                : currItem?.meta}
                     {currItem?.songUrl === undefined ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                 </div>
             </div>
@@ -159,11 +168,13 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                             {item.title}
                         </p>
                         <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
-                            {location.pathname.includes("blog")
-                                ? new Date(item?.meta).toLocaleDateString()
-                                : item?.songUrl === undefined
-                                    ? "Album"
-                                    : item?.meta}
+                            {location.pathname.includes("merch")
+                                ? currItem?.meta
+                                : location.pathname.includes("blog")
+                                    ? new Date(currItem?.meta).toLocaleDateString()
+                                    : currItem?.songUrl === undefined
+                                        ? "Album"
+                                        : currItem?.meta}
                         </p>
                     </li>
                 ))}

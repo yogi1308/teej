@@ -26,6 +26,7 @@ export default function AddDialog({
     const albumMetaRef = useRef<HTMLFormElement>(null);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
     const blogFormRef = useRef<HTMLFormElement>(null);
+    const merchFormRef = useRef<HTMLFormElement>(null);
     useEffect(() => {
         if (albumTracksSongsIds.length === 0) {
             setAlbumTracksSongsIds([nextId.current++]);
@@ -95,6 +96,19 @@ export default function AddDialog({
         }
     }
 
+    async function handleMerchUpload() {
+        try {
+            const form = merchFormRef.current;
+            if (!form) return;
+            await fetch("/api/merch", {
+                method: "POST",
+                body: new FormData(form),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleUpload() {
         if (currTab === "Album") {
             await handleAlbumsUpload();
@@ -102,6 +116,8 @@ export default function AddDialog({
             await handleSinglesUpload();
         } else if (currTab === "Blog") {
             await handleBlogUpload();
+        } else if (currTab === "Merch") {
+            await handleMerchUpload()
         }
     }
 
@@ -193,12 +209,11 @@ export default function AddDialog({
                                         if (el) formRefs.current.set(id, el);
                                         else formRefs.current.delete(id);
                                     }}
-                                    onDelete={handleAlbumTracksDelete}
-                                />
+                                    onDelete={handleAlbumTracksDelete} />
                             ))}
                         </>
                     )}
-                    {currTab == "Merch" && <AddMerch />}
+                    {currTab == "Merch" && <AddMerch merchFormRef={merchFormRef} />}
                     {currTab == "Blog" && <AddBlog blogFormRef={blogFormRef} />}
                     {currTab == "Home" && <AddHome />}
                 </div>

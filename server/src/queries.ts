@@ -109,3 +109,45 @@ export async function getBlog(blogId: string) {
         console.error(error);
     }
 }
+
+export async function merchUploadQuery(req, merchImages) {
+    const merchImagesUrls = merchImages.map(img => img.secure_url)
+    const merchImagesAssetIds = merchImages.map(img => img.asset_id)
+    try {
+        const upload = await prisma.merch.create({
+            data: {
+                title: req.body.title,
+                meta: req.body.price,
+                imageUrl: merchImagesUrls,
+                imageAssetId: merchImagesAssetIds,
+                description: req.body.description,
+                sizes: req.body.sizes,
+                inStock: parseInt( req.body.inStock, 10),
+                env: env,
+            },
+        });
+        return upload;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getAllMerch() {
+    try {
+        const merch = await prisma.merch.findMany({ where: { env: env } });
+        return merch;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getMerch(merchId: string) {
+    try {
+        const blogs = await prisma.merch.findUnique({
+            where: { id: merchId },
+        });
+        return blogs;
+    } catch (error) {
+        console.error(error);
+    }
+}

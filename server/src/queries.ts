@@ -122,7 +122,7 @@ export async function merchUploadQuery(req, merchImages) {
                 imageAssetId: merchImagesAssetIds,
                 description: req.body.description,
                 sizes: req.body.sizes,
-                inStock: parseInt( req.body.inStock, 10),
+                inStock: parseInt( req.body.stock, 10),
                 env: env,
             },
         });

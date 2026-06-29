@@ -141,9 +141,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     <p className=""> {currItem?.title} </p>
                     <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
                 </div>
-                <div className="text-red flex gap-2 items-center">
+                <div className="text-red flex gap-2 items-center text-[1.2rem]">
                     {location.pathname.includes("merch")
-                        ? currItem?.meta
+                        ? `$ ${ currItem?.meta }`
                         : location.pathname.includes("blog")
                             ? new Date(currItem?.meta).toLocaleDateString()
                             : currItem?.songUrl === undefined
@@ -169,12 +169,12 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         </p>
                         <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
                             {location.pathname.includes("merch")
-                                ? currItem?.meta
+                                ? `$ ${ item?.meta }`
                                 : location.pathname.includes("blog")
-                                    ? new Date(currItem?.meta).toLocaleDateString()
-                                    : currItem?.songUrl === undefined
+                                    ? new Date(item?.meta).toLocaleDateString()
+                                    : item?.songUrl === undefined
                                         ? "Album"
-                                        : currItem?.meta}
+                                        : item?.meta}
                         </p>
                     </li>
                 ))}

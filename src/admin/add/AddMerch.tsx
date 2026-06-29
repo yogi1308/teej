@@ -63,7 +63,6 @@ export default function AddMerch({merchFormRef}) {
                         const files = Array.from(e.target.files || []);
                         const urls = files.map(f => URL.createObjectURL(f));
                         setImgs(prev => [...prev, ...urls]);
-                        e.target.value = "";
                     }}
                 />
                 <button

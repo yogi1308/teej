@@ -1,82 +1,95 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { useMerch } from "../hooks/useMerch";
+import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import SleekLeftArrow from "../assets/svg/SleekLeftArrow";
+import TiltedCard from "../components/onlineLibraries/TiltedCard";
 import SleekRightArrow from "../assets/svg/SleekRightArrow";
+import { useMerch } from "../hooks/useMerch";
 
 export default function MerchPost() {
     const { merchId } = useParams();
     const { merch } = useMerch(merchId);
-    const item = Array.isArray(merch) ? merch[0] : merch;
-    const [currImg, setCurrImg] = useState(0);
-
-    if (!item) return null;
-
-    const imgs = item.imageUrl || [];
-
+    const [currImgPos, setCurrImgPos] = useState(0);
     return (
-        <div className="bg-black min-h-screen text-white p-8 pt-20 font-dots">
-            <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8">
-                <div className="relative flex-1">
-                    {imgs.length > 0 ? (
-                        <>
-                            {imgs.length > 1 && (
-                                <>
-                                    <button
-                                        className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full z-10"
-                                        onClick={() => setCurrImg(prev => (prev === 0 ? imgs.length - 1 : prev - 1))}
-                                    >
-                                        <SleekLeftArrow />
-                                    </button>
-                                    <button
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full z-10"
-                                        onClick={() => setCurrImg(prev => (prev === imgs.length - 1 ? 0 : prev + 1))}
-                                    >
-                                        <SleekRightArrow />
-                                    </button>
-                                </>
-                            )}
-                            <img src={imgs[currImg]} className="w-full h-auto object-cover rounded" />
-                            {imgs.length > 1 && (
-                                <div className="flex justify-center gap-2 mt-2">
-                                    {imgs.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            className={`w-2 h-2 rounded-full ${i === currImg ? "bg-white" : "bg-white/30"}`}
-                                            onClick={() => setCurrImg(i)}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <div className="w-full h-64 bg-white/10 rounded flex items-center justify-center text-white/30">
-                            No Image
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex-1 flex flex-col gap-4">
-                    <h1 className="text-2xl">{item.title}</h1>
-                    <p className="text-xl text-red">{item.meta}</p>
-                    {item.description && <p className="text-white/60">{item.description}</p>}
-                    {item.sizes && (
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white/50 text-sm uppercase tracking-widest">Sizes</p>
-                            <div className="flex gap-2 flex-wrap">
-                                {item.sizes.split(",").map(s => (
-                                    <span key={s} className="border border-white/30 px-3 py-1 text-sm">
-                                        {s.trim()}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                    <p className={`text-sm ${item.inStock > 0 ? "text-green-400" : "text-red-400"}`}>
-                        {item.inStock > 0 ? `In Stock (${item.inStock})` : "Out of Stock"}
-                    </p>
+        <div className="bg-black min-h-screen text-white p-8 pt-20 font-dots flex flex-col gap-1 pl-0">
+            <div className="absolute! top-12 left-1/2 -translate-x-1/2">
+                {merch?.imageUrl?.length > 1 && (
+                    <div
+                        className="absolute z-100000000 left-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full"
+                        onClick={() => {
+                            if (currImgPos !== 0) {
+                                setCurrImgPos(prev => prev - 1);
+                            }
+                        }}
+                    >
+                        <SleekLeftArrow />
+                    </div>
+                )}
+                <TiltedCard
+                    imageSrc={merch?.imageUrl?.[currImgPos] || logo}
+                    containerHeight="min-content"
+                    containerWidth="min-content"
+                    imageHeight="clamp(10rem, 60vh, 90vw)"
+                    imageWidth="clamp(10rem, 60vh, 90vw)"
+                    rotateAmplitude={12}
+                    scaleOnHover={1}
+                    showMobileWarning={false}
+                    showTooltip={false}
+                    displayOverlayContent
+                />
+                {merch?.imageUrl?.length > 1 && (
+                    <div
+                        className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full"
+                        onClick={() => {
+                            if (currImgPos !== merch?.imageUrl?.length - 1) {
+                                setCurrImgPos(prev => prev + 1);
+                            }
+                        }}
+                    >
+                        <SleekRightArrow />
+                    </div>
+                )}
+                {merch?.imageUrl?.length > 1 && (
+                    <div className="absolute right-0 top-1/2 translate-x-4 -translate-y-1/2 cursor-pointer flex flex-col z-1000000 gap-3">
+                        {merch?.imageUrl?.map((url, idx) => (
+                            <div
+                                key={idx}
+                                onClick={() => setCurrImgPos(idx)}
+                                className={`rounded-full w-2 h-2 ${idx === currImgPos ? "bg-white/90" : "bg-white/30"} hover:bg-white`}
+                            ></div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            <div className="absolute top-1/2">
+                <h1 className="flex justify-between w-screen p-4 py-2 border-b border-t border-white bg-[rgba(0,0,0,0.4)] items-center">
+                    {merch?.title}
+                    <p>{merch?.meta && `$ ${merch?.meta}`}</p>
+                </h1>
+                <h2 className="p-4 pb-0">Details</h2>
+                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 p-4 pt-0" >
+                    <p className="text-white/50">Description</p>
+                    <p>{merch?.description}</p>
+                    <p className="text-white/50">Sizes</p>
+                    <p>{merch?.sizes}</p>
+                    <p className="text-white/50">Stock</p>
+                    <p className={merch?.inStock > 0 ? "text-green-400" : "text-red-400"}>{merch?.inStock}</p>
                 </div>
             </div>
         </div>
     );
 }
+
+// model Merch {
+//     id           String   @id @default(uuid())
+//     title        String
+//     meta         String // For price (e.g., "$49.99")
+//     imageUrl     String[]
+//     imageAssetId String[]
+//     description  String?
+//     sizes        String // e.g., ["S", "M", "L", "XL"]
+//     createdAt    DateTime @default(now())
+//     updatedAt    DateTime @updatedAt
+//     inStock      Int
+//     env          String
+// }

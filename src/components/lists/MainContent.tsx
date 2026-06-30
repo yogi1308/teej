@@ -75,11 +75,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     function scrollToItem(item) {
         return new Promise<void>(resolve => {
             const container = containerRef.current;
-            if (!container) { resolve(); return; }
+            if (!container) {
+                resolve();
+                return;
+            }
             const items = container.querySelectorAll(".item");
             const idx = content.indexOf(item);
             const el = items[idx] as HTMLElement;
-            if (!el) { setCurrItem(item); resolve(); return; }
+            if (!el) {
+                setCurrItem(item);
+                resolve();
+                return;
+            }
             isProgrammaticScroll.current = true;
             container.scrollTo({ top: el.offsetTop + 8, behavior: "smooth" });
             const onScrollEnd = () => {
@@ -132,18 +139,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             className="music-list text-white w-screen font-dots absolute top-[50vh] h-[50vh] overflow-auto scrollbar-hide px-4 z-5 "
         >
             <div
-                className={`flex justify-between fixed ${location.pathname.includes("blog") ? "top-[calc(50vh-3rem)]" : "top-[calc(50vh-1.2rem)]"} z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)]`}
+                className={`flex justify-between fixed hover:bg-[rgba(255,255,255,0.1)] ${location.pathname.includes("blog") ? "top-[calc(50vh-3rem)]" : "top-[calc(50vh-1.2rem)]"} z-2 w-[calc(100vw-2rem)] mr-8 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)] items-center`}
                 onClick={e => {
                     toTop(e, currItem);
                 }}
             >
                 <div className="flex flex-col gap-2">
                     <p className=""> {currItem?.title} </p>
-                    <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
+                    {currItem?.subtitle && <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>}
                 </div>
                 <div className="text-red flex gap-2 items-center text-[1.2rem]">
                     {location.pathname.includes("merch")
-                        ? `$ ${ currItem?.meta }`
+                        ? `$ ${currItem?.meta}`
                         : location.pathname.includes("blog")
                             ? new Date(currItem?.meta).toLocaleDateString()
                             : currItem?.songUrl === undefined
@@ -169,7 +176,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         </p>
                         <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
                             {location.pathname.includes("merch")
-                                ? `$ ${ item?.meta }`
+                                ? `$ ${item?.meta}`
                                 : location.pathname.includes("blog")
                                     ? new Date(item?.meta).toLocaleDateString()
                                     : item?.songUrl === undefined

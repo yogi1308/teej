@@ -1,21 +1,36 @@
-Caveat Variable Font
-====================
+Doto Variable Font
+==================
 
-This download contains Caveat as both a variable font and static fonts.
+This download contains Doto as both a variable font and static fonts.
 
-Caveat is a variable font with this axis:
+Doto is a variable font with these axes:
+  ROND
   wght
 
 This means all the styles are contained in a single file:
-  Caveat-VariableFont_wght.ttf
+  Doto-VariableFont_ROND,wght.ttf
 
 If your app fully supports variable fonts, you can now pick intermediate styles
 that aren’t available as static fonts. Not all apps support variable fonts, and
-in those cases you can use the static font files for Caveat:
-  static/Caveat-Regular.ttf
-  static/Caveat-Medium.ttf
-  static/Caveat-SemiBold.ttf
-  static/Caveat-Bold.ttf
+in those cases you can use the static font files for Doto:
+  static/Doto-Thin.ttf
+  static/Doto-ExtraLight.ttf
+  static/Doto-Light.ttf
+  static/Doto-Regular.ttf
+  static/Doto-Medium.ttf
+  static/Doto-SemiBold.ttf
+  static/Doto-Bold.ttf
+  static/Doto-ExtraBold.ttf
+  static/Doto-Black.ttf
+  static/Doto_Rounded-Thin.ttf
+  static/Doto_Rounded-ExtraLight.ttf
+  static/Doto_Rounded-Light.ttf
+  static/Doto_Rounded-Regular.ttf
+  static/Doto_Rounded-Medium.ttf
+  static/Doto_Rounded-SemiBold.ttf
+  static/Doto_Rounded-Bold.ttf
+  static/Doto_Rounded-ExtraBold.ttf
+  static/Doto_Rounded-Black.ttf
 
 Get started
 -----------

@@ -102,7 +102,7 @@ export default function BlogPost() {
                 </div>
             </div>
             {isOpen && (
-                <div className="fixed inset-0 z-10 bg-black/50 backdrop-blur-sm p-4 pt-16 font-king gap-8" onClick={e => { if (e.target === e.currentTarget) setIsOpen(false); }}>
+                <div className="fixed inset-0 z-10 bg-black/50 backdrop-blur-sm p-4 pt-16 font-king gap-8 overflow-y-auto" onClick={e => { if (e.target === e.currentTarget) setIsOpen(false); }}>
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col">
                             <h1 className=""> {blog?.title} </h1>
@@ -114,7 +114,7 @@ export default function BlogPost() {
                         </div>
                     </div>
                     {isPdf ? (
-                        <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-700 rounded mt-4" />
+                        <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-700 rounded mt-4 w-full h-full" />
                     ) : (
                         html && <div className="pt-6 w-fit" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
                     )}

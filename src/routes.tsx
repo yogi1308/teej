@@ -8,7 +8,7 @@ import AdminMerch from "./admin/AdminMerch.tsx";
 import AdminBlog from "./admin/AdminBlog.tsx";
 import AdminMusic from "./admin/AdminMusic.tsx";
 import AdminHome from "./admin/AdminHome.tsx";
-import BlogPost from "./blog/Blogpost.tsx";
+import BlogPost from "./blog/Blogpost1.tsx";
 import MerchPost from "./merch/MerchPost.tsx";
 
 const routes = [

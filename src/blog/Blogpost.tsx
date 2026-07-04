@@ -62,31 +62,36 @@ export default function BlogPost() {
                 </div>
             </div>
             {isOpen && (
-                <div
-                    className="fixed min-h-[calc(100vh - 1rem)] inset-0 z-100000000000 bg-black/50 backdrop-blur-sm p-4 pt-16 font-king gap-8 overflow-y-auto"
-                    onClick={e => {
-                        if (e.target === e.currentTarget) setIsOpen(false);
-                    }}
-                >
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col">
-                            <h1 className=""> {blog?.title} </h1>
-                            <h3 className="text-gray-400"> {blog?.subtitle} </h3>
+                <>
+                    <div
+                        className="fixed min-h-[calc(100vh - 1rem)] inset-0 z-100000000000 bg-black/50 backdrop-blur-sm p-4 pt-16 font-king gap-8 overflow-y-auto"
+                        onClick={e => {
+                            if (e.target === e.currentTarget) setIsOpen(false);
+                        }}
+                    >
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col">
+                                <h1 className=""> {blog?.title} </h1>
+                                <h3 className="text-gray-400"> {blog?.subtitle} </h3>
+                            </div>
+                            <div className="flex flex-col">
+                                <p>Description</p>
+                                <p>{blog?.description}</p>
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <p>Description</p>
-                            <p>{blog?.description}</p>
-                        </div>
+                        {isPdf ? (
+                            <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded my-4 w-full h-full" />
+                        ) : (
+                            html && <div className="pt-6 w-fit" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
+                        )}
                     </div>
-                    {isPdf ? (
-                        <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded my-4 w-full h-full" />
-                    ) : (
-                        html && <div className="pt-6 w-fit" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
-                    )}
-                    <div className="sticky bottom-px left-1/2 -translate-x-1/2 w-min border border-gray-700 p-1 mix-blend-difference">
+                    <div
+                        className="fixed bottom-4 cursor-pointer left-1/2 -translate-x-1/2 w-min border border-gray-700 p-1 mix-blend-difference z-[100000000001]"
+                        onClick={() => setIsOpen(false)}
+                    >
                         <BackArrow />
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

@@ -5,8 +5,10 @@ import { PlayerProvider } from "./hooks/PlayerContext.tsx";
 export default function App() {
     return (
         <PlayerProvider>
-            <Nav />
-            <Outlet />
+            <div className="flex flex-col">
+                <Nav />
+                <Outlet />
+            </div>
         </PlayerProvider>
     );
 }

@@ -20,7 +20,7 @@ export default function AdminMerch() {
             el.querySelectorAll<HTMLDivElement>(".mc").forEach(c => {
                 const r = c.getBoundingClientRect();
                 const t = Math.min(Math.abs(r.top + r.height / 2 - cy) / (vh * 0.6), 1);
-                c.style.transform = `scale(${1.1 - t * 0.4})`;
+                c.style.transform = `scale(${1.1 - t * 0.6})`;
             });
         };
         const onScroll = () => requestAnimationFrame(update);

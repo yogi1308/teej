@@ -32,11 +32,11 @@ export default function MerchPost() {
     }, [merch?.imageUrl]);
 
     return (
-        <div className="bg-black min-h-screen text-white pt-20 font-dots pl-0 overflow-hidden!">
+        <div className={ `overflow-hidden ${isOpen && "overflow-y-scroll"}` }>
             {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
             <div
                 ref={scrollRef}
-                className="absolute! top-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 h-[calc(100vh_-_6rem)] overflow-y-auto no-scrollbar pb-56"
+                className="absolute! top-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar pb-56"
             >
                 {merch?.imageUrl?.map((url, idx) => (
                     <div key={idx} className="mc">
@@ -55,7 +55,7 @@ export default function MerchPost() {
                     </div>
                 ))}
             </div>
-            <div className="fixed top-[calc(50vh-1.2rem)] bottom-0 overflow-hidden w-screen z-100000 flex flex-col overflow-y-auto">
+            <div className="fixed top-[calc(50vh)] w-screen z-100000 flex flex-col h-[50%]">
                 <div
                     className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b border-white py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all cursor-pointer"
                     onClick={() => setIsOpen(prev => !prev)}
@@ -82,7 +82,7 @@ export default function MerchPost() {
                         {state.succeeded ? (
                             <p className="text-green-400">Thanks! We'll get back to you soon.</p>
                         ) : interested ? (
-                            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-1">
                                 <input type="hidden" name="item" value={merch?.title || ""} />
                                 <input type="hidden" name="price" value={merch?.meta || ""} />
                                 <div className="flex flex-col gap-2">
@@ -103,8 +103,7 @@ export default function MerchPost() {
                                     id="message"
                                     name="message"
                                     defaultValue={"I'm interested in this item sizes S, M, and XL sizes"}
-                                    className=" border border-white/30 rounded p-2 text-white/50 focus:text-white focus:border-white outline-none"
-                                    rows={5}
+                                    className="flex-1 border border-white/30 rounded p-2 text-white/50 focus:text-white focus:border-white outline-none"
                                     required
                                 />
                                 <ValidationError prefix="Message" field="message" errors={state.errors} />

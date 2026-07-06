@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useBlog } from "../hooks/useBlog";
 import DOMPurify from "dompurify";
 import TiltedCard from "../components/onlineLibraries/TiltedCard";
-import BackArrow from "../assets/svg/BackArrow";
 
 export default function BlogPost() {
     const { blogId } = useParams();
@@ -33,7 +32,7 @@ export default function BlogPost() {
     if (!blog) return null;
 
     return (
-        <div className={`bg-black min-h-screen text-white font-dots flex items-center justify-center ${isOpen ? "overflow-y-auto" : ""}`}>
+        <div className={`flex items-center justify-center overflow-hidden ${isOpen && "overflow-y-scroll"}`}>
             {isOpen && <div className="fixed inset-0 z-500000000 bg-black/50 backdrop-blur-md" />}
             <div className="fixed top-1/2 left-1/2 -translate-1/2">
                 <TiltedCard
@@ -49,9 +48,9 @@ export default function BlogPost() {
                     displayOverlayContent
                 />
             </div>
-            <div className={`absolute top-[calc(50vh-1.2rem)] bottom-0 w-[calc(100vw-2rem)] z-100000000000 flex flex-col `}>
+            <div className={`relative top-[calc(50vh)] bottom-0 pt-4 z-100000000000 flex flex-col h-screen`}>
                 <div
-                    className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen"
+                    className="bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen"
                     onClick={() => {
                         setIsOpen(prev => !prev);
                     }}
@@ -60,7 +59,7 @@ export default function BlogPost() {
                         <p className=""> {blog?.title} </p>
                         <p className="text-[1.0rem]! text-gray-400"> {blog?.subtitle} </p>
                     </div>
-                    <div className="flex gap-56">
+                    <div className="flex gap-52">
                         <div className="flex gap-4 justify-between">
                             <p>Read</p>
                             {isOpen ? <p>-</p> : <p>+</p>}
@@ -71,7 +70,7 @@ export default function BlogPost() {
                 {isOpen && (
                     <div className="flex-1 px-4 py-4 font-king">
                         {isPdf ? (
-                            <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded w-full min-h-[calc(100vh-8rem)]" />
+                            <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded w-full min-h-[calc(100vh-7rem)]" />
                         ) : (
                             html && <div className="w-fit" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
                         )}

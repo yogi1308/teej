@@ -47,7 +47,7 @@ export default function BlogPost() {
                 displayOverlayContent
             />
             <div
-                className={`flex justify-between fixed hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all top-[calc(50vh-1.2rem)] z-1 w-[calc(100vw-2rem)] border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)] items-center`}
+                className={`w-screen flex justify-between fixed hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all top-[calc(50vh-1.2rem)] z-1 border-t border-b py-2 px-4 bg-[rgba(0,0,0,0.4)] items-center`}
                 onClick={() => {
                     setIsOpen(true);
                 }}
@@ -56,9 +56,12 @@ export default function BlogPost() {
                     <p className=""> {blog?.title} </p>
                     <p className="text-[1.0rem]! text-gray-400"> {blog?.subtitle} </p>
                 </div>
-                <div className="flex gap-4 justify-between">
-                    <p>Read</p>
-                    {isOpen ? <p>-</p> : <p>+</p>}
+                <div className="flex gap-56">
+                    <div className="flex gap-4 justify-between">
+                        <p>Read</p>
+                        {isOpen ? <p>-</p> : <p>+</p>}
+                    </div>
+                    <p>{new Date(blog?.meta).toLocaleDateString()}</p>
                 </div>
             </div>
             {isOpen && (

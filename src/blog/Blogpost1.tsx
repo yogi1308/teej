@@ -51,7 +51,7 @@ export default function BlogPost() {
             </div>
             <div className={`absolute top-[calc(50vh-1.2rem)] bottom-0 w-[calc(100vw-2rem)] z-100000000000 flex flex-col `}>
                 <div
-                    className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all"
+                    className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen"
                     onClick={() => {
                         setIsOpen(prev => !prev);
                     }}
@@ -60,10 +60,12 @@ export default function BlogPost() {
                         <p className=""> {blog?.title} </p>
                         <p className="text-[1.0rem]! text-gray-400"> {blog?.subtitle} </p>
                     </div>
-                        <p>{ new Date(blog?.meta).toLocaleDateString() }</p>
-                    <div className="flex gap-4 justify-between">
-                        <p>Read</p>
-                        {isOpen ? <p>-</p> : <p>+</p>}
+                    <div className="flex gap-56">
+                        <div className="flex gap-4 justify-between">
+                            <p>Read</p>
+                            {isOpen ? <p>-</p> : <p>+</p>}
+                        </div>
+                        <p>{new Date(blog?.meta).toLocaleDateString()}</p>
                     </div>
                 </div>
                 {isOpen && (

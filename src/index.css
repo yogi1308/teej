@@ -25,6 +25,7 @@
     font-size: 1.2rem;
     line-height: 1;
     background-color: black;
+    overflow: hidden;
 }
 
 /* global.css */

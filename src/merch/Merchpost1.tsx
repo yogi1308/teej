@@ -1,0 +1,142 @@
+import { useParams } from "react-router-dom";
+import { useForm, ValidationError } from "@formspree/react";
+import { useEffect, useRef, useState } from "react";
+import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
+import TiltedCard from "../components/onlineLibraries/TiltedCard";
+import { useMerch } from "../hooks/useMerch";
+
+export default function MerchPost() {
+    const { merchId } = useParams();
+    const { merch } = useMerch(merchId);
+    const [isOpen, setIsOpen] = useState(false);
+    const [interested, setInterested] = useState(false);
+    const [state, handleSubmit] = useForm("xgojqyel");
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el || !merch?.imageUrl?.length) return;
+        const update = () => {
+            const vh = window.innerHeight;
+            const cy = vh / 2;
+            el.querySelectorAll<HTMLDivElement>(".mc").forEach(c => {
+                const r = c.getBoundingClientRect();
+                const t = Math.min(Math.abs(r.top + r.height / 2 - cy) / (vh * 0.6), 1);
+                c.style.transform = `scale(${1.1 - t * 0.4})`;
+            });
+        };
+        const onScroll = () => requestAnimationFrame(update);
+        el.addEventListener("scroll", onScroll);
+        update();
+        return () => el.removeEventListener("scroll", onScroll);
+    }, [merch?.imageUrl]);
+
+    return (
+        <div className="bg-black min-h-screen text-white pt-20 font-dots pl-0 overflow-hidden!">
+            {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
+            <div
+                ref={scrollRef}
+                className="absolute! top-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 h-[calc(100vh_-_6rem)] overflow-y-auto no-scrollbar pb-56"
+            >
+                {merch?.imageUrl?.map((url, idx) => (
+                    <div key={idx} className="mc">
+                        <TiltedCard
+                            imageSrc={url || logo}
+                            containerHeight="min-content"
+                            containerWidth="min-content"
+                            imageHeight="clamp(10rem, 60vh, 90vw)"
+                            imageWidth="clamp(10rem, 60vh, 90vw)"
+                            rotateAmplitude={12}
+                            scaleOnHover={1}
+                            showMobileWarning={false}
+                            showTooltip={false}
+                            displayOverlayContent
+                        />
+                    </div>
+                ))}
+            </div>
+            <div className="fixed top-[calc(50vh-1.2rem)] bottom-0 overflow-hidden w-screen z-100000 flex flex-col overflow-y-auto">
+                <div
+                    className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b border-white py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all cursor-pointer"
+                    onClick={() => setIsOpen(prev => !prev)}
+                >
+                    <p>{merch?.title}</p>
+                    <div className="flex gap-56 items-center">
+                        <div className="flex gap-4 items-center">
+                            <p>Details</p>
+                            {isOpen ? <p>-</p> : <p>+</p>}
+                        </div>
+                        <p>{merch?.meta && `$ ${merch?.meta}`}</p>
+                    </div>
+                </div>
+                {isOpen && (
+                    <div className="flex-1 p-4 font-king flex flex-col gap-4">
+                        <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
+                            <p className="text-white/50">Description</p>
+                            <p>{merch?.description}</p>
+                            <p className="text-white/50">Sizes</p>
+                            <p>{merch?.sizes}</p>
+                            <p className="text-white/50">Stock</p>
+                            <p>{merch?.inStock}</p>
+                        </div>
+                        {state.succeeded ? (
+                            <p className="text-green-400">Thanks! We'll get back to you soon.</p>
+                        ) : interested ? (
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                                <input type="hidden" name="item" value={merch?.title || ""} />
+                                <input type="hidden" name="price" value={merch?.meta || ""} />
+                                <div className="flex flex-col gap-2">
+                                    <label htmlFor="contact" className="text-white/70 " title="So that I can coordinate the delivery with you">
+                                        How to reach you<span className="text-red-600">*</span>
+                                    </label>
+                                    <input
+                                        id="contact"
+                                        type="text"
+                                        name="contact"
+                                        placeholder="Email, Instagram, phone..."
+                                        className=" border border-white/30 rounded p-2 focus:border-white outline-none"
+                                        required
+                                    />
+                                    <ValidationError prefix="Contact" field="contact" errors={state.errors} />
+                                </div>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    defaultValue={"I'm interested in this item sizes S, M, and XL sizes"}
+                                    className=" border border-white/30 rounded p-2 text-white/50 focus:text-white focus:border-white outline-none"
+                                    rows={5}
+                                    required
+                                />
+                                <ValidationError prefix="Message" field="message" errors={state.errors} />
+                                <div className="flex gap-4 w-full">
+                                    <button
+                                        type="submit"
+                                        disabled={state.submitting}
+                                        className="flex-1 border border-white p-2 rounded hover:bg-white/10 transition-all disabled:opacity-50"
+                                    >
+                                        {state.submitting ? "Sending..." : "Send Interest"}
+                                    </button>
+                                    <button
+                                        className="flex-1 border border-white p-2 rounded hover:bg-white/10 transition-all disabled:opacity-50"
+                                        onClick={() => {
+                                            setInterested(prev => !prev);
+                                        }}
+                                    >
+                                        Close Form
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <button
+                                className="border border-white p-4 text-center cursor-pointer hover:bg-white/10 transition-all"
+                                onClick={() => setInterested(true)}
+                            >
+                                Interested? Place a request
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

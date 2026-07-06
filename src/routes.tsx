@@ -9,7 +9,7 @@ import AdminBlog from "./admin/AdminBlog.tsx";
 import AdminMusic from "./admin/AdminMusic.tsx";
 import AdminHome from "./admin/AdminHome.tsx";
 import BlogPost from "./blog/Blogpost1.tsx";
-import MerchPost from "./merch/MerchPost.tsx";
+import MerchPost from "./merch/Merchpost1.tsx";
 
 const routes = [
     {

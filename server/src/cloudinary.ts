@@ -91,3 +91,11 @@ export async function uploadRawToCloudinary(buffer: Buffer, folder: string) {
     });
     return uploadResult;
 }
+
+export async function deleteFromCloudinary(assetIds: string[]) {
+    try {
+        await cloudinary.api.delete_resources_by_asset_ids(assetIds)
+    } catch (error) {
+        console.error("uploadToCloudinary error:", error);
+    }
+}

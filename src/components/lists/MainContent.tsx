@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { MusicPlayerBar } from "../MusicPlayerBar";
 import { usePlayer } from "../../hooks/PlayerContext";
 import Pause from "../../assets/svg/Pause";
+import Delete from "../../assets/svg/Delete";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const location = useLocation();
@@ -133,6 +134,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         setPlaying(prev);
     }
 
+    async function handleDeleteItem(item) {
+        try {
+            const res = await fetch("/api/delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: item.id, type: item.type }),
+            });
+        } catch (error) {
+            return { id: item.id, ok: false };
+        }
+    }
+
     return (
         <div
             ref={containerRef}
@@ -148,15 +161,28 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     <p className=""> {currItem?.title} </p>
                     {currItem?.subtitle && <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>}
                 </div>
-                <div className="text-red flex gap-2 items-center text-[1.2rem]">
-                    {location.pathname.includes("merch")
-                        ? `$ ${currItem?.meta}`
-                        : location.pathname.includes("blog")
-                            ? new Date(currItem?.meta).toLocaleDateString()
-                            : currItem?.songUrl === undefined
-                                ? "Album"
-                                : currItem?.meta}
-                    {currItem?.songUrl === undefined ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                <div className="flex gap-4 ">
+                    <div className="text-red flex gap-2 items-center text-[1.2rem]">
+                        {location.pathname.includes("merch")
+                            ? `$ ${currItem?.meta}`
+                            : location.pathname.includes("blog")
+                                ? new Date(currItem?.meta).toLocaleDateString()
+                                : currItem?.songUrl === undefined
+                                    ? "Album"
+                                    : currItem?.meta}
+                        {currItem?.songUrl === undefined ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                    </div>
+                    {location.pathname.includes("admin") && (
+                        <div
+                            onClick={event => {
+                                event?.stopPropagation();
+                                event?.preventDefault();
+                                handleDeleteItem(currItem);
+                            }}
+                        >
+                            <Delete />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -164,7 +190,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 {content.map(item => (
                     <li
                         key={item.id}
-                        className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] ${item !== currItem && "hover:relative hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-none"} 
+                        className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] ${item.id !== 0 && item.id !== currItem?.id && "hover:relative hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-none"} 
                cursor-pointer ${item.id === 0 ? "invisible" : ""}
             `}
                         onClick={e => toTop(e, item)}
@@ -174,15 +200,18 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         >
                             {item.title}
                         </p>
-                        <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
-                            {location.pathname.includes("merch")
-                                ? `$ ${item?.meta}`
-                                : location.pathname.includes("blog")
-                                    ? new Date(item?.meta).toLocaleDateString()
-                                    : item?.songUrl === undefined
-                                        ? "Album"
-                                        : item?.meta}
-                        </p>
+                        <div className="flex gap-4 ">
+                            <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
+                                {location.pathname.includes("merch")
+                                    ? `$ ${item?.meta}`
+                                    : location.pathname.includes("blog")
+                                        ? new Date(item?.meta).toLocaleDateString()
+                                        : item?.songUrl === undefined
+                                            ? "Album"
+                                            : item?.meta}
+                            </p>
+                            {location.pathname.includes("admin") && item.id !== currItem?.id && item.id !== 0 && <Delete />}
+                        </div>
                     </li>
                 ))}
             </ul>

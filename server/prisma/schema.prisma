@@ -22,6 +22,7 @@ model Album {
     displayPosition Int? // position on the public display page
     tracks          Track[]
     env             String
+    type            String   @default("album")
 }
 
 model Track {
@@ -42,6 +43,7 @@ model Track {
     albumId         String?
     album           Album?   @relation(fields: [albumId], references: [id])
     env             String
+    type            String   @default("track")
 }
 
 model Merch {
@@ -56,6 +58,7 @@ model Merch {
     updatedAt    DateTime @updatedAt
     inStock      Int
     env          String
+    type            String   @default("merch")
 }
 
 model Blog {
@@ -73,6 +76,7 @@ model Blog {
     updatedAt       DateTime?
     displayPosition Int?
     env             String
+    type            String   @default("blog")
 }
 
 model User {

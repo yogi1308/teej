@@ -111,8 +111,8 @@ export async function getBlog(blogId: string) {
 }
 
 export async function merchUploadQuery(req, merchImages) {
-    const merchImagesUrls = merchImages.map(img => img.secure_url)
-    const merchImagesAssetIds = merchImages.map(img => img.asset_id)
+    const merchImagesUrls = merchImages.map(img => img.secure_url);
+    const merchImagesAssetIds = merchImages.map(img => img.asset_id);
     try {
         const upload = await prisma.merch.create({
             data: {
@@ -122,7 +122,7 @@ export async function merchUploadQuery(req, merchImages) {
                 imageAssetId: merchImagesAssetIds,
                 description: req.body.description,
                 sizes: req.body.sizes,
-                inStock: parseInt( req.body.stock, 10),
+                inStock: parseInt(req.body.stock, 10),
                 env: env,
             },
         });
@@ -147,6 +147,27 @@ export async function getMerch(merchId: string) {
             where: { id: merchId },
         });
         return blogs;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function deleteItem(id, type) {
+    try {
+        if (type === "merch") {
+            const res = await prisma.merch.delete({ where: { id: id } });
+            return res.imageAssetId;
+        } else if (type === "blog") {
+            const res = await prisma.blog.delete({ where: { id: id } });
+            return [res.imageAssetId, res.contentAssetId];
+        } else if (type === "track") {
+            const res = await prisma.track.delete({ where: { id: id } });
+            return [res.imageAssetId, res.songAssetId]
+        }
+        else if (type === "album") {
+            const res = await prisma.album.delete({ where: { id: id }, include: { tracks: true } })
+            return [res.coverAssetId!, ...res.tracks.map(t => t.imageAssetId!)];
+        }
     } catch (error) {
         console.error(error);
     }

@@ -16,6 +16,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
     const { setPlayingLink } = usePlayer();
     const isProgrammaticScroll = useRef(false);
 
@@ -139,8 +140,15 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             const res = await fetch("/api/delete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: item.id, type: item.type }),
+                body: JSON.stringify({
+                    id: item.id,
+                    type: location.pathname.includes("merch") ? "merch" : location.pathname.includes("blog") ? "blog" : "track",
+                }),
             });
+            if (res.ok) {
+                setDeletedIds(prev => new Set(prev).add(item.id));
+                if (item.id === currItem?.id) setCurrItem(content.find(c => c.id !== item.id && !deletedIds.has(c.id)) || content[0]);
+            }
         } catch (error) {
             return { id: item.id, ok: false };
         }
@@ -187,33 +195,45 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             </div>
 
             <ul className="pb-[calc(50vh+1.2rem)] flex flex-col gap-2 pt-0 after:fixed after:inset-0 after:content-[''] after:pointer-events-none after:bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.7)_85%,rgba(0,0,0,0.95)_100%)]">
-                {content.map(item => (
-                    <li
-                        key={item.id}
-                        className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] ${item.id !== 0 && item.id !== currItem?.id && "hover:relative hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-none"} 
+                {content
+                    .filter(item => !deletedIds.has(item.id))
+                    .map(item => (
+                        <li
+                            key={item.id}
+                            className={`item flex gap-4 justify-between p-1 px-4 opacity-80 transition-all duration-300 ease-in-out drop-shadow-[0_3px_3px_rgb(0,0,0)] ${item.id !== 0 && item.id !== currItem?.id && "hover:relative hover:scale-101 hover:opacity-100 hover:z-10 hover:bg-[rgba(255,255,255,0.1)] cursor-none"} 
                cursor-pointer ${item.id === 0 ? "invisible" : ""}
             `}
-                        onClick={e => toTop(e, item)}
-                    >
-                        <p
-                            className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${item.id === currItem?.id && "opacity-0"}`}
+                            onClick={e => toTop(e, item)}
                         >
-                            {item.title}
-                        </p>
-                        <div className="flex gap-4 ">
-                            <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
-                                {location.pathname.includes("merch")
-                                    ? `$ ${item?.meta}`
-                                    : location.pathname.includes("blog")
-                                        ? new Date(item?.meta).toLocaleDateString()
-                                        : item?.songUrl === undefined
-                                            ? "Album"
-                                            : item?.meta}
+                            <p
+                                className={` flex-1 min-w-0 transition-all duration-300 ease-in-out text-yellow truncate ${item.id === currItem?.id && "opacity-0"}`}
+                            >
+                                {item.title}
                             </p>
-                            {location.pathname.includes("admin") && item.id !== currItem?.id && item.id !== 0 && <Delete />}
-                        </div>
-                    </li>
-                ))}
+                            <div className="flex gap-4 ">
+                                <p className={` transition-all duration-300 ease-in-out text-red pr-8 ${item.id === currItem?.id && "opacity-0"}`}>
+                                    {location.pathname.includes("merch")
+                                        ? `$ ${item?.meta}`
+                                        : location.pathname.includes("blog")
+                                            ? new Date(item?.meta).toLocaleDateString()
+                                            : item?.songUrl === undefined
+                                                ? "Album"
+                                                : item?.meta}
+                                </p>
+                                {location.pathname.includes("admin") && item.id !== currItem?.id && item.id !== 0 && (
+                                    <div
+                                        onClick={event => {
+                                            event?.stopPropagation();
+                                            event?.preventDefault();
+                                            handleDeleteItem(item);
+                                        }}
+                                    >
+                                        <Delete />
+                                    </div>
+                                )}
+                            </div>
+                        </li>
+                    ))}
             </ul>
             {playing !== null && (
                 <MusicPlayerBar

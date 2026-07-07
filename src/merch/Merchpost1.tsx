@@ -12,40 +12,39 @@ export default function MerchPost() {
     const [interested, setInterested] = useState(false);
     const [state, handleSubmit] = useForm("xgojqyel");
     const scrollRef = useRef<HTMLDivElement>(null);
+    const cardRefs = useRef<(HTMLElement | null)[]>([]);
 
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el || !merch?.imageUrl?.length) return;
-        const update = () => {
-            const vh = window.innerHeight;
-            const cy = vh / 2;
-            el.querySelectorAll<HTMLDivElement>(".mc").forEach(c => {
-                const r = c.getBoundingClientRect();
-                const t = Math.min(Math.abs(r.top + r.height / 2 - cy) / (vh * 0.6), 1);
-                c.style.transform = `scale(${1.1 - t * 0.6})`;
-            });
-        };
-        const onScroll = () => requestAnimationFrame(update);
-        el.addEventListener("scroll", onScroll);
-        update();
-        return () => el.removeEventListener("scroll", onScroll);
-    }, [merch?.imageUrl]);
+    useEffect(() => {onScroll()},)
+
+    function onScroll() {
+        const cx = window.innerWidth / 2;
+        cardRefs.current.forEach(c => {
+            if (!c) return;
+            const r = c.getBoundingClientRect();
+            const dist = r.left + r.width / 2 - cx;
+            const t = Math.min(Math.abs(dist) / (window.innerWidth * 0.6), 1);
+            const s = Math.max(1.1 - t * 1.9, 0.0)
+            c.style.transform = `perspective(1000px) scale(${s}) rotateY(${(dist > 0 ? 1 : -1) * t * 45}deg)`
+        });
+    }
 
     return (
         <div className={ `overflow-hidden ${isOpen && "overflow-y-scroll"}` }>
             {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
             <div
                 ref={scrollRef}
-                className="absolute! top-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar pb-56"
+                className="absolute! top-16 left-1/2 -translate-x-1/2 flex gap-4 no-scrollbar px-148 w-[calc(100vw)] h-[calc(100vh-6rem)] overflow-hidden overflow-x-scroll"
+                onScroll={onScroll}
+                onWheel={e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY }}
             >
                 {merch?.imageUrl?.map((url, idx) => (
-                    <div key={idx} className="mc">
+                    <div key={idx} ref={el => (cardRefs.current[idx] = el)} className="">
                         <TiltedCard
                             imageSrc={url || logo}
-                            containerHeight="min-content"
-                            containerWidth="min-content"
-                            imageHeight="clamp(10rem, 60vh, 90vw)"
-                            imageWidth="clamp(10rem, 60vh, 90vw)"
+                            containerHeight="clamp(10rem, 60vh, 90vh)"
+                            containerWidth="clamp(10rem, 60vh, 90vw)"
+                            imageHeight="100%"
+                            imageWidth="100%"
                             rotateAmplitude={12}
                             scaleOnHover={1}
                             showMobileWarning={false}

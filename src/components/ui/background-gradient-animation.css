@@ -1,0 +1,63 @@
+@theme inline {
+  --animate-first: moveLateral 100s ease-in-out infinite;
+  --animate-second: moveOrbit 120s linear infinite;
+  --animate-third: moveVertical 90s ease-in-out infinite;
+  --animate-fourth: moveFigure8 110s ease-in-out infinite;
+  --animate-fifth: moveDrift 130s ease-in-out infinite;
+  --animate-sixth: moveSway 80s ease-in-out infinite;
+  --animate-seventh: moveOrbit 140s reverse infinite;
+  --animate-eighth: moveLateral 95s reverse infinite;
+  --animate-ninth: movePulse 85s ease-in-out infinite;
+  --animate-tenth: moveFigure8 105s reverse infinite;
+}
+
+@keyframes moveLateral {
+  0% { transform: translateX(-60%) rotate(0deg); }
+  25% { transform: translateX(-20%) rotate(90deg); }
+  50% { transform: translateX(40%) rotate(180deg); }
+  75% { transform: translateX(-20%) rotate(270deg); }
+  100% { transform: translateX(-60%) rotate(360deg); }
+}
+
+@keyframes moveOrbit {
+  0% { transform: rotate(0deg) translateX(30%) rotate(0deg); }
+  50% { transform: rotate(180deg) translateX(30%) rotate(-180deg); }
+  100% { transform: rotate(360deg) translateX(30%) rotate(-360deg); }
+}
+
+@keyframes moveVertical {
+  0% { transform: translateY(-40%); }
+  25% { transform: translateY(-10%); }
+  50% { transform: translateY(40%); }
+  75% { transform: translateY(-10%); }
+  100% { transform: translateY(-40%); }
+}
+
+@keyframes moveFigure8 {
+  0% { transform: translate(-30%, -20%); }
+  25% { transform: translate(30%, -40%); }
+  50% { transform: translate(30%, 20%); }
+  75% { transform: translate(-30%, 40%); }
+  100% { transform: translate(-30%, -20%); }
+}
+
+@keyframes moveDrift {
+  0% { transform: translate(0%, 0%) scale(1); }
+  33% { transform: translate(20%, -30%) scale(1.1); }
+  66% { transform: translate(-20%, 20%) scale(0.9); }
+  100% { transform: translate(0%, 0%) scale(1); }
+}
+
+@keyframes moveSway {
+  0% { transform: translateX(-20%) skewX(0deg); }
+  25% { transform: translateX(0%) skewX(5deg); }
+  50% { transform: translateX(20%) skewX(0deg); }
+  75% { transform: translateX(0%) skewX(-5deg); }
+  100% { transform: translateX(-20%) skewX(0deg); }
+}
+
+@keyframes movePulse {
+  0% { transform: scale(0.8) rotate(0deg); }
+  50% { transform: scale(1.3) rotate(180deg); }
+  100% { transform: scale(0.8) rotate(360deg); }
+}

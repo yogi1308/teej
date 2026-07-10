@@ -3,67 +3,55 @@ import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import { useParams } from "react-router-dom";
 import { useMerch } from "../hooks/useMerch.tsx";
-import { useEffect, useState } from "react";
-import SleekLeftArrow from "../assets/svg/SleekLeftArrow.tsx";
-import SleekRightArrow from "../assets/svg/SleekRightArrow.tsx";
+import { useEffect, useRef, useState } from "react";
 
 export default function Merch() {
     const { merchId } = useParams();
     const { merch } = useMerch(merchId);
     const [currItem, setCurrItem] = useState(merch.length > 0 ? merch[0] : null);
-    const [currImgPos, setCurrImgPos] = useState(0);
-    useEffect(() => setCurrImgPos(0), [currItem]);
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const cardRefs = useRef<(HTMLElement | null)[]>([]);
+
+    useEffect(() => {onScroll()}, [currItem])
+
+    function onScroll() {
+        const cx = window.innerWidth / 2;
+        cardRefs.current.forEach(c => {
+            if (!c) return;
+            const r = c.getBoundingClientRect();
+            const dist = r.left + r.width / 2 - cx;
+            const t = Math.min(Math.abs(dist) / (window.innerWidth * 0.6), 1);
+            const s = Math.max(1.1 - t * 1.9, 0.0)
+            c.style.transform = `perspective(1000px) scale(${s}) rotateY(${(dist > 0 ? 1 : -1) * t * 45}deg)`
+        });
+    }
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">
             <MainContent content={merch} currItem={currItem} setCurrItem={setCurrItem} />
-            <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
-                {currItem?.imageUrl.length > 1 && (
-                    <div
-                        className="absolute z-100000000 left-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full"
-                        onClick={() => {
-                            if (currImgPos !== 0) {
-                                setCurrImgPos(prev => prev - 1);
-                            }
-                        }}
-                    >
-                        <SleekLeftArrow />
+            <div
+                ref={scrollRef}
+                className="absolute! top-16 left-1/2 -translate-x-1/2 flex gap-4 no-scrollbar px-148 w-[calc(100vw)] h-[calc(100vh-6rem)] overflow-hidden overflow-x-scroll snap-x snap-mandatory"
+                onScroll={onScroll}
+                onWheel={e => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY;
+                }}
+            >
+                {currItem?.imageUrl?.map((url, idx) => (
+                    <div key={idx} ref={el => (cardRefs.current[idx] = el)} className="snap-center">
+                        <TiltedCard
+                            imageSrc={url || logo}
+                            containerHeight="clamp(10rem, 60vh, 90vh)"
+                            containerWidth="clamp(10rem, 60vh, 90vw)"
+                            imageHeight="100%"
+                            imageWidth="100%"
+                            rotateAmplitude={12}
+                            scaleOnHover={1}
+                            showMobileWarning={false}
+                            showTooltip={false}
+                            displayOverlayContent
+                        />
                     </div>
-                )}
-                <TiltedCard
-                    imageSrc={currItem?.imageUrl[0] || logo}
-                    containerHeight="min-content"
-                    containerWidth="min-content"
-                    imageHeight="clamp(10rem, 60vh, 90vw)"
-                    imageWidth="clamp(10rem, 60vh, 90vw)"
-                    rotateAmplitude={12}
-                    scaleOnHover={1}
-                    showMobileWarning={false}
-                    showTooltip={false}
-                    displayOverlayContent
-                />
-                {currItem?.imageUrl.length > 1 && (
-                    <div
-                        className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer bg-black/30 p-1 rounded-full"
-                        onClick={() => {
-                            if (currImgPos !== currItem?.imageUrl.length - 1) {
-                                setCurrImgPos(prev => prev + 1);
-                            }
-                        }}
-                    >
-                        <SleekRightArrow />
-                    </div>
-                )}
-                {currItem?.imageUrl.length > 1 && (
-                    <div className="absolute right-0 top-1/2 translate-x-4 -translate-y-1/2 cursor-pointer flex flex-col z-1000000 gap-3">
-                        {currItem?.imageUrl.map((url, idx) => (
-                            <div
-                                key={idx}
-                                onClick={() => setCurrImgPos(idx)}
-                                className={`rounded-full w-2 h-2 ${idx === currImgPos ? "bg-white/90" : "bg-white/30"} hover:bg-white`}
-                            ></div>
-                        ))}
-                    </div>
-                )}
+                ))}
             </div>
         </div>
     );

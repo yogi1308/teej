@@ -1,25 +1,31 @@
 import { useLocation } from "react-router-dom";
 import MusicNote from "../../assets/svg/MusicNote";
+import HomeSvg from "../../assets/svg/Home";
+import MerchSvg from "../../assets/svg/Merch";
+import BlogSvg from "../../assets/svg/Blog";
 import ThreeDots from "../../assets/svg/ThreeDots";
 import { usePlayer } from "../../hooks/PlayerContext";
 import SoundCloud from "../../assets/svg/SoundCloud";
+import DonateSvg from "../../assets/svg/Donate";
 
 export default function Navbar({ onClick }: { onClick?: () => void }) {
     const { pathname } = useLocation();
     const { playingLink } = usePlayer();
-    let pageName = "Home";
-    if (pathname.includes("music")) pageName = "Music";
-    else if (pathname.includes("blog")) pageName = "Blog";
-    else if (pathname.includes("merch")) pageName = "Merch";
+    let pageName = "TEEJ";
+    let pageIcon = <HomeSvg />;
+    if (pathname.includes("music")) { pageName = "Music"; pageIcon = <MusicNote />; }
+    else if (pathname.includes("blog")) { pageName = "Blog"; pageIcon = <BlogSvg />; }
+    else if (pathname.includes("merch")) { pageName = "Merch"; pageIcon = <MerchSvg />; }
+    else if (pathname.includes("donate")) { pageName = "Donate"; pageIcon = <DonateSvg />; }
 
     return (
-        <nav className="flex items-center absolute left-[50%] -translate-x-1/2 z-1000 ">
+        <nav className={`flex items-center absolute left-1/2 -translate-x-1/2 z-1000 ${pathname === "/" ? "top-1/2 -translate-y-1/2" : "top-0"}`}>
             <div
                 onClick={onClick ?? (() => { })}
                 className="flex cursor-pointer shrink-0 justify-between m-4! gap-8 -dots backdrop-blur-md bg-[rgba(0,0,0,0.5)] text-white text-center p-2 
-        w-[calc(100vw + 10rem)] border-white border-2"
+        w-[calc(100vw + 10rem)] border-white border-2 items-center"
             >
-                <MusicNote />
+                {pageIcon}
                 {pageName}
                 <ThreeDots />
             </div>

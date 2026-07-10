@@ -1,7 +1,11 @@
 import MusicNote from "../../assets/svg/MusicNote";
-import { useState, useRef } from "react";
+import HomeSvg from "../../assets/svg/Home";
+import MerchSvg from "../../assets/svg/Merch";
+import BlogSvg from "../../assets/svg/Blog";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
+import DonateSvg from "../../assets/svg/Donate";
 
 interface NavigatorProps {
     setNavigatorVisibility: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,13 +13,19 @@ interface NavigatorProps {
 }
 
 export default function Navigator({ setNavigatorVisibility, dialogRef }: NavigatorProps) {
-    const items = ["Home", "Music", "Merch", "Blog"];
+    const items = ["Music", "Merch", "Blog", "Donate"];
     const navigate = useNavigate();
     const [rotation, setRotation] = useState(0);
     const dragging = useRef(false);
     const circleRef = useRef<HTMLDivElement | null>(null);
     const lastAngle = useRef<number>(0);
     const location = useLocation();
+
+    useEffect(() => {
+        const path = location.pathname.split("/").pop() || "";
+        const idx = items.findIndex(i => i.toLowerCase() === path);
+        if (idx > 0) setRotation(-idx * itemAngleStep);
+    }, [])
 
     // Calculate which item is currently "active" based on rotation
     const itemAngleStep = 180 / items.length;
@@ -31,6 +41,15 @@ export default function Navigator({ setNavigatorVisibility, dialogRef }: Navigat
         }
     }
     const leftMost = items[activeIndex] || items[0];
+
+    const iconMap: Record<string, React.ReactNode> = {
+        Home: <HomeSvg />,
+        Music: <MusicNote />,
+        Merch: <MerchSvg />,
+        Blog: <BlogSvg />,
+        Donate: <DonateSvg />
+    };
+    const pageIcon = iconMap[leftMost] || <MusicNote />;
 
     const getAngle = (clientX: number, clientY: number): number => {
         if (!circleRef.current) return 0;
@@ -134,7 +153,7 @@ export default function Navigator({ setNavigatorVisibility, dialogRef }: Navigat
         >
             <div className="relative flex-1 w-full">
                 <div className="flex justify-between gap-4 bg-black absolute text-center p-2 border-white border-2 left-[50%] -translate-x-1/2 min-w-[calc(100%-2rem)] ">
-                    <MusicNote />
+                    {pageIcon}
                     <p>{leftMost}</p>
                     <p onClick={toggleNavigatorVisibility} className="cursor-pointer">
                         ×

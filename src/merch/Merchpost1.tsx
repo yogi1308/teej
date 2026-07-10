@@ -33,12 +33,12 @@ export default function MerchPost() {
             {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
             <div
                 ref={scrollRef}
-                className="absolute! top-16 left-1/2 -translate-x-1/2 flex gap-4 no-scrollbar px-148 w-[calc(100vw)] h-[calc(100vh-6rem)] overflow-hidden overflow-x-scroll"
+                className="absolute! top-16 left-1/2 -translate-x-1/2 flex gap-4 no-scrollbar px-148 w-[calc(100vw)] h-[calc(100vh-6rem)] overflow-hidden overflow-x-scroll snap-x snap-mandatory"
                 onScroll={onScroll}
                 onWheel={e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.currentTarget.scrollLeft += e.deltaY }}
             >
                 {merch?.imageUrl?.map((url, idx) => (
-                    <div key={idx} ref={el => (cardRefs.current[idx] = el)} className="">
+                    <div key={idx} ref={el => (cardRefs.current[idx] = el)} className="snap-center">
                         <TiltedCard
                             imageSrc={url || logo}
                             containerHeight="clamp(10rem, 60vh, 90vh)"

@@ -10,6 +10,7 @@ import AdminMusic from "./admin/AdminMusic.tsx";
 import AdminHome from "./admin/AdminHome.tsx";
 import BlogPost from "./blog/Blogpost1.tsx";
 import MerchPost from "./merch/Merchpost1.tsx";
+import Donate from "./donate/Donate.tsx";
 
 const routes = [
     {
@@ -24,6 +25,7 @@ const routes = [
             { path: "blog/:blogId", element: <BlogPost /> },
             { path: "merch", element: <Merch /> },
             { path: "merch/:merchId", element: <MerchPost /> },
+            { path: "donate", element: <Donate /> },
         ],
     },
     {
@@ -38,6 +40,7 @@ const routes = [
             { path: "blog/:blogId", element: <BlogPost /> },
             { path: "merch", element: <AdminMerch /> },
             { path: "merch/:merchId", element: <MerchPost /> },
+            { path: "donate", element: <Donate /> },
         ],
     },
 ];

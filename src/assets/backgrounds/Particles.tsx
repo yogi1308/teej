@@ -1,4 +1,4 @@
-import ParticlesComponent from "../../components/ui/Particles.jsx";
+import ParticlesComponent from "../../assets/bglib/Particles.jsx";
 
 export default function ParticlesBackground() {
     return (
@@ -8,7 +8,7 @@ export default function ParticlesBackground() {
                 particleCount={300}
                 particleSpread={15}
                 speed={0.08}
-                particleBaseSize={200}
+                particleBaseSize={250}
                 sizeRandomness={0.001}
                 cameraDistance={30}
                 moveParticlesOnHover={false}

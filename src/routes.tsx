@@ -1,5 +1,10 @@
 import App from "./App";
 import ErrorPage from "./errorPage/ErrorPage.tsx";
+import Home from "./pages/home/Home.tsx";
+import Blog from "./pages/blog/Blog.tsx";
+import Music from "./pages/music/Music.tsx";
+import Merch from "./pages/merch/Merch.tsx";
+import Donate from "./pages/donate/Donate.tsx";
 
 const routes = [
     {
@@ -7,14 +12,16 @@ const routes = [
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
-            { index: true, element: <></> },
-            // { path: "music", element: <></> },
-            // { path: "music/album/:albumId", element: <></> },
-            // { path: "blog", element: <></> },
-            // { path: "blog/:blogId", element: <></> },
-            // { path: "merch", element: <></> },
-            // { path: "merch/:merchId", element: <></> },
-            // { path: "donate", element: <></> },
+            {
+                element: <Home />,
+                children: [
+                    { index: true, element: <></> },
+                    { path: "music", element: <Music /> },
+                    { path: "merch", element: <Merch /> },
+                    { path: "blog", element: <Blog /> },
+                    { path: "donate", element: <Donate /> },
+                ],
+            },
         ],
     },
     {
@@ -22,14 +29,16 @@ const routes = [
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
-            { index: true, element: <></> },
-            // { path: "music", element: <></> },
-            // { path: "music/album/:albumId", element: <></> },
-            // { path: "blog", element: <></> },
-            // { path: "blog/:blogId", element: <></> },
-            // { path: "merch", element: <></> },
-            // { path: "merch/:merchId", element: <></> },
-            // { path: "donate", element: <></> },
+            {
+                element: <Home />,
+                children: [
+                    { index: true, element: <></> },
+                    { path: "music", element: <Music /> },
+                    { path: "merch", element: <Merch /> },
+                    { path: "blog", element: <Blog /> },
+                    { path: "donate", element: <Donate /> },
+                ],
+            },
         ],
     },
 ];

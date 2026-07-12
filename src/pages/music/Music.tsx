@@ -1,4 +1,5 @@
 import MainContent from "@/components/MainContent";
+import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
 
 export default function Music() {
@@ -29,6 +30,9 @@ export default function Music() {
     }, []);
     return (
         <div>
+            <div className="absolute top-4 left-1/2 -translate-x-1/2">
+                <Thumbnail src={currItem?.imageUrl || currItem?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
+            </div>
             <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
         </div>
     );

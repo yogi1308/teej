@@ -1,29 +1,32 @@
 import { useRef, useEffect, useState } from "react";
+import ArrowRight from "@/assets/svg/ArrowRight";
+import Pause from "@/assets/svg/Pause";
+import PlayArrow from "@/assets/svg/PlayArrow";
+import AudioPlayer from "./AudioPlayer";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const ulRef = useRef(null);
     const currRef = useRef(currItem);
     currRef.current = currItem;
     const [ulHeight, setUlHeight] = useState(0);
+    const [playing, setPlaying] = useState(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
+        // used to calcaluate padding bottom so that the last element can scroll all the way to the top
         if (ulRef.current) {
             setUlHeight(ulRef.current.offsetHeight);
         }
-    }, [content]);
+    }, []);
 
     useEffect(() => {
-        if (content.length > 0) {
-            const exists = currItem && content.some(c => c.id === currItem.id);
-            if (!exists) setCurrItem(content[0]);
-        }
-    }, [content]);
-
-    useEffect(() => {
+        // scroll listener + IntersectionObserver to detect which item is in the active zone
         const container = ulRef.current;
         if (!container || content.length === 0) return;
 
         function onScroll() {
+            // at the top boundary, force currItem to the first item (observer misses it)
             if (container.scrollTop <= 0) {
                 const first = content[0];
                 if (first && first.id !== currRef.current?.id) setCurrItem(first);
@@ -31,8 +34,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         }
 
         container.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
 
-        const observer = new IntersectionObserver(
+        const observer = new IntersectionObserver( // fires when an item crosses the detection band at the top
             entries => {
                 for (const entry of entries) {
                     if (entry.isIntersecting) {
@@ -61,24 +65,61 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         };
     }, [content]);
 
+    function toTop(id: string) {
+        const li = ulRef.current?.querySelector(`[data-id="${id}"]`);
+        if (li) {
+            const top = (li as HTMLElement).offsetTop;
+            ulRef.current?.scrollTo({ top, behavior: "smooth" });
+        }
+    }
+
     return (
-        <div className="absolute bottom-0 top-1/2 h-1/2 w-full px-1 overflow-hidden ">
-            <div className="flex justify-between border-y border-white/50 relative py-2 backdrop-blur-md bg-black/15 z-10">
+        <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
+            <div className="shrink-0 flex justify-between border-y border-white/50 relative p-2  bg-black/40 ">
                 <p className="truncate">{currItem?.title}</p>
-                <p className="truncate">{currItem?.meta || "Album"}</p>
+                <div className="flex gap-4">
+                    {currItem?.type === "merch" ? (
+                        <p className="truncate">{`$ ${currItem?.meta}`}</p>
+                    ) : currItem?.type === "blog" ? (
+                        <p className="truncate">{new Date(currItem?.meta).toLocaleDateString()}</p>
+                    ) : (
+                        <p className="truncate">{currItem?.meta || "Album"}</p>
+                    )}
+                    {currItem.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                </div>
             </div>
-            <ul ref={ulRef} className="h-full overflow-y-auto no-scrollbar " style={{ paddingBottom: ulHeight }}>
+            <ul ref={ulRef} className="flex-1 overflow-y-auto no-scrollbar" style={{ paddingBottom: ulHeight }}>
                 {content.map((item, i) => (
                     <li
-                        className={`flex justify-between my-4 ${i === 0 ? "h-0" : ""}`}
+                        className={`cursor-pointer group flex justify-between my-2 p-2 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-white/5"} `}
                         key={item.id}
                         data-id={item.id}
+                        onClick={() => toTop(item.id)}
                     >
                         <p className="truncate">{item?.title}</p>
-                        <p className="truncate">{item?.meta || "Album"}</p>
+                        <div className="flex gap-0 group-hover:gap-4 items-center">
+                            {currItem?.type === "merch" ? (
+                                <p className="truncate">{`$ ${currItem?.meta}`}</p>
+                            ) : currItem?.type === "blog" ? (
+                                <p className="truncate">{new Date(currItem?.meta).toLocaleDateString()}</p>
+                            ) : (
+                                <p className="truncate">{currItem?.meta || "Album"}</p>
+                            )}
+                            <div className="w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
+                                {item.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                            </div>
+                        </div>
                     </li>
                 ))}
             </ul>
+            <AudioPlayer
+                audioRef={audioRef}
+                content={content}
+                playing={playing}
+                setPlaying={setPlaying}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+            />
         </div>
     );
 }

@@ -3,6 +3,7 @@ import ArrowRight from "@/assets/svg/ArrowRight";
 import Pause from "@/assets/svg/Pause";
 import PlayArrow from "@/assets/svg/PlayArrow";
 import AudioPlayer from "./AudioPlayer";
+import Hover1 from "./Hover1";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const ulRef = useRef(null);
@@ -65,17 +66,21 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         };
     }, [content]);
 
-    function toTop(id: string) {
-        const li = ulRef.current?.querySelector(`[data-id="${id}"]`);
+    function toTop(item) {
+        const li = ulRef.current?.querySelector(`[data-id="${item.id}"]`);
         if (li) {
             const top = (li as HTMLElement).offsetTop;
             ulRef.current?.scrollTo({ top, behavior: "smooth" });
+        }
+        if (item.type === "track") {
+            setPlaying(item);
+            setIsPlaying(true);
         }
     }
 
     return (
         <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
-            <div className="shrink-0 flex justify-between border-y border-white/50 relative p-2  bg-black/40 ">
+            <div className="shrink-0 flex justify-between border-y relative p-2 px-4" style={{background: "linear-gradient(90deg, rgba(35, 201, 236, 0.2), rgba(0, 0, 0, 0.4), rgba(35, 201, 236, 0.2))"}}>
                 <p className="truncate">{currItem?.title}</p>
                 <div className="flex gap-4">
                     {currItem?.type === "merch" ? (
@@ -91,19 +96,19 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             <ul ref={ulRef} className="flex-1 overflow-y-auto no-scrollbar" style={{ paddingBottom: ulHeight }}>
                 {content.map((item, i) => (
                     <li
-                        className={`cursor-pointer group flex justify-between my-2 p-2 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-white/5"} `}
+                        className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-white/5"} `}
                         key={item.id}
                         data-id={item.id}
-                        onClick={() => toTop(item.id)}
+                        onClick={() => toTop(item)}
                     >
                         <p className="truncate">{item?.title}</p>
                         <div className="flex gap-0 group-hover:gap-4 items-center">
-                            {currItem?.type === "merch" ? (
-                                <p className="truncate">{`$ ${currItem?.meta}`}</p>
-                            ) : currItem?.type === "blog" ? (
-                                <p className="truncate">{new Date(currItem?.meta).toLocaleDateString()}</p>
+                            {item?.type === "merch" ? (
+                                <p className="truncate">{`$ ${item?.meta}`}</p>
+                            ) : item?.type === "blog" ? (
+                                <p className="truncate">{new Date(item?.meta).toLocaleDateString()}</p>
                             ) : (
-                                <p className="truncate">{currItem?.meta || "Album"}</p>
+                                <p className="truncate">{item?.meta || "Album"}</p>
                             )}
                             <div className="w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
                                 {item.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}

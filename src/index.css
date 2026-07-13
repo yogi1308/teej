@@ -55,3 +55,9 @@ small {
     display: none;
     /* Chrome, Safari */
 }
+
+.navigator::backdrop,
+dialog::backdrop {
+    @apply bg-black/50 backdrop-blur-sm;
+}
+

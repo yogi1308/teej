@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MusicPlayerBar } from "./MusicPlayerBar";
 import { usePlayer } from "@/hooks/usePlayer";
 
 export default function AudioPlayer({ content, playing, setPlaying, isPlaying, setIsPlaying, audioRef }) {
     const [currentTime, setCurrentTime] = useState(0);
     const { setPlayingLink } = usePlayer();
+
+    useEffect(() => {
+        setPlayingLink(playing?.link ?? null);
+    }, [playing, setPlayingLink]);
 
     function onNext() {
         const idx = content.findIndex(c => c.id === playing?.id);

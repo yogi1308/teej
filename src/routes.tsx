@@ -13,9 +13,8 @@ const routes = [
         errorElement: <ErrorPage />,
         children: [
             {
-                element: <Home />,
                 children: [
-                    { index: true, element: <></> },
+                    { index: true, element: <Home />},
                     { path: "music", element: <Music /> },
                     { path: "merch", element: <Merch /> },
                     { path: "blog", element: <Blog /> },
@@ -30,9 +29,8 @@ const routes = [
         errorElement: <ErrorPage />,
         children: [
             {
-                element: <Home />,
                 children: [
-                    { index: true, element: <></> },
+                    { index: true, element: <Home />},
                     { path: "music", element: <Music /> },
                     { path: "merch", element: <Merch /> },
                     { path: "blog", element: <Blog /> },

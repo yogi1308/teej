@@ -124,6 +124,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 setPlaying={setPlaying}
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
+                toTop={toTop}
             />
         </div>
     );

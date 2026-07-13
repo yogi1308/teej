@@ -5,15 +5,7 @@ import PlayArrow from "../assets/svg/PlayArrow";
 import SkipNext from "../assets/svg/SkipNext";
 import SkipPrevious from "../assets/svg/SkipPrevious";
 
-export function MusicPlayerBar({
-    playing,
-    currentTime,
-    isPlaying,
-    onToggle,
-    onSeek,
-    onNext,
-    onPrevious,
-}) {
+export function MusicPlayerBar({ playing, currentTime, isPlaying, onToggle, onSeek, onNext, onPrevious }) {
     const total = playing.meta?.split(":").reduce((m, s) => m * 60 + +s, 0) ?? 0;
 
     function formatTime(s) {
@@ -27,34 +19,34 @@ export function MusicPlayerBar({
         <div className="fixed bottom-0.5 left-1/2 -translate-x-1/2 px-4 py-4 flex flex-col items-center gap-2 border border-white w-[99vw] backdrop-blur-md bg-black/20">
             <p className="text-white">
                 <span className="text-xl">{playing.title}</span>
-                { playing.albumTtitle && 
-                    <span className="text-white/50 "> / {playing.albumTitle}</span>
-                }
+                {playing.albumTtitle && <span className="text-white/50 "> / {playing.albumTitle}</span>}
             </p>
-            <Slider
-                value={currentTime}
-                min={0}
-                max={total || 1}
-                step={0.1}
-                onChange={onSeek}
-                trackStyle={{ background: "white", height: 1, borderRadius: 0 }}
-                railStyle={{
-                    background: "rgba(255,255,255,0.15)",
-                    height: 1,
-                    borderRadius: 0,
-                }}
-                handleStyle={{ display: "none" }}
-            />
+            <div className="cursor-pointer w-full">
+                <Slider
+                    value={currentTime}
+                    min={0}
+                    max={total || 1}
+                    step={0.1}
+                    onChange={onSeek}
+                    trackStyle={{ background: "white", height: 1, borderRadius: 0 }}
+                    railStyle={{
+                        background: "rgba(255,255,255,0.15)",
+                        height: 1,
+                        borderRadius: 0,
+                    }}
+                    handleStyle={{ display: "none" }}
+                />
+            </div>
             <div className="flex justify-between w-full">
                 <p className="text-white/50 shrink-0">{formatTime(currentTime)}</p>
                 <div className="flex gap-4">
-                    <button onClick={onPrevious} className="scale-150">
+                    <button onClick={onPrevious} className="scale-100 cursor-pointer hover:scale-[1.25] active:scale-[0.9]">
                         <SkipPrevious />
                     </button>
-                    <button onClick={onToggle} className="scale-150">
+                    <button onClick={onToggle} className="scale-100 cursor-pointer hover:scale-[1.25] active:scale-[0.9]">
                         {isPlaying ? <Pause /> : <PlayArrow />}
                     </button>
-                    <button onClick={onNext} className="scale-150">
+                    <button onClick={onNext} className="scale-100 cursor-pointer hover:scale-[1.25] active:scale-[0.9]">
                         <SkipNext />
                     </button>
                 </div>
@@ -63,4 +55,3 @@ export function MusicPlayerBar({
         </div>
     );
 }
-

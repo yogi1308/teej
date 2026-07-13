@@ -3,7 +3,6 @@ import ArrowRight from "@/assets/svg/ArrowRight";
 import Pause from "@/assets/svg/Pause";
 import PlayArrow from "@/assets/svg/PlayArrow";
 import AudioPlayer from "./AudioPlayer";
-import Hover1 from "./Hover1";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
     const ulRef = useRef(null);
@@ -52,7 +51,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             },
             {
                 root: container,
-                rootMargin: "10% 0px -103% 0px",
+                rootMargin: "5% 0px -103% 0px",
                 threshold: 0,
             },
         );

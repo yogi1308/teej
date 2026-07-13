@@ -11,12 +11,9 @@ import { usePlayer } from "@/hooks/usePlayer";
 export default function Navbar({ onClick }: { onClick?: () => void }) {
     const { pathname } = useLocation();
     const { playingLink } = usePlayer();
-    let pageName = "TEEJ";
+    let pageName = "Home";
     let pageIcon = <HomeSvg />;
-    if (pathname === "/") {
-        pageName = "Home";
-        pageIcon = <HomeSvg />;
-    } else if (pathname.includes("music")) {
+    if (pathname.includes("music")) {
         pageName = "Music";
         pageIcon = <MusicNote />;
     } else if (pathname.includes("blog")) {

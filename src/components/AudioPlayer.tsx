@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MusicPlayerBar } from "./MusicPlayerBar";
 import { usePlayer } from "@/hooks/usePlayer";
 
-export default function AudioPlayer({toTop, content, playing, setPlaying, isPlaying, setIsPlaying, audioRef }) {
+export default function AudioPlayer({onclick, content, playing, setPlaying, isPlaying, setIsPlaying, audioRef }) {
     const [currentTime, setCurrentTime] = useState(0);
     const { setPlayingLink } = usePlayer();
 
@@ -22,7 +22,7 @@ export default function AudioPlayer({toTop, content, playing, setPlaying, isPlay
         const idx = content.findIndex(c => c.id === playing?.id);
         const next = content.slice(idx + 1).find(c => c.songUrl) ?? content.find(c => c.songUrl);
         setIsPlaying(true);
-        toTop(next);
+        onclick(next);
         setPlaying(next);
     }
 
@@ -34,7 +34,7 @@ export default function AudioPlayer({toTop, content, playing, setPlaying, isPlay
                 .reverse()
                 .find(c => c.songUrl) ?? content.toReversed().find(c => c.songUrl);
         setIsPlaying(true);
-        toTop(prev);
+        onclick(prev);
         setPlaying(prev);
     }
 

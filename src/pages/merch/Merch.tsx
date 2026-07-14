@@ -2,10 +2,10 @@ import Carousel from "@/components/Carousel";
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
-import { useMerch } from "../hooks/useMerch";
+import useFetch from "../hooks/useFetch";
 
 export default function Music() {
-    const { data: content } = useMerch();
+    const { data: content } = useFetch("/api/merch/");
     const [currItem, setCurrItem] = useState(null);
     const [imgtype, setImgType] = useState("Thumbnail");
 

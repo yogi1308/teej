@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useForm, ValidationError } from "@formspree/react";
 import { useEffect, useRef, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 export default function MerchPost() {
     const { merchId } = useParams();
-    const { merch } = useMerch(merchId);
+    const { data: merch } = useFetch(`/api/merch/${merchId}`);
     const [isOpen, setIsOpen] = useState(false);
     const [interested, setInterested] = useState(false);
     const [state, handleSubmit] = useForm("xgojqyel");

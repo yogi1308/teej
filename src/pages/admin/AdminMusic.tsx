@@ -1,11 +1,11 @@
 import MainContent from "../components/lists/MainContent.tsx";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import Add from "./add/Add.tsx";
-import { useMusic } from "../hooks/useMusic.ts";
+import useFetch from "../hooks/useFetch";
 import { useState } from "react";
 
 export default function AdminMusic() {
-    const { music, refetch } = useMusic();
+    const { data: music, refetch } = useFetch("/api/music/");
     const [currItem, setCurrItem] = useState(music.length > 0 ? music[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">

@@ -3,10 +3,10 @@ import logo from "../assets/Gemini_Generated_Image_f97ocif97ocif97o.png";
 import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import { useState } from "react";
 import Add from "./add/Add.tsx";
-import { useBlog } from "../hooks/useBlog.tsx";
+import useFetch from "../hooks/useFetch";
 
 export default function Blog() {
-    const { blog, refetch } = useBlog();
+    const { data: blog, refetch } = useFetch("/api/blog/");
     const [currItem, setCurrItem] = useState(blog.length > 0 ? blog[0] : null);
     return (
         <div className="bg-black h-screen w-screen overflow-hidden">

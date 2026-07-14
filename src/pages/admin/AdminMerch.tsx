@@ -4,11 +4,11 @@ import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
 import Add from "./add/Add.tsx";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useMerch } from "../hooks/useMerch.tsx";
+import useFetch from "../hooks/useFetch";
 
 export default function AdminMerch() {
     const { merchId } = useParams();
-    const { merch } = useMerch(merchId);
+    const { data: merch } = useFetch(merchId ? `/api/merch/${merchId}` : "/api/merch/");
     const [currItem, setCurrItem] = useState(merch.length > 0 ? merch[0] : null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const cardRefs = useRef<(HTMLElement | null)[]>([]);

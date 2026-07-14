@@ -1,10 +1,10 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
-import { useMusic } from "../hooks/useMusic";
+import useFetch from "../hooks/useFetch";
 
 export default function Music() {
-    const { music: content } = useMusic();
+    const { data: content } = useFetch("/api/music/");
     const [currItem, setCurrItem] = useState([]);
     return (
         <div>

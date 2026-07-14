@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useBlog } from "../hooks/useBlog";
+import useFetch from "../hooks/useFetch";
 import DOMPurify from "dompurify";
 import TiltedCard from "../components/onlineLibraries/TiltedCard";
 
 export default function BlogPost() {
     const { blogId } = useParams();
-    const { blog } = useBlog(blogId);
+    const { data: blog } = useFetch(`/api/blog/${blogId}`);
     const [html, setHtml] = useState("");
     const isPdf = blog?.contentType === "pdf";
     const [isOpen, setIsOpen] = useState(false);

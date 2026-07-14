@@ -79,7 +79,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
 
     return (
         <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
-            <div className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10">
+            <div className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70">
                 <p className="truncate">{currItem?.title}</p>
                 <div className="flex gap-4">
                     {currItem?.type === "merch" ? (

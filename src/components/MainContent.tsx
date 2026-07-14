@@ -3,8 +3,11 @@ import ArrowRight from "@/assets/svg/ArrowRight";
 import Pause from "@/assets/svg/Pause";
 import PlayArrow from "@/assets/svg/PlayArrow";
 import AudioPlayer from "./AudioPlayer";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function MainContent({ content, currItem, setCurrItem }) {
+    const navigate = useNavigate();
+    const location = useLocation();
     const ulRef = useRef(null);
     const currRef = useRef(currItem);
     currRef.current = currItem;
@@ -23,12 +26,12 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     useEffect(() => {
         // scroll listener + IntersectionObserver to detect which item is in the active zone
         const container = ulRef.current;
-        if (!container || content.length === 0) return;
+        if (!container || content?.length === 0) return;
 
         function onScroll() {
             // at the top boundary, force currItem to the first item (observer misses it)
             if (container.scrollTop <= 0) {
-                const first = content[0];
+                const first = content?.[0];
                 if (first && first.id !== currRef.current?.id) setCurrItem(first);
             }
         }
@@ -75,11 +78,17 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             setPlaying(item);
             setIsPlaying(true);
         }
+        navigate(`${location.pathname}/${item.id}`);
     }
 
     return (
         <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
-            <div className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70">
+            <div
+                className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
+                onClick={() => {
+                    toTop(currItem);
+                }}
+            >
                 <p className="truncate">{currItem?.title}</p>
                 <div className="flex gap-4">
                     {currItem?.type === "merch" ? (
@@ -93,7 +102,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 </div>
             </div>
             <ul ref={ulRef} className="flex-1 overflow-y-auto no-scrollbar" style={{ paddingBottom: ulHeight }}>
-                {content.map((item, i) => (
+                {content?.map((item, i) => (
                     <li
                         className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
                         key={item.id}

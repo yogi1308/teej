@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useForm, ValidationError } from "@formspree/react";
 import { useEffect, useRef, useState } from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "@/hooks/useFetch";
 
 export default function MerchPost() {
     const { merchId } = useParams();

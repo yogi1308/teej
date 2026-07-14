@@ -79,7 +79,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
 
     return (
         <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
-            <div className="shrink-0 flex justify-between border-y relative p-2 px-4" style={{background: "linear-gradient(90deg, rgba(35, 201, 236, 0.2), rgba(0, 0, 0, 0.4), rgba(35, 201, 236, 0.2))"}}>
+            <div className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10">
                 <p className="truncate">{currItem?.title}</p>
                 <div className="flex gap-4">
                     {currItem?.type === "merch" ? (
@@ -89,13 +89,13 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     ) : (
                         <p className="truncate">{currItem?.meta || "Album"}</p>
                     )}
-                    {currItem.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                    {currItem?.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                 </div>
             </div>
             <ul ref={ulRef} className="flex-1 overflow-y-auto no-scrollbar" style={{ paddingBottom: ulHeight }}>
                 {content.map((item, i) => (
                     <li
-                        className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-white/5"} `}
+                        className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
                         key={item.id}
                         data-id={item.id}
                         onClick={() => toTop(item)}

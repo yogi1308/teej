@@ -3,6 +3,7 @@ import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
+import Add from "../admin/add/Add";
 
 export default function Merch() {
     const { data: content } = useFetch("/api/merch/");
@@ -12,12 +13,13 @@ export default function Merch() {
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
                 {currItem?.imageUrl?.length > 1 ? (
-                    <Carousel src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)"}} />
+                    <Carousel src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)" }} />
                 ) : (
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                 )}
             </div>
             <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            <Add tab={"Blog"} />
         </div>
     );
 }

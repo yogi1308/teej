@@ -1,34 +1,23 @@
-import MainContent from "../components/lists/MainContent.tsx";
-import TiltedCard from "../components/onlineLibraries/TiltedCard.tsx";
-import Add from "./add/Add.tsx";
-import useFetch from "../hooks/useFetch";
+import MainContent from "@/components/MainContent";
+import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import useFetch from "@/hooks/useFetch";
+import Add from "./add/Add";
 
-export default function AdminMusic() {
-    const { data: music, refetch } = useFetch("/api/music/");
-    const [currItem, setCurrItem] = useState(music.length > 0 ? music[0] : null);
+export default function Music() {
+    const { musicId } = useParams();
+    const url = musicId ? `/api/music/albums/${musicId}` : "/api/music/";
+    const { data } = useFetch(url);
+    const content = Array.isArray(data) ? data : data?.tracks ?? [];
+    const [currItem, setCurrItem] = useState([]);
     return (
-        <div className="bg-black h-screen w-screen overflow-hidden">
-            <MainContent
-                content={music}
-                currItem={currItem}
-                setCurrItem={setCurrItem}
-            />
-            <div className="absolute! top-[3rem] left-1/2 -translate-x-1/2">
-                <TiltedCard
-                    imageSrc={currItem?.imageUrl || currItem?.coverUrl }
-                    containerHeight="min-content"
-                    containerWidth="min-content"
-                    imageHeight="clamp(10rem, 60vh, 90vw)"
-                    imageWidth="clamp(10rem, 60vh, 90vw)"
-                    rotateAmplitude={12}
-                    scaleOnHover={1}
-                    showMobileWarning={false}
-                    showTooltip={false}
-                    displayOverlayContent
-                />
+        <div>
+            <div className="absolute top-16 left-1/2 -translate-x-1/2">
+                <Thumbnail src={currItem?.imageUrl || currItem?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
             </div>
-            <Add tab={"Music"} refetch={async () => { const d = await refetch(); setCurrItem(d[0]); }} />
+            <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            <Add tab={"Music"} />
         </div>
     );
 }

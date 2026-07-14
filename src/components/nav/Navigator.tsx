@@ -38,7 +38,7 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
     function navigateToItem(index: number) {
         let path = items[index] === "Home" ? "/" : `/${items[index].toLowerCase()}`;
         if (location.pathname.includes("admin")) {
-            path = items[index] === "Home" ? "/" : `/admin/${items[index].toLowerCase()}`;
+            path = items[index] === "Home" ? "/admin" : `/admin/${items[index].toLowerCase()}`;
         }
         navigate(path);
         toggleNavigatorVisibility();

@@ -20,8 +20,9 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         // used to calcaluate padding bottom so that the last element can scroll all the way to the top
         if (ulRef.current) {
             setUlHeight(ulRef.current.offsetHeight);
+            ulRef.current.scrollTop = 0;
         }
-    }, []);
+    }, [content]);
 
     useEffect(() => {
         // scroll listener + IntersectionObserver to detect which item is in the active zone

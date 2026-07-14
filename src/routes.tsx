@@ -8,6 +8,9 @@ import Donate from "./pages/donate/Donate.tsx";
 import AdminHome from "./pages/admin/AdminHome.tsx";
 import MerchPost from "./pages/merch/Merchpost.tsx";
 import BlogPost from "./pages/blog/Blogpost.tsx";
+import AdminMusic from "./pages/admin/AdminMusic.tsx";
+import AdminMerch from "./pages/admin/AdminMerch.tsx";
+import AdminBlog from "./pages/admin/AdminBlog.tsx";
 
 const routes = [
     {
@@ -37,10 +40,10 @@ const routes = [
             {
                 children: [
                     { index: true, element: <AdminHome /> },
-                    { path: "music", element: <Music /> },
-                    { path: "music/:musicId", element: <Music /> },
-                    { path: "merch", element: <Merch /> },
-                    { path: "blog", element: <Blog /> },
+                    { path: "music", element: <AdminMusic /> },
+                    { path: "music/:musicId", element: <AdminMusic /> },
+                    { path: "merch", element: <AdminMerch /> },
+                    { path: "blog", element: <AdminBlog /> },
                     { path: "donate", element: <Donate /> },
                 ],
             },

@@ -18,6 +18,7 @@ const routes = [
                 children: [
                     { index: true, element: <Home /> },
                     { path: "music", element: <Music /> },
+                    { path: "music/:musicId", element: <Music /> },
                     { path: "merch", element: <Merch /> },
                     { path: "merch/:merchId", element: <MerchPost /> },
                     { path: "blog", element: <Blog /> },
@@ -35,6 +36,7 @@ const routes = [
                 children: [
                     { index: true, element: <AdminHome /> },
                     { path: "music", element: <Music /> },
+                    { path: "music/:musicId", element: <Music /> },
                     { path: "merch", element: <Merch /> },
                     { path: "blog", element: <Blog /> },
                     { path: "donate", element: <Donate /> },

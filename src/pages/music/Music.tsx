@@ -1,6 +1,6 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
 
 export default function Music() {

@@ -1,6 +1,6 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "@/hooks/useFetch";
 
@@ -10,6 +10,7 @@ export default function Music() {
     const { data } = useFetch(url);
     const content = Array.isArray(data) ? data : data?.tracks ?? [];
     const [currItem, setCurrItem] = useState([]);
+    useEffect(() => {console.log(currItem)}, [currItem])
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

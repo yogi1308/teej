@@ -65,6 +65,7 @@ export async function getAlbum(albumId: string) {
             include: { tracks: { orderBy: { trackPosition: "asc" } } },
         });
         if (!album) return null;
+        console.log("ran")
         return {
             ...album,
             tracks: album.tracks.map(t => ({

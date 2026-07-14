@@ -1,23 +1,11 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
+import { useBlog } from "../hooks/useBlog";
 
 export default function Music() {
-    const [content, setContent] = useState([]);
+    const { data: content } = useBlog();
     const [currItem, setCurrItem] = useState([]);
-    useEffect(() => {
-        async function getBlog() {
-            try {
-                const url = "/api/blog/";
-                const res = await fetch(url);
-                const body = await res.json();
-                setContent(body.data);
-            } catch {
-                setContent([]);
-            }
-        }
-        getBlog();
-    }, []);
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

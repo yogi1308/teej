@@ -1,33 +1,11 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
+import { useMusic } from "../hooks/useMusic";
 
 export default function Music() {
-    const [content, setContent] = useState([]);
+    const { music: content } = useMusic();
     const [currItem, setCurrItem] = useState([]);
-    useEffect(() => {
-        async function getMusic() {
-            try {
-                const url = "/api/music/";
-                const res = await fetch(url);
-                const body = await res.json();
-                if (body.data?.tracks) {
-                    setContent(
-                        body.data.tracks.map(t => ({
-                            ...t,
-                            coverUrl: t.imageUrl ?? body.data.coverUrl,
-                            albumTitle: body.data.title,
-                        })),
-                    );
-                } else {
-                    setContent(body.data ?? []);
-                }
-            } catch {
-                setContent([]);
-            }
-        }
-        getMusic();
-    }, []);
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

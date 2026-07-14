@@ -2,9 +2,10 @@ import Carousel from "@/components/Carousel";
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
+import { useMerch } from "../hooks/useMerch";
 
 export default function Music() {
-    const [content, setContent] = useState([]);
+    const { data: content } = useMerch();
     const [currItem, setCurrItem] = useState(null);
     const [imgtype, setImgType] = useState("Thumbnail");
 
@@ -15,20 +16,6 @@ export default function Music() {
             setImgType("Thumbnail");
         }
     }, [currItem]);
-
-    useEffect(() => {
-        async function getMerch() {
-            try {
-                const url = "/api/merch/";
-                const res = await fetch(url);
-                const body = await res.json();
-                setContent(body.data);
-            } catch {
-                setContent([]);
-            }
-        }
-        getMerch();
-    }, []);
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

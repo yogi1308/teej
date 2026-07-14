@@ -90,12 +90,19 @@ export default function MainContent({ content, currItem, setCurrItem }) {
     return (
         <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
             <div
-                className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
+                className="shrink-0 flex items-center justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
                 onClick={() => {
                     onclick(currItem);
                 }}
             >
-                <p className="truncate">{currItem?.title}</p>
+                {currItem?.subtitle ? (
+                    <div className="flex flex-col">
+                        <p className=""> {currItem?.title} </p>
+                        <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
+                    </div>
+                ) : (
+                    <p className="truncate">{currItem?.title}</p>
+                )}
                 <div className="flex gap-4">
                     {currItem?.type === "merch" ? (
                         <p className="truncate">{`$ ${currItem?.meta}`}</p>

@@ -6,7 +6,8 @@ import Music from "./pages/music/Music.tsx";
 import Merch from "./pages/merch/Merch.tsx";
 import Donate from "./pages/donate/Donate.tsx";
 import AdminHome from "./pages/admin/AdminHome.tsx";
-import MerchPost from "./pages/merch/Merchpost1.tsx";
+import MerchPost from "./pages/merch/Merchpost.tsx";
+import BlogPost from "./pages/blog/Blogpost.tsx";
 
 const routes = [
     {
@@ -22,6 +23,7 @@ const routes = [
                     { path: "merch", element: <Merch /> },
                     { path: "merch/:merchId", element: <MerchPost /> },
                     { path: "blog", element: <Blog /> },
+                    { path: "blog/:blogId", element: <BlogPost /> },
                     { path: "donate", element: <Donate /> },
                 ],
             },

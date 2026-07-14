@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "@/hooks/useFetch";
 import DOMPurify from "dompurify";
-import TiltedCard from "../components/onlineLibraries/TiltedCard";
+import Thumbnail from "@/components/Thumbnail";
 
 export default function BlogPost() {
     const { blogId } = useParams();
@@ -34,28 +34,17 @@ export default function BlogPost() {
     return (
         <div className={`flex items-center justify-center overflow-hidden ${isOpen && "overflow-y-scroll"}`}>
             {isOpen && <div className="fixed inset-0 z-500000000 bg-black/50 backdrop-blur-md" />}
-            <div className="fixed top-1/2 left-1/2 -translate-1/2">
-                <TiltedCard
-                    imageSrc={blog?.imageUrl}
-                    containerHeight="min-content"
-                    containerWidth="min-content"
-                    imageHeight="clamp(10rem, 60vh, 90vw)"
-                    imageWidth="clamp(10rem, 60vh, 90vw)"
-                    rotateAmplitude={12}
-                    scaleOnHover={1}
-                    showMobileWarning={false}
-                    showTooltip={false}
-                    displayOverlayContent
-                />
+            <div className="absolute top-16 left-1/2 -translate-x-1/2">
+                <Thumbnail src={blog?.imageUrl || blog?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
             </div>
             <div className={`relative top-[calc(50vh)] bottom-0 pt-4 z-100000000000 flex flex-col h-screen`}>
                 <div
-                    className="bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen"
+                    className={ `bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen ${!isOpen && "sticky top-[50vh]"}` }
                     onClick={() => {
                         setIsOpen(prev => !prev);
                     }}
                 >
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col ">
                         <p className=""> {blog?.title} </p>
                         <p className="text-[1.0rem]! text-gray-400"> {blog?.subtitle} </p>
                     </div>

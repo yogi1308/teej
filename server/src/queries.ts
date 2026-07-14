@@ -34,14 +34,7 @@ export async function getMusic() {
             prisma.album.findMany({ where: { env: env }, include: { tracks: true } }),
             prisma.track.findMany({ where: { albumId: null, env: env } }),
         ]);
-        const albumTracks = albums.flatMap(album =>
-            album.tracks.map(t => ({
-                ...t,
-                coverUrl: t.imageUrl ?? album.coverUrl,
-                albumTitle: album.title,
-            }))
-        );
-        return [...albumTracks, ...singles];
+        return [...albums, ...singles];
     } catch (error) {
         console.error(error);
     }

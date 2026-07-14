@@ -3,9 +3,10 @@ import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 
-export default function Music() {
+export default function Blog() {
     const { data: content } = useFetch("/api/blog/");
     const [currItem, setCurrItem] = useState([]);
+
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
@@ -15,4 +16,3 @@ export default function Music() {
         </div>
     );
 }
-

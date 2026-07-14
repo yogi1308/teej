@@ -4,22 +4,15 @@ import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 
-export default function Music() {
+export default function Merch() {
     const { data: content } = useFetch("/api/merch/");
     const [currItem, setCurrItem] = useState(null);
     const [imgtype, setImgType] = useState("Thumbnail");
 
-    useEffect(() => {
-        if (currItem?.imageUrl?.length > 1) {
-            setImgType("Carousel");
-        } else {
-            setImgType("Thumbnail");
-        }
-    }, [currItem]);
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
-                {imgtype === "Carousel" ? (
+                {currItem?.imageUrl?.length > 1 ? (
                     <Carousel src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)"}} />
                 ) : (
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />

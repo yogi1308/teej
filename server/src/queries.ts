@@ -60,10 +60,19 @@ export async function albumArtUploadQuery(req, cloudinaryData) {
 
 export async function getAlbum(albumId: string) {
     try {
-        return await prisma.album.findUnique({
+        const album = await prisma.album.findUnique({
             where: { id: albumId },
             include: { tracks: { orderBy: { trackPosition: "asc" } } },
         });
+        if (!album) return null;
+        return {
+            ...album,
+            tracks: album.tracks.map(t => ({
+                ...t,
+                coverUrl: t.imageUrl ?? album.coverUrl,
+                albumTitle: album.title,
+            })),
+        };
     } catch (error) {
         console.error(error);
     }

@@ -1,10 +1,14 @@
 import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import useFetch from "@/hooks/useFetch";
 
 export default function Music() {
-    const { data: content } = useFetch("/api/music/");
+    const { musicId } = useParams();
+    const url = musicId ? `/api/music/albums/${musicId}` : "/api/music/";
+    const { data } = useFetch(url);
+    const content = Array.isArray(data) ? data : data?.tracks ?? [];
     const [currItem, setCurrItem] = useState([]);
     return (
         <div>

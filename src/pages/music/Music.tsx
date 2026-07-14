@@ -10,7 +10,6 @@ export default function Music() {
     const { data } = useFetch(url);
     const content = Array.isArray(data) ? data : data?.tracks ?? [];
     const [currItem, setCurrItem] = useState([]);
-    useEffect(() => {console.log(currItem)}, [currItem])
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

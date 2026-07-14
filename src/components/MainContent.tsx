@@ -107,7 +107,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                     {currItem?.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                 </div>
             </div>
-            <ul ref={ulRef} className="flex-1 overflow-y-auto no-scrollbar" style={{ paddingBottom: ulHeight }}>
+            <ul ref={ulRef} className="flex-1 overflow-y-auto " style={{ paddingBottom: ulHeight }}>
                 {content?.map((item, i) => (
                     <li
                         className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}

@@ -68,7 +68,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         };
     }, [content]);
 
-    async function toTop(item) {
+    async function onclick(item) {
         const li = ulRef.current?.querySelector(`[data-id="${item.id}"]`);
         if (li) {
             const top = (li as HTMLElement).offsetTop;
@@ -92,7 +92,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             <div
                 className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
                 onClick={() => {
-                    toTop(currItem);
+                    onclick(currItem);
                 }}
             >
                 <p className="truncate">{currItem?.title}</p>
@@ -113,7 +113,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
                         key={item.id}
                         data-id={item.id}
-                        onClick={() => toTop(item)}
+                        onClick={() => onclick(item)}
                     >
                         <p className="truncate">{item?.title}</p>
                         <div className="flex gap-0 group-hover:gap-4 items-center">
@@ -138,7 +138,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 setPlaying={setPlaying}
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
-                toTop={toTop}
+                onclick={onclick}
             />
         </div>
     );

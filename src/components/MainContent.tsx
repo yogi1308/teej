@@ -68,21 +68,17 @@ export default function MainContent({ content, currItem, setCurrItem }) {
         };
     }, [content]);
 
-    function scrollToTop(item) {
-        return new Promise(resolve => {
-            const li = ulRef.current?.querySelector(`[data-id="${item.id}"]`);
-            if (li) {
-                const top = (li as HTMLElement).offsetTop;
-                ulRef.current?.scrollTo({ top, behavior: "smooth" });
-                ulRef.current?.addEventListener("scrollend", resolve, { once: true });
-            } else {
-                resolve();
+    async function toTop(item) {
+        const li = ulRef.current?.querySelector(`[data-id="${item.id}"]`);
+        if (li) {
+            const top = (li as HTMLElement).offsetTop;
+            if (ulRef.current?.scrollTop !== top) {
+                await new Promise(resolve => {
+                    ulRef.current?.addEventListener("scrollend", resolve, { once: true });
+                    ulRef.current?.scrollTo({ top, behavior: "smooth" });
+                });
             }
-        });
-    }
-
-    async function onclick(item) {
-        await scrollToTop(item);
+        }
         if (item.type === "track") {
             setPlaying(item);
             setIsPlaying(true);
@@ -96,7 +92,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
             <div
                 className="shrink-0 flex justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
                 onClick={() => {
-                    onclick(currItem);
+                    toTop(currItem);
                 }}
             >
                 <p className="truncate">{currItem?.title}</p>
@@ -117,7 +113,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                         className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
                         key={item.id}
                         data-id={item.id}
-                        onClick={() => onclick(item)}
+                        onClick={() => toTop(item)}
                     >
                         <p className="truncate">{item?.title}</p>
                         <div className="flex gap-0 group-hover:gap-4 items-center">
@@ -142,7 +138,7 @@ export default function MainContent({ content, currItem, setCurrItem }) {
                 setPlaying={setPlaying}
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
-                onclick={onclick}
+                toTop={toTop}
             />
         </div>
     );

@@ -22,7 +22,7 @@ export default function AddBlog({ blogFormRef }) {
                             name="description"
                             placeholder={"Add a description..."}
                             rows={5}
-                            className="border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 h-full"
+                            className="border border-white bg-transparent px-1 py-2 outline-none  placeholder:text-white/20 h-full"
                         />
                     </div>
                     <div className="flex border border-white divide-x divide-white w-full text-center p-1">

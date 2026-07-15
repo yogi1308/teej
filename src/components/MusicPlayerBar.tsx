@@ -17,7 +17,7 @@ export function MusicPlayerBar({ playing, currentTime, isPlaying, onToggle, onSe
 
     return (
         <div className="fixed bottom-0.5 left-1/2 -translate-x-1/2 px-4 py-4 flex flex-col items-center gap-2 border border-white w-[99vw] backdrop-blur-md bg-black/20">
-            <p className="text-white">
+            <p className="">
                 <span className="text-xl">{playing.title}</span>
                 {playing.albumTtitle && <span className="text-white/50 "> / {playing.albumTitle}</span>}
             </p>

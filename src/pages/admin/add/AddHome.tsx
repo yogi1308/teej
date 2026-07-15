@@ -7,7 +7,7 @@ export default function AddHome() {
     });
 
     return (
-        <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto p-4 font-dots text-white">
+        <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto p-4 ">
             <header className="border-b border-white/10 pb-4">
                 <h2 className="text-2xl text-red-500 tracking-tighter">HOME_SYSTEM_CONFIG</h2>
                 <p className="text-[10px] opacity-40 uppercase tracking-[0.3em]">Modify Core Interface parameters</p>
@@ -17,7 +17,7 @@ export default function AddHome() {
                 <div className="group flex flex-col gap-2">
                     <label className="text-[10px] opacity-40 uppercase tracking-widest group-focus-within:text-red-500">Global Hero Text</label>
                     <textarea 
-                        className="bg-white/5 border border-white/10 h-32 p-4 font-caveat text-4xl text-white outline-none focus:border-red-500 transition-all resize-none"
+                        className="bg-white/5 border border-white/10 h-32 p-4 font-caveat text-4xl outline-none focus:border-red-500 transition-all resize-none"
                         placeholder="Define the primary system greeting..."
                         value={formData.heroText}
                         onChange={(e) => setFormData({ heroText: e.target.value })}
@@ -48,7 +48,7 @@ export default function AddHome() {
             <motion.button 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="mt-4 bg-red-500 text-white py-4 font-bold uppercase tracking-[0.4em] text-xs shadow-[0_0_20px_rgba(239,68,68,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] transition-all"
+                className="mt-4 bg-red-500 py-4 font-bold uppercase tracking-[0.4em] text-xs shadow-[0_0_20px_rgba(239,68,68,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] transition-all"
             >
                 Execute_System_Update
             </motion.button>

@@ -16,7 +16,7 @@ export default function MerchPost() {
         <div className={`overflow-hidden ${isOpen && "overflow-y-scroll"}`}>
             {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
             <div
-                className="absolute! top-16"
+                className="absolute! top-16 left-1/2 -translate-x-1/2"
             >
                 {merch?.imageUrl?.length > 1 ? (
                     <Carousel src={merch?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)" }} />
@@ -39,7 +39,7 @@ export default function MerchPost() {
                     </div>
                 </div>
                 {isOpen && (
-                    <div className="flex-1 p-4 font-king flex flex-col gap-4">
+                    <div className="flex-1 p-4 flex flex-col gap-4">
                         <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
                             <p className="text-white/50">Description</p>
                             <p>{merch?.description}</p>

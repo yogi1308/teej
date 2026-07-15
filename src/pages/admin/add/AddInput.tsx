@@ -26,7 +26,7 @@ export default function AddInput({
                         event.currentTarget.value = defaultValue;
                     }
                 }}
-                className="border-b border-white bg-transparent outline-none text-white placeholder:text-white/20"
+                className="border-b border-white bg-transparent outline-none placeholder:text-white/20"
                 required={!!defaultValue}
             />
         </div>

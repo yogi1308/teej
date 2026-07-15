@@ -1,3 +1,3 @@
 export default function ErrorPage() {
-    return <div className="bg-black h-screen w-screen text-white flex items-center justify-center font-dots">404</div>;
+    return <div className="h-screen w-screen flex items-center justify-center ">404</div>;
 }

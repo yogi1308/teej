@@ -11,6 +11,7 @@ import BlogPost from "./pages/blog/Blogpost.tsx";
 import AdminMusic from "./pages/admin/AdminMusic.tsx";
 import AdminMerch from "./pages/admin/AdminMerch.tsx";
 import AdminBlog from "./pages/admin/AdminBlog.tsx";
+import AdminApp from "./AdminApp.tsx";
 
 const routes = [
     {
@@ -34,7 +35,7 @@ const routes = [
     },
     {
         path: "admin",
-        element: <App />,
+        element: <AdminApp />,
         errorElement: <ErrorPage />,
         children: [
             {
@@ -43,7 +44,9 @@ const routes = [
                     { path: "music", element: <AdminMusic /> },
                     { path: "music/:musicId", element: <AdminMusic /> },
                     { path: "merch", element: <AdminMerch /> },
+                    { path: "merch/:merchId", element: <MerchPost /> },
                     { path: "blog", element: <AdminBlog /> },
+                    { path: "blog/:blogId", element: <BlogPost /> },
                     { path: "donate", element: <Donate /> },
                 ],
             },

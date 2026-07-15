@@ -103,7 +103,7 @@ function MenuBar({ editor }: { editor: Editor }) {
                             editor.chain().focus().unsetFontSize().run();
                         }
                     }}
-                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                    className="bg-transparent text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
                 >
                     <option value="" className="bg-black">
                         Font size
@@ -155,7 +155,7 @@ function MenuBar({ editor }: { editor: Editor }) {
                             editor.chain().focus().unsetColor().run();
                         }
                     }}
-                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
+                    className="bg-transparent text-sm px-1 py-1 border border-white/30 rounded cursor-pointer"
                     style={s.color ? { color: s.color } : undefined}
                 >
                     <option value="" className="bg-black">
@@ -251,7 +251,7 @@ function MenuBar({ editor }: { editor: Editor }) {
                             editor.chain().focus().setTextAlign(val).run();
                         }
                     }}
-                    className="bg-transparent text-white text-sm px-1 py-1 border border-white/30 rounded cursor-pointer mr-1.25"
+                    className="bg-transparent text-sm px-1 py-1 border border-white/30 rounded cursor-pointer mr-1.25"
                 >
                     <option value="left" className="bg-black">
                         Left
@@ -425,7 +425,7 @@ function ToolBtn({
             type="button"
             onClick={onClick}
             title={tooltip}
-            className={`px-3 py-1 text-sm transition-colors ${active ? "bg-white text-black" : "text-white hover:bg-white/10"}`}
+            className={`px-3 py-1 text-sm transition-colors ${active ? "bg-white text-black" : " hover:bg-white/10"}`}
         >
             {label ?? children}
         </button>
@@ -554,7 +554,7 @@ export default function TipTap({ value, onChange }: { value?: string; onChange?:
     return (
         <div className="border border-white bg-black font-sans flex-1">
             <MenuBar editor={editor} />
-            <EditorContent editor={editor} className="p-4 text-white" />
+            <EditorContent editor={editor} className="p-4 " />
         </div>
     );
 }

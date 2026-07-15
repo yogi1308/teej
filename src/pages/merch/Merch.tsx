@@ -3,7 +3,6 @@ import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
-import Add from "../admin/add/Add";
 
 export default function Merch() {
     const { data: content } = useFetch("/api/merch/");
@@ -19,7 +18,6 @@ export default function Merch() {
                 )}
             </div>
             <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
-            <Add tab={"Blog"} />
         </div>
     );
 }

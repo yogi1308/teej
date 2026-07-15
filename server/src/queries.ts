@@ -126,7 +126,7 @@ export async function merchUploadQuery(req, merchImages) {
         const upload = await prisma.merch.create({
             data: {
                 title: req.body.title,
-                meta: req.body.price,
+                meta: Number(req.body.price).toFixed(2),
                 imageUrl: merchImagesUrls,
                 imageAssetId: merchImagesAssetIds,
                 description: req.body.description,

@@ -12,7 +12,7 @@ const AddAlbums = forwardRef<HTMLFormElement, { songId: number; failed: boolean;
             <form
                 ref={ref}
                 data-song-id={songId}
-                className={`flex w-full text-white p-4 gap-8 items-center ${failed ? "border border-red-500" : ""} items-end`}
+                className={`flex w-full p-4 gap-8 items-center ${failed ? "border border-red-500" : ""} items-end`}
             >
                 <input
                     type="file"

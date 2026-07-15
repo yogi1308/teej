@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import Add from "./add/Add.tsx";
 import Hover1 from "@/components/Hover1.tsx";
 import GradientBorders from "@/components/GradientBorders.tsx";
+import Add from "./add/Add.tsx";
 
 export default function AdminHome() {
     const { pathname } = useLocation();

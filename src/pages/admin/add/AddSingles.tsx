@@ -15,7 +15,7 @@ const AddSingles = forwardRef<
         <form
             ref={ref}
             data-song-id={songId}
-            className={`flex w-full text-white p-4 gap-8 items-center ${failed ? "border border-red-500" : ""}`}
+            className={`flex w-full  p-4 gap-8 items-center ${failed ? "border border-red-500" : ""}`}
         >
             <div className="flex flex-col flex-1 gap-4">
                 <AddImage defaultText={"Upload Cover Art"} />
@@ -65,7 +65,7 @@ const AddSingles = forwardRef<
                         name="description"
                         placeholder={"Add a description..."}
                         rows={5}
-                        className="border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20"
+                        className="border border-white bg-transparent px-1 py-2 outline-none placeholder:text-white/20"
                     />
                 </div>
             </div>

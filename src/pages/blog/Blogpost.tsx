@@ -57,7 +57,7 @@ export default function BlogPost() {
                     </div>
                 </div>
                 {isOpen && (
-                    <div className="flex-1 px-4 py-4 font-king">
+                    <div className="flex-1 px-4 py-4">
                         {isPdf ? (
                             <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded w-full min-h-[calc(100vh-7rem)]" />
                         ) : (

@@ -7,18 +7,9 @@ import AddAlbums from "./AddAlbums";
 import AddInput from "./AddInput";
 import AddImage from "./AddImage";
 
-export default function AddDialog({
-    open,
-    onClose,
-    tab,
-    refetch,
-}: {
-    open: boolean;
-    onClose: () => void;
-    tab: "Merch" | "Music" | "Blog" | "Home" | "Singles" | "Album";
-    refetch?: () => void;
-}) {
-    const [currTab, setCurrTab] = useState(tab);
+export default function AddDialog({ onClose, dialogRef }: { onClose: () => void }) {
+    const [currTab, setCurrTab] = useState("Home");
+    const [resetKeys, setResetKeys] = useState({ Home: 0, Merch: 0, Blog: 0 });
     const [singlesSongIds, setSinglesSongIds] = useState([0]);
     const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0]);
     const [failedIds, setFailedIds] = useState(new Set<number>());
@@ -27,6 +18,7 @@ export default function AddDialog({
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
     const blogFormRef = useRef<HTMLFormElement>(null);
     const merchFormRef = useRef<HTMLFormElement>(null);
+
     useEffect(() => {
         if (albumTracksSongsIds.length === 0) {
             setAlbumTracksSongsIds([nextId.current++]);
@@ -39,7 +31,6 @@ export default function AddDialog({
     function updateResults(succeeded: number[], failed: number[]) {
         setSinglesSongIds(prev => prev.filter(id => !succeeded.includes(id)));
         setFailedIds(new Set(failed));
-        refetch();
     }
 
     async function uploadSongs(url: string) {
@@ -110,15 +101,21 @@ export default function AddDialog({
     }
 
     async function handleUpload() {
-        if (currTab === "Album") {
-            await handleAlbumsUpload();
-        } else if (currTab === "Singles" || currTab === "Music") {
-            await handleSinglesUpload();
-        } else if (currTab === "Blog") {
-            await handleBlogUpload();
-        } else if (currTab === "Merch") {
-            await handleMerchUpload()
-        }
+        try {
+            if (currTab === "Album") {
+                await handleAlbumsUpload();
+                setResetKeys(prev => ({ ...prev, Album: prev.Album + 1 }));
+            } else if (currTab === "Singles" || currTab === "Music") {
+                await handleSinglesUpload();
+                setResetKeys(prev => ({ ...prev, Singles: prev.Singles + 1 }));
+            } else if (currTab === "Blog") {
+                await handleBlogUpload();
+                setResetKeys(prev => ({ ...prev, Blog: prev.Blog + 1 }));
+            } else if (currTab === "Merch") {
+                await handleMerchUpload();
+                setResetKeys(prev => ({ ...prev, Merch: prev.Merch + 1 }));
+            }
+        } catch (error) { }
     }
 
     function handleDelete(id: number) {
@@ -131,12 +128,11 @@ export default function AddDialog({
 
     return (
         <>
-            {open && <div className="fixed inset-0  backdrop-blur-sm z-[9998]" />}
             <dialog
-                className="dialog flex flex-col h-[90vh] w-[80vw] fixed inset-0 m-auto z-[9999] border border-white bg-black text-white overflow-hidden"
-                open={open}
+                className="dialog flex-col bg-black/50 backdrop-blur-md h-[90vh] w-[80vw] fixed inset-0 m-auto border border-white overflow-hidden"
+                ref={dialogRef}
             >
-                <div className="tabs flex sticky -top-px bg-black justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 font-dots text-md ">
+                <div className="tabs flex sticky -top-px justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 text-md ">
                     <p
                         className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Home" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Home")}
@@ -170,8 +166,8 @@ export default function AddDialog({
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
-                    {(currTab === "Singles" || currTab === "Music") &&
-                        singlesSongIds.map(id => (
+                    <div style={{ display: currTab === "Singles" || currTab === "Music" ? "" : "none" }}>
+                        {singlesSongIds.map(id => (
                             <AddSingles
                                 key={id}
                                 songId={id}
@@ -183,43 +179,49 @@ export default function AddDialog({
                                 onDelete={handleDelete}
                             />
                         ))}
-                    {currTab === "Album" && (
-                        <>
-                            <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
-                                <AddImage defaultText={"Upload Cover Art"} />
-                                <div className="flex-1 flex flex-col gap-4">
-                                    <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />
-                                    <AddInput label={"Release Date"} placeholder="Release Date" type="date" name="release" />
-                                    <div className="flex flex-col gap-2 flex-1">
-                                        <label>Description</label>
-                                        <textarea
-                                            name="description"
-                                            placeholder={"Add a description..."}
-                                            className="flex-1 border border-white bg-transparent px-1 py-2 outline-none text-white placeholder:text-white/20 resize-none"
-                                        />
-                                    </div>
+                    </div>
+                    <div style={{ display: currTab === "Album" ? "" : "none" }}>
+                        <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
+                            <AddImage defaultText={"Upload Cover Art"} />
+                            <div className="flex-1 flex flex-col gap-4">
+                                <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />
+                                <AddInput label={"Release Date"} placeholder="Release Date" type="date" name="release" />
+                                <div className="flex flex-col gap-2 flex-1">
+                                    <label>Description</label>
+                                    <textarea
+                                        name="description"
+                                        placeholder={"Add a description..."}
+                                        className="flex-1 border border-white bg-transparent px-1 py-2 outline-none placeholder:text-white/20 resize-none"
+                                    />
                                 </div>
-                            </form>
-                            {albumTracksSongsIds.map(id => (
-                                <AddAlbums
-                                    key={id}
-                                    songId={id}
-                                    failed={failedIds.has(id)}
-                                    ref={el => {
-                                        if (el) formRefs.current.set(id, el);
-                                        else formRefs.current.delete(id);
-                                    }}
-                                    onDelete={handleAlbumTracksDelete} />
-                            ))}
-                        </>
-                    )}
-                    {currTab == "Merch" && <AddMerch merchFormRef={merchFormRef} />}
-                    {currTab == "Blog" && <AddBlog blogFormRef={blogFormRef} />}
-                    {currTab == "Home" && <AddHome />}
+                            </div>
+                        </form>
+                        {albumTracksSongsIds.map(id => (
+                            <AddAlbums
+                                key={id}
+                                songId={id}
+                                failed={failedIds.has(id)}
+                                ref={el => {
+                                    if (el) formRefs.current.set(id, el);
+                                    else formRefs.current.delete(id);
+                                }}
+                                onDelete={handleAlbumTracksDelete}
+                            />
+                        ))}
+                    </div>
+                    <div style={{ display: currTab === "Merch" ? "" : "none" }}>
+                        <AddMerch merchFormRef={merchFormRef} key={resetKeys.Merch} />
+                    </div>
+                    <div style={{ display: currTab === "Blog" ? "" : "none" }}>
+                        <AddBlog blogFormRef={blogFormRef} key={resetKeys.Blog} />
+                    </div>
+                    <div style={{ display: currTab === "Home" ? "" : "none" }}>
+                        <AddHome key={resetKeys.Home} />
+                    </div>
                 </div>
 
-                <div className="flex sticky bg-black mt-auto bottom-0 text-center font-dots text-md justify-center w-full self-center">
-                    <div className="flex sticky bg-black mt-auto bottom-0 text-center divide-x divide-white font-dots text-md justify-center border-t w-fit self-center">
+                <div className="flex sticky mt-auto bottom-0 text-center text-md justify-center w-full self-center">
+                    <div className="flex sticky mt-auto bottom-0 text-center divide-x divide-white text-md justify-center border-t w-fit self-center">
                         <button className="cursor-pointer px-20 py-1 mb-1" onClick={() => handleUpload()}>
                             Upload
                         </button>

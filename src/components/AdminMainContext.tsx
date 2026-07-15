@@ -5,6 +5,9 @@ import PlayArrow from "@/assets/svg/PlayArrow";
 import AudioPlayer from "./AudioPlayer";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingContent from "@/pages/load/LoadingContent";
+import Delete from "@/assets/svg/Delete";
+import EditSVG from "@/assets/svg/Edit";
+import { Overlay } from "@/pages/overlay/UploadingOverlay";
 
 export default function AdminMainContent({ content, currItem, setCurrItem, loading }) {
     const navigate = useNavigate();
@@ -14,6 +17,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     currRef.current = currItem;
     const [ulHeight, setUlHeight] = useState(0);
     const [playing, setPlaying] = useState(null);
+    const [deleting, setDeleting] = useState(false)
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -70,6 +74,20 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
         };
     }, [content]);
 
+    async function handleDelete(event, item) {
+        setDeleting(true)
+        event.stopPropagation();
+        event.preventDefault();
+        await fetch("/api/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ id: item.id, type: item.type }),
+        });
+        window.dispatchEvent(new CustomEvent("refetch-admin"));
+        setDeleting(false)
+    }
+
     async function onclick(item) {
         const li = ulRef.current?.querySelector(`[data-id="${item.id}"]`);
         if (li) {
@@ -115,6 +133,10 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                             ) : (
                                 <p className="truncate">{currItem?.meta || "Album"}</p>
                             )}
+                            <EditSVG />
+                            <div onClick={event => handleDelete(event, currItem)}>
+                                <Delete />
+                            </div>
                             {currItem?.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                         </div>
                     </div>
@@ -135,7 +157,11 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                                     ) : (
                                         <p className="truncate">{item?.meta || "Album"}</p>
                                     )}
-                                    <div className="w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
+                                    <div className="flex gap-4 w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
+                                        <EditSVG />
+                                        <div onClick={event => handleDelete(event, item)}>
+                                            <Delete />
+                                        </div>
                                         {item.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
                                     </div>
                                 </div>
@@ -154,6 +180,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                 </div>
             )}
             {loading && <LoadingContent />}
+            {deleting && <Overlay overlaytext={"Deleting.."} />}
         </>
     );
 }

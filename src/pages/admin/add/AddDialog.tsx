@@ -6,8 +6,8 @@ import AddSingles from "./AddSingles";
 import AddAlbums from "./AddAlbums";
 import AddInput from "./AddInput";
 import AddImage from "./AddImage";
-import { UploadingOverlay } from "@/pages/uploading/UploadingOverlay";
 import { useLocation } from "react-router-dom";
+import { Overlay } from "@/pages/overlay/UploadingOverlay";
 
 export default function AddDialog({ onClose, dialogRef }: { onClose: () => void }) {
     const location = useLocation();
@@ -265,7 +265,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         </button>
                     </div>
                 </div>
-                {uploading && <UploadingOverlay />}
+                {uploading && <Overlay overlaytext={"Uploading..."}/>}
             </dialog>
         </>
     );

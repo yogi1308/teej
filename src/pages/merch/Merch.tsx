@@ -5,7 +5,7 @@ import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
 
 export default function Merch() {
-    const { data: content } = useFetch("/api/merch/");
+    const { data: content, loading, error } = useFetch("/api/merch/");
     const [currItem, setCurrItem] = useState(null);
 
     return (
@@ -17,7 +17,7 @@ export default function Merch() {
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                 )}
             </div>
-            <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            <MainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
         </div>
     );
 }

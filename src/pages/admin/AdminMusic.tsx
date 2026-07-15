@@ -7,7 +7,7 @@ import useFetch from "@/hooks/useFetch";
 export default function Music() {
     const { musicId } = useParams();
     const url = musicId ? `/api/music/albums/${musicId}` : "/api/music/";
-    const { data } = useFetch(url);
+    const { data: data, loading, error } = useFetch(url);
     const content = Array.isArray(data) ? data : data?.tracks ?? [];
     const [currItem, setCurrItem] = useState([]);
     return (
@@ -15,7 +15,7 @@ export default function Music() {
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
                 <Thumbnail src={currItem?.imageUrl || currItem?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
             </div>
-            <MainContent content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            <MainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
         </div>
     );
 }

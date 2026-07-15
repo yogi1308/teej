@@ -2,10 +2,11 @@ import express from "express";
 import { Router } from "express";
 import { deleteItem } from "../queries";
 import { deleteFromCloudinary } from "../cloudinary";
+import { requireAdmin } from "../../auth/middleware";
 
 const indexRouter = Router();
 
-indexRouter.post("/delete", express.json(), async (req, res) => {
+indexRouter.post("/delete", requireAdmin, express.json(), async (req, res) => {
     try {
         const { id, type } = req.body;
         console.log("Delete request:", { id, type });

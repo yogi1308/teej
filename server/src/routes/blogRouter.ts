@@ -2,10 +2,11 @@ import { Router } from "express";
 import { upload } from "../multer";
 import { uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary";
 import { blogFileUploadQuery, getAllBlog, getBlog } from "../queries";
+import { requireAdmin } from "../../auth/middleware";
 
 const blogRouter = Router();
 
-blogRouter.post("/", upload.fields([{ name: "file" }, { name: "cover-art" }]), async (req, res, next) => {
+blogRouter.post("/", requireAdmin, upload.fields([{ name: "file" }, { name: "cover-art" }]), async (req, res, next) => {
     try {
         const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
         if (!req.files?.["cover-art"] && !req.files?.["file"]) return res.status(400).json({ success: false, error: "Blog Thumbnail Required" });
@@ -56,7 +57,7 @@ blogRouter.get("/:id", async (req, res) => {
         const blog = await getBlog(req.params.id);
         res.status(200).json({ success: true, data: blog });
     } catch (error) {
-        res.status(500).json({ success: false, error: "Failed to fetch music" });
+        res.status(500).json({ success: false, error: "Failed to fetch blog" });
     }
 });
 

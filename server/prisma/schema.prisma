@@ -31,7 +31,7 @@ model Track {
     meta            String // duration (MM:SS)
     songUrl         String?
     songAssetId     String
-    link            String
+    link            String?
     imageUrl        String? // cover art (singles). Album tracks fall back to album.coverUrl
     imageAssetId    String?
     description     String?

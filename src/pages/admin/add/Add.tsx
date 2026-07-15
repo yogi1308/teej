@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import AddDialog from "./AddDialog";
 import AddIcon from "./AddIcon";
 
-export default function Add({ refetch } : { tab: "Merch" | "Music" | "Blog" | "Home"; refetch?: () => void}) {
+export default function Add({}) {
     const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef<HTMLDialogElement | null>(null);
     const opened = useRef(false);
@@ -32,7 +32,7 @@ export default function Add({ refetch } : { tab: "Merch" | "Music" | "Blog" | "H
     return (
         <>
             <AddIcon onClick={() => setIsOpen(true)} />
-            <AddDialog onClose={() => setIsOpen(false)} refetch={refetch} dialogRef={dialogRef}/>
+            <AddDialog onClose={() => setIsOpen(false)}  dialogRef={dialogRef}/>
         </>
     );
 }

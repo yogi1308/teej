@@ -12,7 +12,6 @@ import { useEffect } from "react";
 export default function Navbar({ onClick }: { onClick?: () => void }) {
     const { pathname } = useLocation();
     const { playingLink } = usePlayer();
-    useEffect(() => { console.log(playingLink) }, [playingLink])
     let pageName = "Home";
     let pageIcon = <HomeSvg />;
     if (pathname.includes("music")) {
@@ -30,7 +29,7 @@ export default function Navbar({ onClick }: { onClick?: () => void }) {
     }
 
     return (
-        <nav className={`flex items-center absolute left-1/2 -translate-x-1/2 top-0}`}>
+        <nav className={`flex items-center absolute left-1/2 -translate-x-1/2 top-0`}>
             <div
                 onClick={onClick ?? (() => { })}
                 className="flex cursor-pointer justify-between m-4! gap-8 backdrop-blur-md text-center p-2 

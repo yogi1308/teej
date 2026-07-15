@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import Hover1 from "@/components/Hover1.tsx";
 import GradientBorders from "@/components/GradientBorders.tsx";
-import Add from "./add/Add.tsx";
 
 export default function AdminHome() {
     const { pathname } = useLocation();
@@ -11,21 +10,20 @@ export default function AdminHome() {
             <main className="flex flex-col bg-white/05 items-center w-full justify-center gap-4 ">
                 <h1>TEEJ</h1>
                 <div className="flex">
-                    <Link to="/music" style={{ textDecoration: "none", color: "inherit" }}>
+                    <Link to="/admin/music" style={{ textDecoration: "none", color: "inherit" }}>
                         <Hover1 active={pathname.includes("/music")}><div className="p-1 px-16">Music</div></Hover1>
                     </Link>
-                    <Link to="/merch" style={{ textDecoration: "none", color: "inherit" }}>
+                    <Link to="/admin/merch" style={{ textDecoration: "none", color: "inherit" }}>
                         <Hover1 active={pathname.includes("/merch")}><div className="p-1 px-16">Merch</div></Hover1>
                     </Link>
-                    <Link to="/blog" style={{ textDecoration: "none", color: "inherit" }}>
+                    <Link to="/admin/blog" style={{ textDecoration: "none", color: "inherit" }}>
                         <Hover1 active={pathname.includes("/blog")}><div className="p-1 px-16">Blog</div></Hover1>
                     </Link>
-                    <Link to="/donate" style={{ textDecoration: "none", color: "inherit" }}>
+                    <Link to="/admin/donate" style={{ textDecoration: "none", color: "inherit" }}>
                         <Hover1 active={pathname.includes("/donate")}><div className="p-1 px-16">Donate</div></Hover1>
                     </Link>
                 </div>
             </main>
-            <Add tab={"Home"} />
         </div>
     );
 }

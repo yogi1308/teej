@@ -6,9 +6,25 @@ import AddSingles from "./AddSingles";
 import AddAlbums from "./AddAlbums";
 import AddInput from "./AddInput";
 import AddImage from "./AddImage";
+import { UploadingOverlay } from "@/pages/uploading/UploadingOverlay";
+import { useLocation } from "react-router-dom";
 
 export default function AddDialog({ onClose, dialogRef }: { onClose: () => void }) {
-    const [currTab, setCurrTab] = useState("Home");
+    const location = useLocation();
+    function determineTab() {
+        if (location.pathname.includes("blog")) {
+            return "Blog";
+        }
+        if (location.pathname.includes("merch")) {
+            return "Merch";
+        }
+        if (location.pathname.includes("music")) {
+            return "Music";
+        }
+        return "Home";
+    }
+    const [currTab, setCurrTab] = useState(determineTab());
+    const [uploading, setUploading] = useState(false);
     const [resetKeys, setResetKeys] = useState({ Home: 0, Merch: 0, Blog: 0 });
     const [singlesSongIds, setSinglesSongIds] = useState([0]);
     const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0]);
@@ -43,6 +59,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                     const res = await fetch(url, {
                         method: "POST",
                         body: new FormData(form),
+                        credentials: "include"
                     });
                     return { id, ok: res.ok };
                 } catch {
@@ -66,6 +83,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
         const albumRes = await fetch("/api/music/albums", {
             method: "POST",
             body: new FormData(albumMetaRef.current),
+            credentials: "include"
         });
         if (!albumRes.ok) return;
         const { albumId } = await albumRes.json();
@@ -81,6 +99,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             await fetch("/api/blog", {
                 method: "POST",
                 body: new FormData(form),
+                credentials: "include"
             });
         } catch (error) {
             console.error(error);
@@ -94,6 +113,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             await fetch("/api/merch", {
                 method: "POST",
                 body: new FormData(form),
+                credentials: "include"
             });
         } catch (error) {
             console.error(error);
@@ -101,13 +121,12 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     }
 
     async function handleUpload() {
+        setUploading(true);
         try {
             if (currTab === "Album") {
                 await handleAlbumsUpload();
-                setResetKeys(prev => ({ ...prev, Album: prev.Album + 1 }));
             } else if (currTab === "Singles" || currTab === "Music") {
                 await handleSinglesUpload();
-                setResetKeys(prev => ({ ...prev, Singles: prev.Singles + 1 }));
             } else if (currTab === "Blog") {
                 await handleBlogUpload();
                 setResetKeys(prev => ({ ...prev, Blog: prev.Blog + 1 }));
@@ -115,7 +134,12 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                 await handleMerchUpload();
                 setResetKeys(prev => ({ ...prev, Merch: prev.Merch + 1 }));
             }
-        } catch (error) { }
+        } catch (error) {
+            console.error("Upload failed:", error);
+        } finally {
+            window.dispatchEvent(new CustomEvent("refetch-admin"));
+            setUploading(false);
+        }
     }
 
     function handleDelete(id: number) {
@@ -222,7 +246,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
 
                 <div className="flex sticky mt-auto bottom-0 text-center text-md justify-center w-full self-center">
                     <div className="flex sticky mt-auto bottom-0 text-center divide-x divide-white text-md justify-center border-t w-fit self-center">
-                        <button className="cursor-pointer px-20 py-1 mb-1" onClick={() => handleUpload()}>
+                        <button type="button" className="cursor-pointer px-20 py-1 mb-1" onClick={() => handleUpload()}>
                             Upload
                         </button>
                         {(currTab === "Album" || currTab === "Singles" || currTab === "Music") && (
@@ -241,6 +265,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         </button>
                     </div>
                 </div>
+                {uploading && <UploadingOverlay />}
             </dialog>
         </>
     );

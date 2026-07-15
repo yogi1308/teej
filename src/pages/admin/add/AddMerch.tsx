@@ -7,7 +7,6 @@ export default function AddMerch({merchFormRef}) {
     const [imgs, setImgs] = useState([]);
     const [currImgPos, setCurrImgPos] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {console.log(imgs?.length)}, [imgs])
     return (
         <form className="flex p-4 gap-4" ref={merchFormRef}>
             <div className="flex flex-col gap-4">

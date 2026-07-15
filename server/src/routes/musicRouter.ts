@@ -2,10 +2,12 @@ import { Router } from "express";
 import { uploadImageToCloudinary, uploadToCloudinary } from "../cloudinary";
 import { upload } from "../multer";
 import { musicUpload, getMusic, albumArtUploadQuery, getAlbum } from "../queries";
+import { requireAdmin } from "../../auth/middleware";
 
 const musicRouter = Router();
 musicRouter.post(
     "/singles",
+    requireAdmin,
     upload.fields([{ name: "track" }, { name: "cover-art" }]),
     uploadToCloudinary,
     musicUpload,
@@ -25,6 +27,7 @@ musicRouter.get("/", async (req, res) => {
 
 musicRouter.post(
     "/albums",
+    requireAdmin,
     upload.single("cover-art"),
     async (req, res, next)  => {
         try {
@@ -42,6 +45,7 @@ musicRouter.post(
 
 musicRouter.post(
     "/albums/:id/tracks",
+    requireAdmin,
     upload.fields([{name: "track"}]),
     uploadToCloudinary,
     musicUpload,

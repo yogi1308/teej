@@ -2,10 +2,11 @@ import { Router } from "express";
 import { upload } from "../multer";
 import { uploadImageToCloudinary } from "../cloudinary";
 import { getAllMerch, getMerch, merchUploadQuery } from "../queries";
+import { requireAdmin } from "../../auth/middleware";
 
 const merchRouter = Router();
 
-merchRouter.post("/", upload.array("images"), async (req, res, next) => {
+merchRouter.post("/", requireAdmin, upload.array("images"), async (req, res, next) => {
     try {
         const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
         const files = req.files as Express.Multer.File[]

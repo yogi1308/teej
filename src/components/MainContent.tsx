@@ -100,9 +100,9 @@ export default function MainContent({ content, currItem, setCurrItem, loading })
                         }}
                     >
                         {currItem?.subtitle ? (
-                            <div className="flex flex-col">
-                                <p className=""> {currItem?.title} </p>
-                                <p className="text-[1.0rem]! text-gray-400"> {currItem?.subtitle} </p>
+                            <div className="flex flex-col min-w-0">
+                                <p className="truncate"> {currItem?.title} </p>
+                                <p className="truncate text-gray-400"> {currItem?.subtitle} </p>
                             </div>
                         ) : (
                             <p className="truncate">{currItem?.title}</p>

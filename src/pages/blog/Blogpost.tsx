@@ -40,27 +40,27 @@ export default function BlogPost() {
                     <div className="absolute top-16 left-1/2 -translate-x-1/2">
                         <Thumbnail src={blog?.imageUrl || blog?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                     </div>
-                    <div className={`relative top-[calc(50vh)] bottom-0 pt-4 z-100000000000 flex flex-col h-screen`}>
+                    <div className={`relative top-[calc(50vh)] bottom-0 pt-4 z-100000000000 flex flex-col h-screen pointer-events-none`}>
                         <div
-                            className={`bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen ${!isOpen && "sticky top-[50vh]"}`}
+                            className={`pointer-events-auto bg-[rgba(0,0,0,0.4)] flex gap-12 justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen ${!isOpen && "sticky top-[50vh]"}`}
                             onClick={() => {
                                 setIsOpen(prev => !prev);
                             }}
                         >
-                            <div className="flex flex-col ">
-                                <p className=""> {blog?.title} </p>
-                                <p className="text-[1.0rem]! text-gray-400"> {blog?.subtitle} </p>
+                            <div className="flex flex-col min-w-0">
+                                <p className="truncate"> {blog?.title} </p>
+                                <p className="truncate text-gray-400"> {blog?.subtitle} </p>
                             </div>
-                            <div className="flex gap-52">
+                            <div className="flex gap-12">
                                 <div className="flex gap-4 justify-between">
                                     <p>Read</p>
                                     {isOpen ? <p>-</p> : <p>+</p>}
                                 </div>
-                                <p>{new Date(blog?.meta).toLocaleDateString()}</p>
+                                <p className="hidden md:block">{new Date(blog?.meta).toLocaleDateString()}</p>
                             </div>
                         </div>
                         {isOpen && (
-                            <div className="flex-1 px-4 py-4">
+                            <div className="flex-1 px-4 py-4 pointer-events-auto">
                                 {isPdf ? (
                                     <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded w-full min-h-[calc(100vh-7rem)]" />
                                 ) : (

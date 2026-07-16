@@ -1,6 +1,7 @@
 import Navbar from "./Navbar.tsx";
 import Navigator from "./Navigator.tsx";
 import { useState, useEffect, useRef } from "react";
+import BackButton from "../BackButton";
 
 export default function Nav() {
     const [navigatorVisibility, setNavigatorVisibility] = useState(false);
@@ -46,6 +47,7 @@ export default function Nav() {
             )}
 
             <Navigator toggleNavigatorVisibility={toggleNavigatorVisibility} dialogRef={dialogRef} />
+            <BackButton />
         </>
     );
 }

@@ -25,14 +25,14 @@ export default function MerchPost() {
                             <Thumbnail src={merch?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                         )}
                     </div>
-                    <div className="fixed top-[calc(50vh)] w-screen z-100000 flex flex-col h-[50%]">
+                    <div className="fixed top-[calc(50vh)] w-screen z-100000 flex flex-col h-min">
                         <div
-                            className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b border-white py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all cursor-pointer"
+                            className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b border-white py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all cursor-pointer min-w-0"
                             onClick={() => setIsOpen(prev => !prev)}
                         >
-                            <p>{merch?.title}</p>
-                            <div className="flex gap-56 items-center">
-                                <div className="flex gap-4 items-center">
+                            <p className="truncate">{merch?.title}</p>
+                            <div className="flex gap-12 items-center">
+                                <div className="flex gap-2 items-center">
                                     <p>Details</p>
                                     {isOpen ? <p>-</p> : <p>+</p>}
                                 </div>

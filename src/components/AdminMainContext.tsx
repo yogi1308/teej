@@ -8,6 +8,7 @@ import LoadingContent from "@/pages/load/LoadingContent";
 import Delete from "@/assets/svg/Delete";
 import EditSVG from "@/assets/svg/Edit";
 import { Overlay } from "@/pages/overlay/UploadingOverlay";
+import EditDialog from "@/pages/edit/EditDialog";
 
 export default function AdminMainContent({ content, currItem, setCurrItem, loading }) {
     const navigate = useNavigate();
@@ -17,9 +18,35 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     currRef.current = currItem;
     const [ulHeight, setUlHeight] = useState(0);
     const [playing, setPlaying] = useState(null);
-    const [deleting, setDeleting] = useState(false)
+    const [deleting, setDeleting] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const dialogRef = useRef<HTMLDialogElement | null>(null);
+    const opened = useRef(false);
+    const [editItem, setEditItem] = useState(null)
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+
+        if (isOpen) {
+            opened.current = true;
+            dialog.style.transform = "scaleY(0)";
+            setTimeout(() => {
+                dialog.showModal();
+                requestAnimationFrame(() => {
+                    dialog.style.transform = "scaleY(1)";
+                });
+            }, 10);
+            dialog.style.display = "flex"
+        } else if (opened.current) {
+            dialog.style.transform = "scaleY(0)";
+            setTimeout(() => {
+                dialog.close();
+            }, 300);
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         // used to calcaluate padding bottom so that the last element can scroll all the way to the top
@@ -75,7 +102,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     }, [content]);
 
     async function handleDelete(event, item) {
-        setDeleting(true)
+        setDeleting(true);
         event.stopPropagation();
         event.preventDefault();
         await fetch("/api/delete", {
@@ -85,7 +112,15 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
             body: JSON.stringify({ id: item.id, type: item.type }),
         });
         window.dispatchEvent(new CustomEvent("refetch-admin"));
-        setDeleting(false)
+        setDeleting(false);
+    }
+
+    function handleEdit(event, item) {
+        console.log(item)
+        event.stopPropagation();
+        event.preventDefault();
+        setEditItem(item)
+        setIsOpen(true)
     }
 
     async function onclick(item) {
@@ -133,7 +168,9 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                             ) : (
                                 <p className="truncate">{currItem?.meta || "Album"}</p>
                             )}
-                            <EditSVG />
+                            <div onClick={event => handleEdit(event, currItem)}>
+                                <EditSVG />
+                            </div>
                             <div onClick={event => handleDelete(event, currItem)}>
                                 <Delete />
                             </div>
@@ -158,7 +195,9 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                                         <p className="truncate">{item?.meta || "Album"}</p>
                                     )}
                                     <div className="flex gap-4 w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
-                                        <EditSVG />
+                                        <div onClick={event => handleEdit(event, item)}>
+                                            <EditSVG />
+                                        </div>
                                         <div onClick={event => handleDelete(event, item)}>
                                             <Delete />
                                         </div>
@@ -181,6 +220,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
             )}
             {loading && <LoadingContent />}
             {deleting && <Overlay overlaytext={"Deleting.."} />}
+            <EditDialog dialogRef={dialogRef} item={editItem} onClose={() => setIsOpen(false)} />
         </>
     );
 }

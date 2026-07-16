@@ -552,7 +552,7 @@ export default function TipTap({ value, onChange }: { value?: string; onChange?:
     if (!editor) return null;
 
     return (
-        <div className="border border-white bg-black font-sans flex-1">
+        <div className="border border-white bg-black font-sans flex-1 min-h-[20rem]">
             <MenuBar editor={editor} />
             <EditorContent editor={editor} className="p-4 " />
         </div>

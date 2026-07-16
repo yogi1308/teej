@@ -233,13 +233,13 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                             />
                         ))}
                     </div>
-                    <div style={{ display: currTab === "Merch" ? "" : "none" }}>
+                    <div className="h-full" style={{ display: currTab === "Merch" ? "" : "none" }}>
                         <AddMerch merchFormRef={merchFormRef} key={resetKeys.Merch} />
                     </div>
-                    <div style={{ display: currTab === "Blog" ? "" : "none" }}>
+                    <div className="h-full" style={{ display: currTab === "Blog" ? "" : "none" }}>
                         <AddBlog blogFormRef={blogFormRef} key={resetKeys.Blog} />
                     </div>
-                    <div style={{ display: currTab === "Home" ? "" : "none" }}>
+                    <div className="h-full" style={{ display: currTab === "Home" ? "" : "none" }}>
                         <AddHome key={resetKeys.Home} />
                     </div>
                 </div>

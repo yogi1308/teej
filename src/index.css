@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: King;
-    src: url("assets/fonts/Courier_Prime/CourierPrime-Regular.ttf");
+    src: url("./assets/fonts/Courier_Prime/CourierPrime-Regular.ttf");
 }
 
 @theme {
@@ -15,7 +15,7 @@
     /* font-family: "Doto", monospace, sans-serif; */
     overflow: hidden;
     color: white;
-    font-family: "Doto", monospace, sans-serif;
+    font-family: "King", monospace, sans-serif;
 }
 
 * {

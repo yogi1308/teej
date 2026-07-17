@@ -162,6 +162,10 @@ export async function getMerch(merchId: string) {
     }
 }
 
+export async function updateTrack(id: string, data: any) {
+    return prisma.track.update({ where: { id }, data });
+}
+
 export async function deleteItem(id, type) {
     try {
         if (type === "merch") {

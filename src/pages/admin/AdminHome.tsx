@@ -9,7 +9,7 @@ export default function AdminHome() {
             <GradientBorders />
             <main className="flex flex-col bg-white/05 items-center w-full justify-center gap-4 ">
                 <h1>TEEJ</h1>
-                <div className="flex">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <Link to="/admin/music" style={{ textDecoration: "none", color: "inherit" }}>
                         <Hover1 active={pathname.includes("/music")}><div className="p-1 px-16">Music</div></Hover1>
                     </Link>

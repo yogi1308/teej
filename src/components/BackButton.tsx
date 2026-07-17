@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowRight from "@/assets/svg/ArrowRight";
 
-const detailRoutes = ["merch", "blog", "music"];
+const detailRoutes = ["merch", "blog"];
 
 export default function BackButton() {
     const navigate = useNavigate();

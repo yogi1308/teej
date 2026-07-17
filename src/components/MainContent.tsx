@@ -115,7 +115,23 @@ export default function MainContent({ content, currItem, setCurrItem, loading })
                             ) : (
                                 <p className="truncate">{currItem?.meta || "Album"}</p>
                             )}
-                            {currItem?.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                            {currItem?.type !== "track" ? (
+                                <ArrowRight />
+                            ) : (
+                                <div
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        if (playing === currItem) {
+                                            setIsPlaying(!isPlaying);
+                                        } else {
+                                            setPlaying(currItem);
+                                            setIsPlaying(true);
+                                        }
+                                    }}
+                                >
+                                    {playing === currItem && isPlaying ? <Pause /> : <PlayArrow />}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <ul ref={ulRef} className="flex-1 overflow-y-auto " style={{ paddingBottom: ulHeight }}>
@@ -136,7 +152,23 @@ export default function MainContent({ content, currItem, setCurrItem, loading })
                                         <p className="truncate">{item?.meta || "Album"}</p>
                                     )}
                                     <div className="w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
-                                        {item.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                                        {item.type !== "track" ? (
+                                            <ArrowRight />
+                                        ) : (
+                                            <span
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    if (playing === item) {
+                                                        setIsPlaying(!isPlaying);
+                                                    } else {
+                                                        setPlaying(item);
+                                                        setIsPlaying(true);
+                                                    }
+                                                }}
+                                            >
+                                                {playing === item && isPlaying ? <Pause /> : <PlayArrow />}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </li>

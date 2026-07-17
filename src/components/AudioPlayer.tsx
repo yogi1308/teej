@@ -15,8 +15,10 @@ export default function AudioPlayer({onclick, content, playing, setPlaying, isPl
         if (!a) return;
         if (isPlaying) {
             a.play().catch(() => {});
+        } else {
+            a.pause();
         }
-    }, [playing]);
+    }, [playing, isPlaying]);
 
     function onNext() {
         const idx = content.findIndex(c => c.id === playing?.id);

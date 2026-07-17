@@ -24,7 +24,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef<HTMLDialogElement | null>(null);
     const opened = useRef(false);
-    const [editItem, setEditItem] = useState(null)
+    const [editItem, setEditItem] = useState(null);
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -39,7 +39,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                     dialog.style.transform = "scaleY(1)";
                 });
             }, 10);
-            dialog.style.display = "flex"
+            dialog.style.display = "flex";
         } else if (opened.current) {
             dialog.style.transform = "scaleY(0)";
             setTimeout(() => {
@@ -116,11 +116,10 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     }
 
     function handleEdit(event, item) {
-        console.log(item)
         event.stopPropagation();
         event.preventDefault();
-        setEditItem(item)
-        setIsOpen(true)
+        setEditItem(item);
+        setIsOpen(true);
     }
 
     async function onclick(item) {
@@ -174,7 +173,23 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                             <div onClick={event => handleDelete(event, currItem)}>
                                 <Delete />
                             </div>
-                            {currItem?.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                            {currItem?.type !== "track" ? (
+                                <ArrowRight />
+                            ) : (
+                                <span
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        if (playing === currItem) {
+                                            setIsPlaying(!isPlaying);
+                                        } else {
+                                            setPlaying(currItem);
+                                            setIsPlaying(true);
+                                        }
+                                    }}
+                                >
+                                    {playing === currItem && isPlaying ? <Pause /> : <PlayArrow />}
+                                </span>
+                            )}
                         </div>
                     </div>
                     <ul ref={ulRef} className="flex-1 overflow-y-auto " style={{ paddingBottom: ulHeight }}>
@@ -201,7 +216,23 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                                         <div onClick={event => handleDelete(event, item)}>
                                             <Delete />
                                         </div>
-                                        {item.type !== "track" ? <ArrowRight /> : isPlaying ? <Pause /> : <PlayArrow />}
+                                        {item.type !== "track" ? (
+                                            <ArrowRight />
+                                        ) : (
+                                            <span
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    if (playing === item) {
+                                                        setIsPlaying(!isPlaying);
+                                                    } else {
+                                                        setPlaying(item);
+                                                        setIsPlaying(true);
+                                                    }
+                                                }}
+                                            >
+                                                {playing === item && isPlaying ? <Pause /> : <PlayArrow />}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </li>

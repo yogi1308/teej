@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { upload } from "../multer";
-import { uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary";
+import { deleteFromCloudinary, uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary";
 import { blogFileUploadQuery, getAllBlog, getBlog } from "../queries";
+import { prisma } from "../../prisma/prisma";
 import { requireAdmin } from "../../auth/middleware";
 
 const blogRouter = Router();
@@ -58,6 +59,49 @@ blogRouter.get("/:id", async (req, res) => {
         res.status(200).json({ success: true, data: blog });
     } catch (error) {
         res.status(500).json({ success: false, error: "Failed to fetch blog" });
+    }
+});
+
+blogRouter.put("/:id", requireAdmin, upload.fields([{ name: "file" }, { name: "images" }]), async (req, res) => {
+    try {
+        const existing = await prisma.blog.findUnique({ where: { id: req.params.id as string } });
+        if (!existing) return res.status(404).json({ success: false, error: "Blog not found" });
+
+        const data: any = {};
+        const oldAssets: string[] = [];
+
+        if (req.body.blogChange === "true") {
+            const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
+            const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+            const isPdf = req.body.blogUploadtype === "upload";
+
+            if (isPdf && files?.["file"]?.[0]) {
+                const b = await uploadRawToCloudinary(files["file"][0].buffer, `${stage}/blog`);
+                data.contentUrl = b.secure_url; data.contentAssetId = b.asset_id; data.contentType = "pdf";
+            } else if (!isPdf && req.body.html) {
+                const b = await uploadRawToCloudinary(Buffer.from(req.body.html, "utf-8"), `${stage}/blog`);
+                data.contentUrl = b.secure_url; data.contentAssetId = b.asset_id; data.contentType = "html";
+            }
+
+            if (files?.["images"]?.[0]) {
+                const c = await uploadImageToCloudinary(files["images"][0].buffer, `${stage}/blog`);
+                data.imageUrl = c.secure_url; data.imageAssetId = c.asset_id;
+            }
+
+            if (existing.contentAssetId) oldAssets.push(existing.contentAssetId);
+            if (existing.imageAssetId) oldAssets.push(existing.imageAssetId);
+        }
+
+        if (req.body.title) data.title = req.body.title;
+        if (req.body.subtitle) data.subtitle = req.body.subtitle;
+        if (req.body.description) data.description = req.body.description;
+
+        if (oldAssets.length) await deleteFromCloudinary(oldAssets);
+        await prisma.blog.update({ where: { id: req.params.id as string }, data });
+        res.json({ success: true });
+    } catch (error) {
+        console.error("PUT /blog/:id error:", error);
+        res.status(500).json({ success: false, error: (error as Error).message });
     }
 });
 

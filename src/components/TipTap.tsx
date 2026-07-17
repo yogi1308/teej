@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { Editor } from "@tiptap/core";
 import { useEditor, EditorContent, useEditorState } from "@tiptap/react";
 import type { EditorStateSnapshot } from "@tiptap/react";
@@ -549,12 +550,19 @@ export default function TipTap({ value, onChange }: { value?: string; onChange?:
         onUpdate: ({ editor }) => onChange?.(editor.getHTML()),
     });
 
+    useEffect(() => {
+        if (!editor || value === undefined) return;
+        if (editor.getHTML() !== value) {
+            editor.commands.setContent(value);
+        }
+    }, [value, editor]);
+
     if (!editor) return null;
 
     return (
-        <div className="border border-white bg-black font-sans flex-1 min-h-[20rem]">
+        <div className="border border-white bg-black font-sans flex-1 min-h-[20rem] overflow-scroll">
             <MenuBar editor={editor} />
-            <EditorContent editor={editor} className="p-4 " />
+            <EditorContent editor={editor} className="flex-1 min-h-0 overflow-y-auto p-4 " />
         </div>
     );
 }

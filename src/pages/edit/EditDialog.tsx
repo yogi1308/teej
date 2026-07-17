@@ -327,8 +327,8 @@ export default function EditDialog({
                         Close
                     </button>
                 </div>
+                {uploading && <Overlay overlaytext={"Uploading..."} />}
             </dialog>
-            {uploading && <Overlay overlaytext={"Uploading..."} />}
         </form>
     );
 }

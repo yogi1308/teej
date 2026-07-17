@@ -40,7 +40,7 @@ export default function MerchPost() {
                             </div>
                         </div>
                     </div>
-                    <div className="fixed top-[calc(50vh+3rem)] w-screen z-100000 flex flex-col overflow-y-auto h-[calc(50vh-3rem)] pb-16">
+                    <div className={ `fixed top-[calc(50vh+3rem)] w-screen z-100000 flex flex-col overflow-y-auto h-[calc(50vh-3rem)] pb-20 ${isOpen ? "h-[calc(50vh-3rem)] pb-20" : "h-min"}` }>
                         {isOpen && (
                             <div className="flex-1 p-4 flex flex-col gap-4">
                                 <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">

@@ -4,12 +4,14 @@ export default function AddInput({
     name,
     defaultValue,
     placeholder,
+    required,
 }: {
     label: string;
     type: string;
     name: string;
     defaultValue?: string;
     placeholder: string;
+    required?: boolean;
 }) {
     return (
         <div className="flex flex-col gap-1">
@@ -26,8 +28,8 @@ export default function AddInput({
                         event.currentTarget.value = defaultValue;
                     }
                 }}
-                className="border-b border-white bg-transparent outline-none placeholder:text-white/20"
-                required={!!defaultValue}
+                className="border-b border-white bg-transparent outline-none placeholder:text-white/20 invalid:border-red-400"
+                required={required ?? !!defaultValue}
             />
         </div>
     );

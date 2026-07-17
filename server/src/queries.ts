@@ -166,6 +166,44 @@ export async function updateTrack(id: string, data: any) {
     return prisma.track.update({ where: { id }, data });
 }
 
+export async function getHome() {
+    try {
+        let home = await prisma.home.findFirst();
+        if (!home) {
+            home = await prisma.home.create({ data: { env: "dev" } });
+        }
+        return home;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function updateHomeSocialLinks(socialLinks: { platform: string; url: string }[]) {
+    let home = await prisma.home.findFirst();
+    if (!home) {
+        home = await prisma.home.create({ data: { env: "dev" } });
+    }
+    return await prisma.home.update({
+        where: { id: home.id },
+        data: { socialLinks },
+    });
+}
+
+export async function deleteHomeSocialLink(index: number) {
+    const home = await prisma.home.findFirst();
+    if (!home) {
+        console.log("deleteHomeSocialLink: no home record found");
+        return;
+    }
+    const links = (home.socialLinks as { platform: string; url: string }[]) ?? [];
+    console.log("deleteHomeSocialLink: filtering index", index, "from", links.length, "links");
+    const updated = links.filter((_, i) => i !== index);
+    return await prisma.home.update({
+        where: { id: home.id },
+        data: { socialLinks: updated },
+    });
+}
+
 export async function deleteItem(id, type) {
     try {
         if (type === "merch") {

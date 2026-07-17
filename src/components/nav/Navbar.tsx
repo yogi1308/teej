@@ -7,7 +7,6 @@ import ThreeDots from "../../assets/svg/ThreeDots";
 import SoundCloud from "../../assets/svg/SoundCloud";
 import DonateSvg from "../../assets/svg/Donate";
 import { usePlayer } from "@/hooks/usePlayer";
-import { useEffect } from "react";
 
 export default function Navbar({ onClick }: { onClick?: () => void }) {
     const { pathname } = useLocation();

@@ -1,11 +1,21 @@
 @import "tailwindcss";
 @import "./assets/bglib/background-gradient-animation.css";
 
+@font-face {
+    font-family: King;
+    src: url("assets/fonts/Courier_Prime/CourierPrime-Regular.ttf");
+}
+
+@theme {
+    --font-king: "King", monospace, sans-serif;
+}
+
 :root {
     color-scheme: dark;
     /* font-family: "Doto", monospace, sans-serif; */
     overflow: hidden;
     color: white;
+    font-family: "Doto", monospace, sans-serif;
 }
 
 * {
@@ -62,27 +72,30 @@ dialog::backdrop {
 }
 
 .embla__viewport {
-  overflow: hidden;
-  width: 100%;
+    overflow: hidden;
+    width: 100%;
 }
 
 .embla__container {
-  display: flex;
-  /* Centering the container */
-  align-items: center; 
+    display: flex;
+    /* Centering the container */
+    align-items: center;
 }
 
 .embla__slide {
-  flex: 0 0 60vw; /* Keeps the slide width */
-  min-width: 0;
-  transition: transform 0.4s ease-in-out;
-  transform: scale(0.8); /* Inactive size */
-  opacity: 0.6;
+    flex: 0 0 60vw;
+    /* Keeps the slide width */
+    min-width: 0;
+    transition: transform 0.4s ease-in-out;
+    transform: scale(0.8);
+    /* Inactive size */
+    opacity: 0.6;
 }
 
 .embla__slide.is-selected {
-  transform: scale(1); /* Active size */
-  opacity: 1;
+    transform: scale(1);
+    /* Active size */
+    opacity: 1;
 }
 
 .shimmer {
@@ -99,19 +112,247 @@ dialog::backdrop {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        150deg,
-        transparent 35%,
-        rgba(255, 255, 255, 0.02) 45%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0.02) 55%,
-        transparent 65%
-    );
+    background: linear-gradient(150deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.02) 45%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(255, 255, 255, 0.02) 55%,
+            transparent 65%);
     animation: shimmer 2.2s ease-in-out infinite;
     will-change: transform;
 }
 
 @keyframes shimmer {
-    0% { transform: translate(-30%, -30%); }
-    100% { transform: translate(30%, 30%); }
+    0% {
+        transform: translate(-30%, -30%);
+    }
+
+    100% {
+        transform: translate(30%, 30%);
+    }
+}
+
+ul {
+    list-style: disc;
+    color: white;
+}
+
+ol {
+    list-style: decimal;
+    color: white;
+    padding-left: 1.5rem;
+}
+
+pre {
+    background: #1e1e1e;
+    border-radius: 0.5rem;
+    color: #d4d4d4;
+    font-family: "JetBrainsMono", monospace;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+}
+
+pre .hljs-keyword,
+pre .hljs-selector-tag,
+pre .hljs-type { color: #569cd6; }
+
+pre .hljs-string,
+pre .hljs-addition { color: #ce9178; }
+
+pre .hljs-comment,
+pre .hljs-quote { color: #6a9955; font-style: italic; }
+
+pre .hljs-number,
+pre .hljs-literal { color: #b5cea8; }
+
+pre .hljs-built_in,
+pre .hljs-builtin-name { color: #4ec9b0; }
+
+pre .hljs-function { color: #dcdcaa; }
+
+pre .hljs-params { color: #9cdcfe; }
+
+pre .hljs-attr,
+pre .hljs-attribute { color: #9cdcfe; }
+
+pre .hljs-title { color: #dcdcaa; }
+
+pre .hljs-variable,
+pre .hljs-this { color: #c586c0; }
+
+pre .hljs-property { color: #dcdcaa; }
+
+pre .hljs-punctuation { color: #d4d4d4; }
+
+pre .hljs-operator { color: #d4d4d4; }
+
+pre .hljs-regexp { color: #d16969; }
+
+blockquote {
+    border-left: 3px solid gray;
+    padding-left: 1rem;
+}
+
+details {
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+}
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    padding: 0.25rem 0.5rem;
+}
+
+[data-type="details"] {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    padding: 0.25rem;
+}
+
+[data-type="details"] > button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.5rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+[data-type="details"] > div {
+    flex: 1;
+    min-width: 0;
+}
+
+[data-type="details"]:not(.is-open) [data-type="detailsContent"] {
+    display: none;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    padding: 0.25rem 0;
+}
+
+ul[data-type="taskList"] {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+ul[data-type="taskList"] li > label {
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: currentColor;
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+    text-decoration: line-through;
+    color: #888;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.5rem 0;
+    overflow: auto;
+}
+
+table th,
+table td {
+    border: 1px solid #555;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    min-width: 80px;
+    vertical-align: top;
+}
+
+table th {
+    background: #2a2a2a;
+    font-weight: 600;
+}
+
+table td {
+    background: #1e1e1e;
+}
+
+table .selectedCell {
+    background: #333;
+    outline: 1px solid #666;
+}
+
+table .column-resize-handle {
+    background: #888;
+    width: 2px;
+    position: absolute;
+    pointer-events: none;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+
+.tiptap-mathematics-render {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0 0.15rem;
+    transition: background 0.15s;
+}
+
+.tiptap-mathematics-render:hover,
+.tiptap-mathematics-render--editable:hover {
+    background: #333;
+}
+
+.tiptap-mathematics-render--editable {
+    cursor: pointer;
+}
+
+[data-type="block-math"] {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 0;
+    margin: 0.5rem 0;
+    background: #1a1a1a;
+    border-radius: 6px;
+    font-size: 1.4rem;
+}
+
+[data-type="inline-math"] {
+    display: inline;
+    padding: 0 0.15rem;
+}
+
+a {
+    color: #02aef0;
+    text-decoration-color: #02aef0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+video {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+.tiptap {
+    outline: none;
 }

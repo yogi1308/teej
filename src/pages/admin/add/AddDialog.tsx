@@ -34,6 +34,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
     const blogFormRef = useRef<HTMLFormElement>(null);
     const merchFormRef = useRef<HTMLFormElement>(null);
+    const homeFormRef = useRef<HTMLFormElement>(null);
 
     useEffect(() => {
         if (albumTracksSongsIds.length === 0) {
@@ -120,6 +121,31 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
         }
     }
 
+    async function handlehomeUpload() {
+        try {
+            const form = homeFormRef.current;
+            if (!form) return;
+            const rows = form.querySelectorAll<HTMLElement>("[data-row]");
+            const socialLinks = Array.from(rows).map(row => ({
+                platform: (row.querySelector<HTMLInputElement>("[name=social-name]"))?.value ?? "",
+                url: (row.querySelector<HTMLInputElement>("[name=social-link]"))?.value ?? "",
+            })).filter(l => l.platform && l.url);
+            console.log("Uploading social links:", socialLinks);
+            const res = await fetch("/api/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ socialLinks }),
+                credentials: "include"
+            });
+            if (res.ok) {
+                window.dispatchEvent(new CustomEvent("refetch-admin"));
+                setResetKeys(prev => ({ ...prev, Home: prev.Home + 1 }));
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleUpload() {
         setUploading(true);
         try {
@@ -133,6 +159,10 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             } else if (currTab === "Merch") {
                 await handleMerchUpload();
                 setResetKeys(prev => ({ ...prev, Merch: prev.Merch + 1 }));
+            }
+            else if (currTab === "Home") {
+                console.log(currTab)
+                await handlehomeUpload()
             }
         } catch (error) {
             console.error("Upload failed:", error);
@@ -240,7 +270,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         <AddBlog blogFormRef={blogFormRef} key={resetKeys.Blog} />
                     </div>
                     <div className="h-full" style={{ display: currTab === "Home" ? "" : "none" }}>
-                        <AddHome key={resetKeys.Home} />
+                        <AddHome homeFormRef={homeFormRef} key={resetKeys.Home} />
                     </div>
                 </div>
 

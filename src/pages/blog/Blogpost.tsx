@@ -35,14 +35,14 @@ export default function BlogPost() {
     return (
         <>
             {!loading && (
-                <div className={`flex items-center justify-center overflow-hidden ${isOpen && "overflow-y-scroll"}`}>
-                    {isOpen && <div className="fixed inset-0 z-500000000 bg-black/50 backdrop-blur-md" />}
+                <div className={`${isOpen ? "fixed inset-0 z-50 overflow-y-auto" : "overflow-hidden"}`}>
+                    {isOpen && <div className="fixed inset-0 z-40 bg-black/80" />}
                     <div className="absolute top-16 left-1/2 -translate-x-1/2">
                         <Thumbnail src={blog?.imageUrl || blog?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                     </div>
-                    <div className={`relative top-[calc(50vh)] bottom-0 pt-4 z-100000000000 flex flex-col h-screen pointer-events-none`}>
+                    <div className="fixed top-[calc(50vh)] w-screen z-50 flex flex-col h-0 max-h-[60vh] pointer-events-none">
                         <div
-                            className={`pointer-events-auto bg-[rgba(0,0,0,0.4)] flex gap-12 justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen ${!isOpen && "sticky top-[50vh]"}`}
+                            className="pointer-events-auto bg-[rgba(0,0,0,0.4)] flex gap-12 justify-between border-t border-b py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all w-screen shrink-0"
                             onClick={() => {
                                 setIsOpen(prev => !prev);
                             }}
@@ -60,7 +60,7 @@ export default function BlogPost() {
                             </div>
                         </div>
                         {isOpen && (
-                            <div className="flex-1 max-h-[calc(100vh-3rem)] overflow-scroll px-4 py-4 pointer-events-auto">
+                            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 py-4 pointer-events-auto">
                                 {isPdf ? (
                                     <iframe src={`/api/blog/pdf/${blog.id}`} className="border border-gray-900 rounded w-full min-h-[calc(100vh-7rem)]" />
                                 ) : (

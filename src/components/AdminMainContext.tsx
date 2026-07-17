@@ -146,7 +146,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
             {!loading && (
                 <div className="absolute bottom-0 top-1/2 h-1/2 w-full overflow-hidden flex flex-col">
                     <div
-                        className="shrink-0 flex items-center justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
+                        className="shrink-0 flex gap-4 items-center justify-between border-y relative p-2 px-4 bg-black/10 cursor-pointer hover:bg-black/70"
                         onClick={() => {
                             onclick(currItem);
                         }}
@@ -195,7 +195,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                     <ul ref={ulRef} className="flex-1 overflow-y-auto " style={{ paddingBottom: ulHeight }}>
                         {content?.map((item, i) => (
                             <li
-                                className={`cursor-pointer group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
+                                className={`cursor-pointer gap-4 group flex justify-between my-2 p-2 px-4 ${i === 0 ? "h-0 invisible hidden" : "hover:bg-black/40"} `}
                                 key={item.id}
                                 data-id={item.id}
                                 onClick={() => onclick(item)}

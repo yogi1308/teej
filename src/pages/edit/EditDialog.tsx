@@ -72,7 +72,6 @@ export default function EditDialog({
     async function handleUpload() {
         if (!item) return;
         const changed = formChange || imgsChange || songsChange || blogChange;
-        console.log(`formChange: ${formChange} \n imgsChange: ${imgsChange} \n songsChange: ${songsChange} \n blogChange: ${blogChange}`);
         if (!changed) {
             onClose();
             return;

@@ -130,7 +130,6 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                 platform: (row.querySelector<HTMLInputElement>("[name=social-name]"))?.value ?? "",
                 url: (row.querySelector<HTMLInputElement>("[name=social-link]"))?.value ?? "",
             })).filter(l => l.platform && l.url);
-            console.log("Uploading social links:", socialLinks);
             const res = await fetch("/api/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -161,7 +160,6 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                 setResetKeys(prev => ({ ...prev, Merch: prev.Merch + 1 }));
             }
             else if (currTab === "Home") {
-                console.log(currTab)
                 await handlehomeUpload()
             }
         } catch (error) {

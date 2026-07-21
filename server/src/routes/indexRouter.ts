@@ -8,12 +8,9 @@ const indexRouter = Router();
 indexRouter.post("/delete", requireAdmin, express.json(), async (req, res) => {
     try {
         const { id, type } = req.body;
-        console.log("Delete request:", { id, type });
         const assetIds = (await deleteItem(id, type))?.filter((id): id is string => !!id);
-        console.log("Asset IDs to delete:", assetIds);
         if (assetIds?.length) {
             const result = await deleteFromCloudinary(assetIds)
-            console.log("Cloudinary result:", result);
         }
         res.status(200).json({ success: true });
     } catch (error) {
@@ -43,7 +40,6 @@ indexRouter.get("/", async (req, res) => {
 indexRouter.post("/", requireAdmin, express.json(), async (req, res) => {
     try {
         const { socialLinks } = req.body;
-        console.log("POST /api/ socialLinks:", socialLinks);
         await updateHomeSocialLinks(socialLinks ?? []);
         res.json({ success: true });
     } catch (error: any) {

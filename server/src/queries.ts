@@ -192,11 +192,9 @@ export async function updateHomeSocialLinks(socialLinks: { platform: string; url
 export async function deleteHomeSocialLink(index: number) {
     const home = await prisma.home.findFirst();
     if (!home) {
-        console.log("deleteHomeSocialLink: no home record found");
         return;
     }
     const links = (home.socialLinks as { platform: string; url: string }[]) ?? [];
-    console.log("deleteHomeSocialLink: filtering index", index, "from", links.length, "links");
     const updated = links.filter((_, i) => i !== index);
     return await prisma.home.update({
         where: { id: home.id },

@@ -21,7 +21,6 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@stripe/cli": "^1.43.8",
     "bcryptjs": "^3.0.3",

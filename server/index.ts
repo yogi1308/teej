@@ -7,12 +7,12 @@ const app = express();
 app.use(cookieParser())
 app.use("/api", router);
 
-const PORT = process.env.EXPRESS_PORT;
-app.listen(PORT, (error : any) => {
-    if (error) {
-        throw error;
-    }
-    console.log(`Listening on port ${PORT}!`);
-});
+if (!process.env.VERCEL) {
+    const PORT = process.env.EXPRESS_PORT;
+    app.listen(PORT, (error: any) => {
+        if (error) throw error;
+        console.log(`Listening on port ${PORT}!`);
+    });
+}
 
 export default app;

@@ -1,4 +1,4 @@
-import { prisma } from "../prisma/prisma";
+import { prisma } from "../prisma/prisma.js";
 import "dotenv/config";
 
 const env = process.env.NODE_ENV === "production" ? "prod" : "dev";

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { upload } from "../multer";
-import { deleteFromCloudinary, uploadImageToCloudinary } from "../cloudinary";
-import { getAllMerch, getMerch, merchUploadQuery } from "../queries";
-import { prisma } from "../../prisma/prisma";
-import { requireAdmin } from "../../auth/middleware";
+import { upload } from "../multer.js";
+import { deleteFromCloudinary, uploadImageToCloudinary } from "../cloudinary.js";
+import { getAllMerch, getMerch, merchUploadQuery } from "../queries.js";
+import { prisma } from "../../prisma/prisma.js";
+import { requireAdmin } from "../../auth/middleware.js";
 
 const merchRouter = Router();
 

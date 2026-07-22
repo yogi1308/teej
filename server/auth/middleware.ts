@@ -1,4 +1,4 @@
-import { verifyToken } from "./jwt";
+import { verifyToken } from "./jwt.js";
 
 export function requireAdmin(req, res, next) {
     const token = req.cookies?.token;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signToken, verifyToken } from "../../auth/jwt.ts";
+import { signToken, verifyToken } from "../../auth/jwt.js";
 import express from "express"
 
 const authRouter = Router();

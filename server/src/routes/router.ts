@@ -1,10 +1,10 @@
 import { Router } from "express";
-import musicRouter from "./musicRouter"
-import blogRouter from "./blogRouter";
-import merchRouter from "./merchRouter";
-import indexRouter from "./indexRouter";
-import authRouter from "./authRouter";
-import donateRouter from "./donateRouter";
+import musicRouter from "./musicRouter.js"
+import blogRouter from "./blogRouter.js";
+import merchRouter from "./merchRouter.js";
+import indexRouter from "./indexRouter.js";
+import authRouter from "./authRouter.js";
+import donateRouter from "./donateRouter.js";
 
 const router = Router()
 

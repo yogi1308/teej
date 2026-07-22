@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { upload } from "../multer";
-import { deleteFromCloudinary, uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary";
-import { blogFileUploadQuery, getAllBlog, getBlog } from "../queries";
-import { prisma } from "../../prisma/prisma";
-import { requireAdmin } from "../../auth/middleware";
+import { upload } from "../multer.js";
+import { deleteFromCloudinary, uploadImageToCloudinary, uploadRawToCloudinary } from "../cloudinary.js";
+import { blogFileUploadQuery, getAllBlog, getBlog } from "../queries.js";
+import { prisma } from "../../prisma/prisma.js";
+import { requireAdmin } from "../../auth/middleware.js";
 
 const blogRouter = Router();
 

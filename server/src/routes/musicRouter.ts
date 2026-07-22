@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { deleteFromCloudinary, uploadImageToCloudinary, uploadToCloudinary, uploadVideoToCloudinary } from "../cloudinary";
-import { upload } from "../multer";
-import { musicUpload, getMusic, albumArtUploadQuery, getAlbum, updateTrack } from "../queries";
-import { prisma } from "../../prisma/prisma";
-import { requireAdmin } from "../../auth/middleware";
+import { deleteFromCloudinary, uploadImageToCloudinary, uploadToCloudinary, uploadVideoToCloudinary } from "../cloudinary.js";
+import { upload } from "../multer.js";
+import { musicUpload, getMusic, albumArtUploadQuery, getAlbum, updateTrack } from "../queries.js";
+import { prisma } from "../../prisma/prisma.js";
+import { requireAdmin } from "../../auth/middleware.js";
 
 const musicRouter = Router();
 musicRouter.post(

@@ -1,7 +1,7 @@
 import express, { Router } from "express";
-import { deleteItem, deleteHomeSocialLink, getHome, updateHomeSocialLinks } from "../queries";
-import { deleteFromCloudinary } from "../cloudinary";
-import { requireAdmin } from "../../auth/middleware";
+import { deleteItem, deleteHomeSocialLink, getHome, updateHomeSocialLinks } from "../queries.js";
+import { deleteFromCloudinary } from "../cloudinary.js";
+import { requireAdmin } from "../../auth/middleware.js";
 
 const indexRouter = Router();
 

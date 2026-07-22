@@ -8,7 +8,8 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
     useEffect(() => {
         fetch("/api/auth/me", { credentials: "include" })
             .then(r => r.json())
-            .then(body => setAuthed(body.success && !!body.data));
+            .then(body => setAuthed(body.success && !!body.data))
+            .catch(() => setAuthed(false));
     }, []);
 
     if (authed === null) return null;

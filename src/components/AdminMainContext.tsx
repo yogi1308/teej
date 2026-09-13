@@ -24,14 +24,27 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
     const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef<HTMLDialogElement | null>(null);
     const opened = useRef(false);
+    const isOpenRef = useRef(isOpen);
+    isOpenRef.current = isOpen;
+    const pushedRef = useRef(false);
     const [editItem, setEditItem] = useState(null);
 
     useEffect(() => {
         const dialog = dialogRef.current;
         if (!dialog) return;
 
+        const onCancel = (e: Event) => {
+            e.preventDefault();
+            setIsOpen(false);
+        };
+        dialog.addEventListener("cancel", onCancel);
+
         if (isOpen) {
             opened.current = true;
+            if (!pushedRef.current) {
+                window.history.pushState({ closeDialog: "edit" }, "");
+                pushedRef.current = true;
+            }
             dialog.style.transform = "scaleY(0)";
             setTimeout(() => {
                 dialog.showModal();
@@ -41,12 +54,25 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
             }, 10);
             dialog.style.display = "flex";
         } else if (opened.current) {
+            pushedRef.current = false;
             dialog.style.transform = "scaleY(0)";
             setTimeout(() => {
                 dialog.close();
             }, 300);
         }
+
+        return () => dialog.removeEventListener("cancel", onCancel);
     }, [isOpen]);
+
+    useEffect(() => {
+        const onPop = () => {
+            if (!isOpenRef.current) return;
+            pushedRef.current = false;
+            setIsOpen(false);
+        };
+        window.addEventListener("popstate", onPop);
+        return () => window.removeEventListener("popstate", onPop);
+    }, []);
 
     useEffect(() => {
         // used to calcaluate padding bottom so that the last element can scroll all the way to the top

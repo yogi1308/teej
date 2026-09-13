@@ -12,7 +12,7 @@ export default function AddHome({homeFormRef}) {
     return (
         <form ref={homeFormRef} className="flex flex-col gap-4 p-4" onSubmit={e => e.preventDefault()}>
             {ids.map(id => (
-                <div key={id} data-row className="flex gap-4 items-end flex-1">
+                <div key={id} data-row className="flex flex-row sm:flex-row flex-wrap gap-4 items-end flex-1">
                     <div className="flex-1">
                         <AddInput label="social-name" type="text" name="social-name" placeholder="Instagram, Twitter..." required />
                     </div>

@@ -10,7 +10,7 @@ const AddSingles = forwardRef<HTMLFormElement, { songId: number; failed: boolean
         const [audioName, setAudioName] = useState<string | null>(null);
 
         return (
-            <form ref={ref} data-song-id={songId} className={`flex w-full  p-4 gap-8 items-center ${failed ? "border border-red-500" : ""}`}>
+            <form ref={ref} data-song-id={songId} className={`flex w-full flex-col sm:flex-row p-4 gap-8 sm:items-center ${failed ? "border border-red-500" : ""}`}>
                 <div className="flex flex-col flex-1 gap-4">
                     <AddImage defaultText={"Upload Cover Art"} />
                     <input
@@ -42,7 +42,7 @@ const AddSingles = forwardRef<HTMLFormElement, { songId: number; failed: boolean
                         />
                     </div>
                 </div>
-                <button type="button" className="scale-[1.1] hover:scale-[1.2]" onClick={() => onDelete(songId)}>
+                <button type="button" className="scale-[1.1] hover:scale-[1.2] self-center sm:self-auto" onClick={() => onDelete(songId)}>
                     <Delete />
                 </button>
             </form>

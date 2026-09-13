@@ -181,43 +181,43 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     return (
         <>
             <dialog
-                className="dialog flex-col bg-black/50 backdrop-blur-md h-[90vh] w-[80vw] fixed inset-0 m-auto border border-white overflow-hidden"
+                className="dialog flex-col bg-black/50 backdrop-blur-md inset-0 m-auto w-full max-w-full h-dvh max-h-dvh sm:w-[80vw] sm:h-[90vh] fixed border border-white overflow-hidden"
                 ref={dialogRef}
             >
-                <div className="tabs flex sticky -top-px justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 text-md ">
+                <div className="tabs flex sticky -top-px justify-around text-center border-b border-white mx-4 divide-x divide-white p-2 sm:text-md text-[13px]">
                     <p
-                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Home" ? "text-white!" : "text-white/30"}`}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Home" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Home")}
                     >
                         Home
                     </p>
                     <p
-                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Album" ? "text-white!" : "text-white/30"}`}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Album" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Album")}
                     >
                         Album
                     </p>
                     <p
-                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Singles" || currTab === "Music" ? "text-white!" : "text-white/30"}`}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Singles" || currTab === "Music" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Singles")}
                     >
                         Singles
                     </p>
                     <p
-                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Merch")}
                     >
                         Merch
                     </p>
                     <p
-                        className={`w-100 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Blog" ? "text-white!" : "text-white/30"}`}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Blog" ? "text-white!" : "text-white/30"}`}
                         onClick={() => setCurrTab("Blog")}
                     >
                         Blog
                     </p>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
                     <div style={{ display: currTab === "Singles" || currTab === "Music" ? "" : "none" }}>
                         {singlesSongIds.map(id => (
                             <AddSingles
@@ -233,7 +233,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         ))}
                     </div>
                     <div style={{ display: currTab === "Album" ? "" : "none" }}>
-                        <form ref={albumMetaRef} className="flex gap-4 w-full p-4">
+                        <form ref={albumMetaRef} className="flex flex-col sm:flex-row gap-4 w-full p-4">
                             <AddImage defaultText={"Upload Cover Art"} />
                             <div className="flex-1 flex flex-col gap-4">
                                 <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />
@@ -261,25 +261,25 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                             />
                         ))}
                     </div>
-                    <div className="h-full" style={{ display: currTab === "Merch" ? "" : "none" }}>
+                    <div className="min-h-full" style={{ display: currTab === "Merch" ? "" : "none" }}>
                         <AddMerch merchFormRef={merchFormRef} key={resetKeys.Merch} />
                     </div>
-                    <div className="h-full" style={{ display: currTab === "Blog" ? "" : "none" }}>
+                    <div className="min-h-full" style={{ display: currTab === "Blog" ? "" : "none" }}>
                         <AddBlog blogFormRef={blogFormRef} key={resetKeys.Blog} />
                     </div>
-                    <div className="h-full" style={{ display: currTab === "Home" ? "" : "none" }}>
+                    <div className="min-h-full" style={{ display: currTab === "Home" ? "" : "none" }}>
                         <AddHome homeFormRef={homeFormRef} key={resetKeys.Home} />
                     </div>
                 </div>
 
                 <div className="flex sticky mt-auto bottom-0 text-center text-md justify-center w-full self-center">
-                    <div className="flex sticky mt-auto bottom-0 text-center divide-x divide-white text-md justify-center border-t w-fit self-center">
-                        <button type="button" className="cursor-pointer px-20 py-1 mb-1" onClick={() => handleUpload()}>
+                    <div className="flex sticky mt-auto bottom-0 text-center divide-x divide-white sm:text-md text-[13px] justify-center border-t w-fit flex-wrap self-center">
+                        <button type="button" className="cursor-pointer px-3 sm:px-20 py-1 mb-1" onClick={() => handleUpload()}>
                             Upload
                         </button>
                         {(currTab === "Album" || currTab === "Singles" || currTab === "Music") && (
                             <button
-                                className="cursor-pointer px-20 py-1 mb-1"
+                                className="cursor-pointer px-3 sm:px-20 py-1 mb-1"
                                 onClick={() => {
                                     if (currTab === "Singles" || currTab === "Music") setSinglesSongIds(prev => [...prev, nextId.current++]);
                                     else setAlbumTracksSongsIds(prev => [...prev, nextId.current++]);
@@ -288,7 +288,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                                 {currTab === "Album" ? "Add more tracks" : "Add More"}
                             </button>
                         )}
-                        <button className="cursor-pointer px-20 py-1 mb-1" onClick={onClose}>
+                        <button className="cursor-pointer px-3 sm:px-20 py-1 mb-1" onClick={onClose}>
                             Close
                         </button>
                     </div>

@@ -8,8 +8,8 @@ export default function AddMerch({merchFormRef}) {
     const [currImgPos, setCurrImgPos] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
     return (
-        <form className="flex p-4 gap-4" ref={merchFormRef}>
-            <div className="flex flex-col gap-4">
+        <form className="flex flex-col sm:flex-row p-4 gap-4" ref={merchFormRef}>
+            <div className="flex flex-col gap-4 h-[60vh] sm:h-auto">
                 {imgs.length > 0 ? (
                     <div className="relative">
                     {imgs.length > 1 && currImgPos !== 0 && 
@@ -87,7 +87,7 @@ export default function AddMerch({merchFormRef}) {
                         className="border border-white bg-transparent px-1 py-2 outline-none placeholder:text-white/20 h-full"
                     />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                     <div className="w-full">
                         <AddInput label={"Price"} placeholder={"Enter the price"} type={"number"} name={"price"} />
                     </div>

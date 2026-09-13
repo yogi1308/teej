@@ -7,6 +7,9 @@ export default function Nav() {
     const [navigatorVisibility, setNavigatorVisibility] = useState(false);
     const dialogRef = useRef<HTMLDialogElement | null>(null);
     const opened = useRef(false);
+    const isOpenRef = useRef(navigatorVisibility);
+    isOpenRef.current = navigatorVisibility;
+    const pushedRef = useRef(false);
 
     function toggleNavigatorVisibility() {
         setNavigatorVisibility(v => !v);
@@ -16,8 +19,18 @@ export default function Nav() {
         const dialog = dialogRef.current;
         if (!dialog) return;
 
+        const onCancel = (e: Event) => {
+            e.preventDefault();
+            setNavigatorVisibility(false);
+        };
+        dialog.addEventListener("cancel", onCancel);
+
         if (navigatorVisibility) {
             opened.current = true;
+            if (!pushedRef.current) {
+                window.history.pushState({ closeDialog: "nav" }, "");
+                pushedRef.current = true;
+            }
             dialog.style.transform = "scaleY(0)";
             setTimeout(() => {
                 dialog.showModal();
@@ -26,12 +39,25 @@ export default function Nav() {
                 });
             }, 10);
         } else if (opened.current) {
+            pushedRef.current = false;
             dialog.style.transform = "scaleY(0)";
             setTimeout(() => {
                 dialog.close();
             }, 300);
         }
+
+        return () => dialog.removeEventListener("cancel", onCancel);
     }, [navigatorVisibility]);
+
+    useEffect(() => {
+        const onPop = () => {
+            if (!isOpenRef.current) return;
+            pushedRef.current = false;
+            setNavigatorVisibility(false);
+        };
+        window.addEventListener("popstate", onPop);
+        return () => window.removeEventListener("popstate", onPop);
+    }, []);
 
     return (
         <>

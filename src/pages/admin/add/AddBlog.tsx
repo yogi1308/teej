@@ -9,8 +9,8 @@ export default function AddBlog({ blogFormRef }) {
 
     return (
         <form className="flex flex-col gap-4 p-4 h-full" ref={blogFormRef}>
-            <div className="flex w-full gap-4">
-                <div className="w-[50%]">
+            <div className="flex w-full flex-col sm:flex-row gap-4">
+                <div className="w-full sm:w-[50%]">
                     <AddImage defaultText={"Upload Thumbnail"} />
                 </div>
                 <div className="flex flex-col flex-1 gap-4">

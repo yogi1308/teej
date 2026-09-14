@@ -3,6 +3,7 @@ import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "@/hooks/useFetch";
+import EmptyState from "@/components/EmptyState";
 
 export default function Music() {
     const { musicId } = useParams();
@@ -15,7 +16,9 @@ export default function Music() {
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
                 <Thumbnail src={currItem?.imageUrl || currItem?.coverUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
             </div>
-            <MainContent loading={loading} content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            {content.length === 0 ? <EmptyState />:
+                <MainContent loading={loading} content={content} currItem={currItem} setCurrItem={setCurrItem} />
+            }
         </div>
     );
 }

@@ -3,6 +3,7 @@ import MainContent from "@/components/MainContent";
 import Thumbnail from "@/components/Thumbnail";
 import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
+import EmptyState from "@/components/EmptyState";
 
 export default function Merch() {
     const { data: content, loading, error } = useFetch("/api/merch/");
@@ -17,7 +18,9 @@ export default function Merch() {
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                 )}
             </div>
-            <MainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
+            {content?.length === 0 ? <EmptyState /> :
+                <MainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
+            }
         </div>
     );
 }

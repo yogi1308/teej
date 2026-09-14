@@ -4,8 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '')
-    const backendPort = env.EXPRESS_PORT
+    const env = loadEnv(mode, process.cwd(), "");
+    const backendPort = env.EXPRESS_PORT;
 
     return {
         resolve: {
@@ -13,20 +13,17 @@ export default defineConfig(({ mode }) => {
                 "@": path.resolve(__dirname, "./src"),
             },
         },
-        plugins: [
-            tailwindcss(),
-            react(),
-        ],
+        plugins: [tailwindcss(), react()],
         server: {
             host: true,
             proxy: {
-                '/api': {
+                "/api": {
                     target: `http://localhost:${backendPort}`,
                     changeOrigin: true,
-                    secure: false
-                }
+                    secure: false,
+                },
             },
-            allowedHosts: ["0073-2600-8800-11c3-ab00-00-7941.ngrok-free.app"]
+            allowedHosts: ["38c1-2600-8800-11c3-ab00-00-7941.ngrok-free.app"],
         },
-    }
+    };
 });

@@ -3,6 +3,7 @@ import Thumbnail from "@/components/Thumbnail";
 import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import AdminMainContent from "@/components/AdminMainContext";
+import EmptyState from "@/components/EmptyState";
 
 export default function Merch() {
     const { data: content, loading, error, refetch } = useFetch("/api/merch/");
@@ -22,7 +23,9 @@ export default function Merch() {
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                 )}
             </div>
-            <AdminMainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
+            {content?.length === 0 ? <EmptyState /> :
+                <AdminMainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
+            }
         </div>
     );
 }

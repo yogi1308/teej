@@ -69,18 +69,18 @@ export default function AdminHome() {
                 <GradientBorders />
                 <main className="flex flex-col bg-white/05 items-center w-full justify-center gap-4 ">
                     <h1>TEEJ</h1>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="flex flex-wrap items-center justify-center content-center">
                         <Link to="/admin/music" style={{ textDecoration: "none", color: "inherit" }}>
-                            <Hover1 active={pathname.includes("/music")}><div className="p-1 px-16">Music</div></Hover1>
+                            <Hover1 active={pathname.includes("/music")}><div className="p-1 px-4 sm:px-16">Music</div></Hover1>
                         </Link>
                         <Link to="/admin/merch" style={{ textDecoration: "none", color: "inherit" }}>
-                            <Hover1 active={pathname.includes("/merch")}><div className="p-1 px-16">Merch</div></Hover1>
+                            <Hover1 active={pathname.includes("/merch")}><div className="p-1 px-4 sm:px-16">Merch</div></Hover1>
                         </Link>
                         <Link to="/admin/blog" style={{ textDecoration: "none", color: "inherit" }}>
-                            <Hover1 active={pathname.includes("/blog")}><div className="p-1 px-16">Blog</div></Hover1>
+                            <Hover1 active={pathname.includes("/blog")}><div className="p-1 px-4 sm:px-16">Blog</div></Hover1>
                         </Link>
                         <Link to="/admin/donate" style={{ textDecoration: "none", color: "inherit" }}>
-                            <Hover1 active={pathname.includes("/donate")}><div className="p-1 px-16">Donate</div></Hover1>
+                            <Hover1 active={pathname.includes("/donate")}><div className="p-1 px-4 sm:px-16">Donate</div></Hover1>
                         </Link>
                     </div>
                     {socialLinks.length > 0 && (

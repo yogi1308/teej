@@ -158,7 +158,7 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
                                     top: "50%",
                                     left: "50%",
                                     transform: `
-                            translate(-50%, -80%)
+                            translate(-50%, -100%)
                             rotate(${angle}deg)
                             translate(-100px)
 

@@ -9,7 +9,6 @@ export default function Clothing() {
     const { data: content, loading, error } = useFetch("/api/clothing/");
     const [currItem, setCurrItem] = useState(null);
 
-    {console.log(content.length)}
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">

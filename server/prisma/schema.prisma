@@ -45,7 +45,7 @@ model Track {
     type            String   @default("track")
 }
 
-model Merch {
+model Clothing {
     id           String   @id @default(uuid())
     title        String
     meta         String // For price (e.g., "$49.99")
@@ -57,7 +57,7 @@ model Merch {
     updatedAt    DateTime @updatedAt
     inStock      Int
     env          String
-    type            String   @default("merch")
+    type            String   @default("clothing")
 }
 
 model Blog {

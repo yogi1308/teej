@@ -5,8 +5,8 @@ import useFetch from "@/hooks/useFetch";
 import AdminMainContent from "@/components/AdminMainContext";
 import EmptyState from "@/components/EmptyState";
 
-export default function Merch() {
-    const { data: content, loading, error, refetch } = useFetch("/api/merch/");
+export default function AdminClothing() {
+    const { data: content, loading, error, refetch } = useFetch("/api/clothing/");
     useEffect(() => {
         const handler = () => refetch();
         window.addEventListener("refetch-admin", handler);

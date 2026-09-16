@@ -73,8 +73,8 @@ export default function AdminHome() {
                         <Link to="/admin/music" style={{ textDecoration: "none", color: "inherit" }}>
                             <Hover1 active={pathname.includes("/music")}><div className="p-1 px-4 sm:px-16">Music</div></Hover1>
                         </Link>
-                        <Link to="/admin/merch" style={{ textDecoration: "none", color: "inherit" }}>
-                            <Hover1 active={pathname.includes("/merch")}><div className="p-1 px-4 sm:px-16">Merch</div></Hover1>
+                        <Link to="/admin/clothing" style={{ textDecoration: "none", color: "inherit" }}>
+                            <Hover1 active={pathname.includes("/clothing")}><div className="p-1 px-4 sm:px-16">Clothing</div></Hover1>
                         </Link>
                         <Link to="/admin/blog" style={{ textDecoration: "none", color: "inherit" }}>
                             <Hover1 active={pathname.includes("/blog")}><div className="p-1 px-4 sm:px-16">Blog</div></Hover1>

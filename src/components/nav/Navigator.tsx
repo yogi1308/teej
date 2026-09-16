@@ -1,6 +1,6 @@
 import MusicNote from "../../assets/svg/MusicNote";
 import HomeSvg from "../../assets/svg/Home";
-import MerchSvg from "../../assets/svg/Merch";
+import ClothingSvg from "../../assets/svg/Clothing";
 import BlogSvg from "../../assets/svg/Blog";
 import DonateSvg from "../../assets/svg/Donate";
 import CloseIcon from "@/assets/svg/CloseIcon";
@@ -10,11 +10,11 @@ import { useState, useRef } from "react";
 export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
     const navigate = useNavigate()
     const { pathname } = useLocation();
-    const items = ["Home", "Music", "Merch", "Blog", "Donate"];
+    const items = ["Home", "Music", "Clothing", "Blog", "Donate"];
     const itemAngleStep = 200 / items.length;
     const [activeIndex, setActiveIndex] = useState(() => {
         if (pathname.includes("music")) return 1;
-        if (pathname.includes("merch")) return 2;
+        if (pathname.includes("clothing")) return 2;
         if (pathname.includes("blog")) return 3;
         if (pathname.includes("donate")) return 4;
         return 0;
@@ -22,7 +22,7 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
     const iconMap: Record<string, React.ReactNode> = {
         Home: <HomeSvg />,
         Music: <MusicNote />,
-        Merch: <MerchSvg />,
+        Clothing: <ClothingSvg />,
         Blog: <BlogSvg />,
         Donate: <DonateSvg />,
     };
@@ -133,7 +133,7 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
                     <CloseIcon />
                 </div>
             </div>
-            <div className="relative h-[17.5rem]">
+            <div className="relative h-[19.5rem]">
                 <div className="size-12 rounded-full border border-white absolute top-1/2 left-1/2 -translate-1/2"></div>
                 <div className="size-32 rounded-full border border-white absolute top-1/2 left-1/2 -translate-1/2"></div>
                 <div className="size-32 absolute top-1/2 -translate-y-1/2 ">
@@ -153,12 +153,12 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
                         return (
                             <p
                                 key={i}
-                                className="absolute select-none hover:opacity-80! cursor-pointer"
+                                className="absolute text-sm select-none hover:opacity-80! cursor-pointer"
                                 style={{
                                     top: "50%",
                                     left: "50%",
                                     transform: `
-                            translate(-50%, -50%)
+                            translate(-50%, -80%)
                             rotate(${angle}deg)
                             translate(-100px)
 

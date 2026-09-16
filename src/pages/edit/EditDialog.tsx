@@ -95,7 +95,7 @@ export default function EditDialog({
             const typeMap: Record<string, string> = {
                 track: "music/tracks",
                 album: "music/albums",
-                merch: "merch",
+                clothing: "clothing",
                 blog: "blog",
             };
             const endpoint = typeMap[item.type];
@@ -197,7 +197,7 @@ export default function EditDialog({
                                         <SleekLeftArrow />
                                     </div>
                                 )}
-                                {item?.type === "merch" && (
+                                {item?.type === "clothing" && (
                                     <button
                                         type="button"
                                         className="border border-dashed border-black py-2 bg-white text-black px-16"
@@ -226,7 +226,7 @@ export default function EditDialog({
                                         <div className="flex-1">
                                             <AddInput
                                                 key={key}
-                                                label={key === "meta" ? (item.type === "merch" ? "Price" : "Meta") : key.charAt(0).toUpperCase() + key.slice(1)}
+                                                label={key === "meta" ? (item.type === "clothing" ? "Price" : "Meta") : key.charAt(0).toUpperCase() + key.slice(1)}
                                                 name={key}
                                                 defaultValue={value ?? ""}
                                                 placeholder={value ?? ""}

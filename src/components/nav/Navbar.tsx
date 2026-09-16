@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import MusicNote from "../../assets/svg/MusicNote";
 import HomeSvg from "../../assets/svg/Home";
-import MerchSvg from "../../assets/svg/Merch";
+import ClothingSvg from "../../assets/svg/Clothing";
 import BlogSvg from "../../assets/svg/Blog";
 import ThreeDots from "../../assets/svg/ThreeDots";
 import SoundCloud from "../../assets/svg/SoundCloud";
@@ -19,9 +19,9 @@ export default function Navbar({ onClick }: { onClick?: () => void }) {
     } else if (pathname.includes("blog")) {
         pageName = "Blog";
         pageIcon = <BlogSvg />;
-    } else if (pathname.includes("merch")) {
-        pageName = "Merch";
-        pageIcon = <MerchSvg />;
+    } else if (pathname.includes("clothing")) {
+        pageName = "Clothing";
+        pageIcon = <ClothingSvg />;
     } else if (pathname.includes("donate")) {
         pageName = "Donate";
         pageIcon = <DonateSvg />;

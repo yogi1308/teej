@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import AddMerch from "./AddMerch";
+import AddClothing from "./AddClothing";
 import AddBlog from "./AddBlog";
 import AddHome from "./AddHome";
 import AddSingles from "./AddSingles";
@@ -15,8 +15,8 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
         if (location.pathname.includes("blog")) {
             return "Blog";
         }
-        if (location.pathname.includes("merch")) {
-            return "Merch";
+        if (location.pathname.includes("clothing")) {
+            return "Clothing";
         }
         if (location.pathname.includes("music")) {
             return "Music";
@@ -25,7 +25,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     }
     const [currTab, setCurrTab] = useState(determineTab());
     const [uploading, setUploading] = useState(false);
-    const [resetKeys, setResetKeys] = useState({ Home: 0, Merch: 0, Blog: 0 });
+    const [resetKeys, setResetKeys] = useState({ Home: 0, Clothing: 0, Blog: 0 });
     const [singlesSongIds, setSinglesSongIds] = useState([0]);
     const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0]);
     const [failedIds, setFailedIds] = useState(new Set<number>());
@@ -33,7 +33,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     const albumMetaRef = useRef<HTMLFormElement>(null);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
     const blogFormRef = useRef<HTMLFormElement>(null);
-    const merchFormRef = useRef<HTMLFormElement>(null);
+    const clothingFormRef = useRef<HTMLFormElement>(null);
     const homeFormRef = useRef<HTMLFormElement>(null);
 
     useEffect(() => {
@@ -107,11 +107,11 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
         }
     }
 
-    async function handleMerchUpload() {
+    async function handleClothingUpload() {
         try {
-            const form = merchFormRef.current;
+            const form = clothingFormRef.current;
             if (!form) return;
-            await fetch("/api/merch", {
+            await fetch("/api/clothing", {
                 method: "POST",
                 body: new FormData(form),
                 credentials: "include"
@@ -155,9 +155,9 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             } else if (currTab === "Blog") {
                 await handleBlogUpload();
                 setResetKeys(prev => ({ ...prev, Blog: prev.Blog + 1 }));
-            } else if (currTab === "Merch") {
-                await handleMerchUpload();
-                setResetKeys(prev => ({ ...prev, Merch: prev.Merch + 1 }));
+            } else if (currTab === "Clothing") {
+                await handleClothingUpload();
+                setResetKeys(prev => ({ ...prev, Clothing: prev.Clothing + 1 }));
             }
             else if (currTab === "Home") {
                 await handlehomeUpload()
@@ -204,10 +204,10 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         Singles
                     </p>
                     <p
-                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Merch" ? "text-white!" : "text-white/30"}`}
-                        onClick={() => setCurrTab("Merch")}
+                        className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Clothing" ? "text-white!" : "text-white/30"}`}
+                        onClick={() => setCurrTab("Clothing")}
                     >
-                        Merch
+                        Clothing
                     </p>
                     <p
                         className={`w-0 flex-1 cursor-pointer transition-all duration-300 hover:text-white/60 ${currTab === "Blog" ? "text-white!" : "text-white/30"}`}
@@ -261,8 +261,8 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                             />
                         ))}
                     </div>
-                    <div className="min-h-full" style={{ display: currTab === "Merch" ? "" : "none" }}>
-                        <AddMerch merchFormRef={merchFormRef} key={resetKeys.Merch} />
+                    <div className="min-h-full" style={{ display: currTab === "Clothing" ? "" : "none" }}>
+                        <AddClothing clothingFormRef={clothingFormRef} key={resetKeys.Clothing} />
                     </div>
                     <div className="min-h-full" style={{ display: currTab === "Blog" ? "" : "none" }}>
                         <AddBlog blogFormRef={blogFormRef} key={resetKeys.Blog} />

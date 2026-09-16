@@ -6,9 +6,9 @@ import Carousel from "@/components/Carousel";
 import Thumbnail from "@/components/Thumbnail";
 import LoadingContent from "../load/LoadingContent";
 
-export default function MerchPost() {
-    const { merchId } = useParams();
-    const { data: merch, loading, error } = useFetch(`/api/merch/${merchId}`);
+export default function ClothingPost() {
+    const { clothingId } = useParams();
+    const { data: clothing, loading, error } = useFetch(`/api/clothing/${clothingId}`);
     const [isOpen, setIsOpen] = useState(false);
     const [interested, setInterested] = useState(false);
     const [state, handleSubmit] = useForm("xgojqyel");
@@ -19,10 +19,10 @@ export default function MerchPost() {
                 <div className={`overflow-hidden ${isOpen && "overflow-y-scroll"}`}>
                     {isOpen && <div className="fixed inset-0 z-50000 bg-black/50 backdrop-blur-md" />}
                     <div className="absolute! top-16 left-1/2 -translate-x-1/2">
-                        {merch?.imageUrl?.length > 1 ? (
-                            <Carousel src={merch?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)" }} />
+                        {clothing?.imageUrl?.length > 1 ? (
+                            <Carousel src={clothing?.imageUrl} style={{ width: "clamp(10rem, 60vh, 60vw)" }} />
                         ) : (
-                            <Thumbnail src={merch?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
+                            <Thumbnail src={clothing?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                         )}
                     </div>
                     <div className="fixed top-[calc(50vh)] w-screen z-100000 flex flex-col h-min">
@@ -30,13 +30,13 @@ export default function MerchPost() {
                             className="sticky top-0 z-10 bg-[rgba(0,0,0,0.4)] flex justify-between border-t border-b border-white py-2 px-4 items-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.01] transition-all cursor-pointer min-w-0"
                             onClick={() => setIsOpen(prev => !prev)}
                         >
-                            <p className="truncate">{merch?.title}</p>
+                            <p className="truncate">{clothing?.title}</p>
                             <div className="flex gap-12 items-center">
                                 <div className="flex gap-2 items-center">
                                     <p>Details</p>
                                     {isOpen ? <p>-</p> : <p>+</p>}
                                 </div>
-                                <p>{merch?.meta && `$ ${merch?.meta}`}</p>
+                                <p>{clothing?.meta && `$ ${clothing?.meta}`}</p>
                             </div>
                         </div>
                     </div>
@@ -45,18 +45,18 @@ export default function MerchPost() {
                             <div className="flex-1 p-4 flex flex-col gap-4">
                                 <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
                                     <p className="text-white/50">Description</p>
-                                    <p>{merch?.description}</p>
+                                    <p>{clothing?.description}</p>
                                     <p className="text-white/50">Sizes</p>
-                                    <p>{merch?.sizes}</p>
+                                    <p>{clothing?.sizes}</p>
                                     <p className="text-white/50">Stock</p>
-                                    <p>{merch?.inStock}</p>
+                                    <p>{clothing?.inStock}</p>
                                 </div>
                                 {state.succeeded ? (
                                     <p className="text-green-400">Thanks! We'll get back to you soon.</p>
                                 ) : interested ? (
                                     <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-1">
-                                        <input type="hidden" name="item" value={merch?.title || ""} />
-                                        <input type="hidden" name="price" value={merch?.meta || ""} />
+                                        <input type="hidden" name="item" value={clothing?.title || ""} />
+                                        <input type="hidden" name="price" value={clothing?.meta || ""} />
                                         <div className="flex flex-col gap-2">
                                             <label htmlFor="contact" className="text-white/70 " title="So that I can coordinate the delivery with you">
                                                 How to reach you<span className="text-red-600">*</span>

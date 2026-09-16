@@ -3,12 +3,12 @@ import AddInput from "./AddInput";
 import Delete from "@/assets/svg/Delete";
 import SleekLeftArrow from "@/assets/svg/SleekLeftArrow";
 
-export default function AddMerch({merchFormRef}) {
+export default function AddClothing({clothingFormRef}) {
     const [imgs, setImgs] = useState([]);
     const [currImgPos, setCurrImgPos] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
     return (
-        <form className="flex flex-col sm:flex-row p-4 gap-4" ref={merchFormRef}>
+        <form className="flex flex-col sm:flex-row p-4 gap-4" ref={clothingFormRef}>
             <div className="flex flex-col gap-4 h-[60vh] sm:h-auto">
                 {imgs.length > 0 ? (
                     <div className="relative">

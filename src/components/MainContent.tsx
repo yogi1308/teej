@@ -108,7 +108,7 @@ export default function MainContent({ content, currItem, setCurrItem, loading })
                             <p className="truncate">{currItem?.title}</p>
                         )}
                         <div className="flex gap-4">
-                            {currItem?.type === "merch" ? (
+                            {currItem?.type === "clothing" ? (
                                 <p className="truncate">{`$ ${currItem?.meta}`}</p>
                             ) : currItem?.type === "blog" ? (
                                 <p className="truncate">{new Date(currItem?.meta).toLocaleDateString()}</p>
@@ -144,7 +144,7 @@ export default function MainContent({ content, currItem, setCurrItem, loading })
                             >
                                 <p className="truncate">{item?.title}</p>
                                 <div className="flex gap-0 group-hover:gap-4 items-center">
-                                    {item?.type === "merch" ? (
+                                    {item?.type === "clothing" ? (
                                         <p className="truncate">{`$ ${item?.meta}`}</p>
                                     ) : item?.type === "blog" ? (
                                         <p className="truncate">{new Date(item?.meta).toLocaleDateString()}</p>

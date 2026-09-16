@@ -25,8 +25,8 @@ export async function uploadToCloudinary(req, res, next) {
         const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
         const entity = req.baseUrl.includes("music")
             ? "music"
-            : req.baseUrl.includes("merch")
-                ? "merch"
+            : req.baseUrl.includes("clothing")
+                ? "clothing"
                 : req.baseUrl.includes("blog")
                     ? "blog"
                     : "";

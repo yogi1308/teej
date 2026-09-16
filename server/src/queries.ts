@@ -120,20 +120,21 @@ export async function getBlog(blogId: string) {
     }
 }
 
-export async function merchUploadQuery(req, merchImages) {
-    const merchImagesUrls = merchImages.map(img => img.secure_url);
-    const merchImagesAssetIds = merchImages.map(img => img.asset_id);
+export async function clothingUploadQuery(req, clothingImages) {
+    const clothingImagesUrls = clothingImages.map(img => img.secure_url);
+    const clothingImagesAssetIds = clothingImages.map(img => img.asset_id);
     try {
-        const upload = await prisma.merch.create({
+        const upload = await prisma.clothing.create({
             data: {
                 title: req.body.title,
                 meta: Number(req.body.price).toFixed(2),
-                imageUrl: merchImagesUrls,
-                imageAssetId: merchImagesAssetIds,
+                imageUrl: clothingImagesUrls,
+                imageAssetId: clothingImagesAssetIds,
                 description: req.body.description,
                 sizes: req.body.sizes,
                 inStock: parseInt(req.body.stock, 10),
                 env: env,
+                type: "clothing",
             },
         });
         return upload;
@@ -142,21 +143,21 @@ export async function merchUploadQuery(req, merchImages) {
     }
 }
 
-export async function getAllMerch() {
+export async function getAllClothing() {
     try {
-        const merch = await prisma.merch.findMany({ where: { env: env } });
-        return merch;
+        const clothing = await prisma.clothing.findMany({ where: { env: env } });
+        return clothing;
     } catch (error) {
         console.error(error);
     }
 }
 
-export async function getMerch(merchId: string) {
+export async function getClothing(clothingId: string) {
     try {
-        const blogs = await prisma.merch.findUnique({
-            where: { id: merchId },
+        const clothing = await prisma.clothing.findUnique({
+            where: { id: clothingId },
         });
-        return blogs;
+        return clothing;
     } catch (error) {
         console.error(error);
     }
@@ -204,8 +205,8 @@ export async function deleteHomeSocialLink(index: number) {
 
 export async function deleteItem(id, type) {
     try {
-        if (type === "merch") {
-            const res = await prisma.merch.delete({ where: { id: id } });
+        if (type === "clothing") {
+            const res = await prisma.clothing.delete({ where: { id: id } });
             return res.imageAssetId;
         } else if (type === "blog") {
             const res = await prisma.blog.delete({ where: { id: id } });

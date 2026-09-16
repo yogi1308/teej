@@ -1,48 +1,48 @@
 import { Router } from "express";
 import { upload } from "../multer.js";
 import { deleteFromCloudinary, uploadImageToCloudinary } from "../cloudinary.js";
-import { getAllMerch, getMerch, merchUploadQuery } from "../queries.js";
+import { getAllClothing, getClothing, clothingUploadQuery } from "../queries.js";
 import { prisma } from "../../prisma/prisma.js";
 import { requireAdmin } from "../../auth/middleware.js";
 
-const merchRouter = Router();
+const clothingRouter = Router();
 
-merchRouter.post("/", requireAdmin, upload.array("images"), async (req, res, next) => {
+clothingRouter.post("/", requireAdmin, upload.array("images"), async (req, res, next) => {
     try {
         const stage = process.env.NODE_ENV === "production" ? "prod" : "dev";
         const files = req.files as Express.Multer.File[]
-        if (!files?.length) return res.status(400).json({success: false, error: "Merch Images Required"})
-        const merchImages = await Promise.all(files.map(file => uploadImageToCloudinary(file.buffer, `${stage}/merch`))
+        if (!files?.length) return res.status(400).json({success: false, error: "Clothing Images Required"})
+        const clothingImages = await Promise.all(files.map(file => uploadImageToCloudinary(file.buffer, `${stage}/clothing`))
                                              );
-        await merchUploadQuery(req, merchImages)
-        res.status(200).json({ success: true, message: "Merch uploaded" });
+        await clothingUploadQuery(req, clothingImages)
+        res.status(200).json({ success: true, message: "Clothing uploaded" });
     } catch (error) {
         res.status(500).json({ success: false, error: error });
     }
 });
 
-merchRouter.get("/", async (req, res) => {
+clothingRouter.get("/", async (req, res) => {
     try {
-        const merch = await getAllMerch();
-        res.status(200).json({ success: true, data: merch });
+        const clothing = await getAllClothing();
+        res.status(200).json({ success: true, data: clothing });
     } catch (error) {
-        res.status(500).json({ success: false, error: "Failed to fetch Merch" });
+        res.status(500).json({ success: false, error: "Failed to fetch Clothing" });
     }
 });
 
-merchRouter.get("/:id", async (req, res) => {
+clothingRouter.get("/:id", async (req, res) => {
     try {
-        const merch = await getMerch(req.params.id);
-        res.status(200).json({ success: true, data: merch });
+        const clothing = await getClothing(req.params.id);
+        res.status(200).json({ success: true, data: clothing });
     } catch (error) {
-        res.status(500).json({ success: false, error: "Failed to fetch merch" });
+        res.status(500).json({ success: false, error: "Failed to fetch clothing" });
     }
 });
 
-merchRouter.put("/:id", requireAdmin, upload.array("images"), async (req, res) => {
+clothingRouter.put("/:id", requireAdmin, upload.array("images"), async (req, res) => {
     try {
-        const existing = await prisma.merch.findUnique({ where: { id: req.params.id as string } });
-        if (!existing) return res.status(404).json({ success: false, error: "Merch not found" });
+        const existing = await prisma.clothing.findUnique({ where: { id: req.params.id as string } });
+        if (!existing) return res.status(404).json({ success: false, error: "Clothing not found" });
 
         const data: any = {};
         const oldAssets: string[] = [];
@@ -54,7 +54,7 @@ merchRouter.put("/:id", requireAdmin, upload.array("images"), async (req, res) =
             const deleteIds: string[] = JSON.parse(req.body.imgsAssetIds || "[]");
 
             const newUploads = files?.length
-                ? await Promise.all(files.map(f => uploadImageToCloudinary(f.buffer, `${stage}/merch`)))
+                ? await Promise.all(files.map(f => uploadImageToCloudinary(f.buffer, `${stage}/clothing`)))
                 : [];
 
             let newIdx = 0;
@@ -87,12 +87,12 @@ merchRouter.put("/:id", requireAdmin, upload.array("images"), async (req, res) =
         if (req.body.meta) data.meta = Number(req.body.meta).toFixed(2);
 
         if (oldAssets.length) await deleteFromCloudinary(oldAssets);
-        await prisma.merch.update({ where: { id: req.params.id as string }, data });
+        await prisma.clothing.update({ where: { id: req.params.id as string }, data });
         res.json({ success: true });
     } catch (error) {
-        console.error("PUT /merch/:id error:", error);
+        console.error("PUT /clothing/:id error:", error);
         res.status(500).json({ success: false, error: (error as Error).message });
     }
 });
 
-export default merchRouter
+export default clothingRouter

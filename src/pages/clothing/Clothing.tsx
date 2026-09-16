@@ -5,8 +5,8 @@ import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import EmptyState from "@/components/EmptyState";
 
-export default function Merch() {
-    const { data: content, loading, error } = useFetch("/api/merch/");
+export default function Clothing() {
+    const { data: content, loading, error } = useFetch("/api/clothing/");
     const [currItem, setCurrItem] = useState(null);
 
     return (

@@ -9,6 +9,7 @@ export default function Clothing() {
     const { data: content, loading, error } = useFetch("/api/clothing/");
     const [currItem, setCurrItem] = useState(null);
 
+    {console.log(content.length)}
     return (
         <div>
             <div className="absolute top-16 left-1/2 -translate-x-1/2">
@@ -18,7 +19,7 @@ export default function Clothing() {
                     <Thumbnail src={currItem?.imageUrl} style={{ width: "clamp(10rem, 60vh, 90vw)" }} />
                 )}
             </div>
-            {content?.length === 0 ? <EmptyState /> :
+            {!loading && (content?.length ?? 0) === 0 ? <EmptyState /> :
                 <MainContent content={content} loading={loading} currItem={currItem} setCurrItem={setCurrItem} />
             }
         </div>

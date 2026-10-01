@@ -33,12 +33,13 @@ export async function uploadToCloudinary(req, res, next) {
         const folder = `${stage}/${entity}`;
         req.uploads = {};
 
-        if (files?.["track"]?.[0]) {
-            req.uploads.track = await uploadVideoToCloudinary(
-                files["track"][0].buffer,
-                folder,
-            );
+        if (!files?.["track"]?.[0]) {
+            return res.status(400).json({ success: false, error: "Track file is required" });
         }
+        req.uploads.track = await uploadVideoToCloudinary(
+            files["track"][0].buffer,
+            folder,
+        );
         if (files?.["cover-art"]?.[0]) {
             req.uploads.cover = await uploadImageToCloudinary(
                 files["cover-art"][0].buffer,

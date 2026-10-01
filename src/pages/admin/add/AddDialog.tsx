@@ -26,9 +26,10 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     const [currTab, setCurrTab] = useState(determineTab());
     const [uploading, setUploading] = useState(false);
     const [resetKeys, setResetKeys] = useState({ Home: 0, Clothing: 0, Blog: 0 });
-    const [singlesSongIds, setSinglesSongIds] = useState([0]);
-    const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState([0]);
+    const [singlesSongIds, setSinglesSongIds] = useState<number[]>([]);
+    const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState<number[]>([]);
     const [failedIds, setFailedIds] = useState(new Set<number>());
+    const [albumMetaFailed, setAlbumMetaFailed] = useState(false);
     const nextId = useRef(1);
     const albumMetaRef = useRef<HTMLFormElement>(null);
     const formRefs = useRef<Map<number, HTMLFormElement>>(new Map());
@@ -47,7 +48,14 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
 
     function updateResults(succeeded: number[], failed: number[]) {
         setSinglesSongIds(prev => prev.filter(id => !succeeded.includes(id)));
+        setAlbumTracksSongsIds(prev => prev.filter(id => !succeeded.includes(id)));
         setFailedIds(new Set(failed));
+    }
+
+    function isSongFormReady(form: HTMLFormElement) {
+        const track = form.elements.namedItem("track") as HTMLInputElement | null;
+        const title = form.elements.namedItem("title") as HTMLInputElement | null;
+        return Boolean(track?.files?.length) && Boolean(title?.value.trim());
     }
 
     async function uploadSongs(url: string) {
@@ -56,6 +64,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             songIds.map(async id => {
                 const form = formRefs.current.get(id);
                 if (!form) return { id, ok: false };
+                if (!isSongFormReady(form)) return { id, ok: false };
                 try {
                     const res = await fetch(url, {
                         method: "POST",
@@ -81,12 +90,20 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
 
     async function handleAlbumsUpload() {
         if (!albumMetaRef.current) return;
+        const metaForm = albumMetaRef.current;
+        const albumName = (metaForm.elements.namedItem("album") as HTMLInputElement | null)?.value.trim();
+        const coverArt = metaForm.elements.namedItem("cover-art") as HTMLInputElement | null;
+        if (!albumName || !coverArt?.files?.length) {
+            setAlbumMetaFailed(true);
+            return;
+        }
         const albumRes = await fetch("/api/music/albums", {
             method: "POST",
-            body: new FormData(albumMetaRef.current),
+            body: new FormData(metaForm),
             credentials: "include"
         });
         if (!albumRes.ok) return;
+        setAlbumMetaFailed(false);
         const { albumId } = await albumRes.json();
 
         const { succeeded, failed } = await uploadSongs(`/api/music/albums/${albumId}/tracks`);
@@ -233,11 +250,11 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         ))}
                     </div>
                     <div style={{ display: currTab === "Album" ? "" : "none" }}>
-                        <form ref={albumMetaRef} className="flex flex-col sm:flex-row gap-4 w-full p-4">
+                        <form ref={albumMetaRef} className={`flex flex-col sm:flex-row gap-4 w-full p-4 ${albumMetaFailed ? "border border-red-500" : ""}`}>
                             <AddImage defaultText={"Upload Cover Art"} />
                             <div className="flex-1 flex flex-col gap-4">
                                 <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />
-                                <AddInput label={"Release Date"} placeholder="Release Date" type="date" name="release" />
+                                <AddInput label={"Release Date"} placeholder="Release Date" type="date" name="releaseDate" />
                                 <div className="flex flex-col gap-2 flex-1">
                                     <label>Description</label>
                                     <textarea

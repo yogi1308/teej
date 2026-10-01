@@ -5,14 +5,19 @@ const env = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
 export async function musicUpload(req, res, next) {
     try {
-        const minutes = String(Math.floor(req.uploads.track.duration / 60)).padStart(2, "0");
-        const seconds = String(Math.floor(req.uploads.track.duration % 60)).padStart(2, "0");
+        const track = req.uploads?.track;
+        if (!track) {
+            return res.status(400).json({ success: false, error: "Track file is required" });
+        }
+        const duration = Number.isFinite(track.duration) ? track.duration : 0;
+        const minutes = String(Math.floor(duration / 60)).padStart(2, "0");
+        const seconds = String(Math.floor(duration % 60)).padStart(2, "0");
         await prisma.track.create({
             data: {
                 title: req.body.title,
                 meta: `${minutes}:${seconds}`,
-                songUrl: req.uploads.track.secure_url,
-                songAssetId: req.uploads.track.asset_id,
+                songUrl: track.secure_url,
+                songAssetId: track.asset_id,
                 link: req.body.link,
                 imageUrl: req.uploads.cover?.secure_url,
                 imageAssetId: req.uploads.cover?.asset_id,

@@ -235,7 +235,7 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
                                     ) : (
                                         <p className="truncate">{item?.meta || "Album"}</p>
                                     )}
-                                    <div className="flex gap-4 w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden">
+                                    <div className="flex gap-4 w-0 scale-x-0 group-hover:w-auto group-hover:scale-x-100 overflow-hidden origin-right">
                                         <div onClick={event => handleEdit(event, item)}>
                                             <EditSVG />
                                         </div>

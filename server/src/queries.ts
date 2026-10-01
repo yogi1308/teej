@@ -61,6 +61,7 @@ export async function albumArtUploadQuery(req, cloudinaryData) {
         return album.id;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 

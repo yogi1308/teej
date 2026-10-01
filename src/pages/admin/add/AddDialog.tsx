@@ -25,7 +25,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
     }
     const [currTab, setCurrTab] = useState(determineTab());
     const [uploading, setUploading] = useState(false);
-    const [resetKeys, setResetKeys] = useState({ Home: 0, Clothing: 0, Blog: 0 });
+    const [resetKeys, setResetKeys] = useState({ Home: 0, Clothing: 0, Blog: 0, Album: 0 });
     const [singlesSongIds, setSinglesSongIds] = useState<number[]>([]);
     const [albumTracksSongsIds, setAlbumTracksSongsIds] = useState<number[]>([]);
     const [failedIds, setFailedIds] = useState(new Set<number>());
@@ -102,12 +102,16 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
             body: new FormData(metaForm),
             credentials: "include"
         });
-        if (!albumRes.ok) return;
+        if (!albumRes.ok) {
+            setAlbumMetaFailed(true);
+            return;
+        }
         setAlbumMetaFailed(false);
         const { albumId } = await albumRes.json();
 
         const { succeeded, failed } = await uploadSongs(`/api/music/albums/${albumId}/tracks`);
         updateResults(succeeded, failed);
+        setResetKeys(prev => ({ ...prev, Album: prev.Album + 1 }));
     }
 
     async function handleBlogUpload() {
@@ -250,7 +254,7 @@ export default function AddDialog({ onClose, dialogRef }: { onClose: () => void 
                         ))}
                     </div>
                     <div style={{ display: currTab === "Album" ? "" : "none" }}>
-                        <form ref={albumMetaRef} className={`flex flex-col sm:flex-row gap-4 w-full p-4 ${albumMetaFailed ? "border border-red-500" : ""}`}>
+                        <form key={resetKeys.Album} ref={albumMetaRef} className={`flex flex-col sm:flex-row gap-4 w-full p-4 ${albumMetaFailed ? "border border-red-500" : ""}`}>
                             <AddImage defaultText={"Upload Cover Art"} />
                             <div className="flex-1 flex flex-col gap-4">
                                 <AddInput label={"Album"} placeholder={"Enter Your Album Name"} type={"text"} name={"album"} />

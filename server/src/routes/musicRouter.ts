@@ -35,7 +35,7 @@ musicRouter.post("/albums", requireAdmin, upload.single("cover-art"), async (req
         res.json({ albumId: albumArtQuery });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, error: error });
+        res.status(500).json({ success: false, error: (error as Error).message || "Album creation failed" });
     }
 });
 

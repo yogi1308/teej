@@ -131,14 +131,22 @@ export default function AdminMainContent({ content, currItem, setCurrItem, loadi
         setDeleting(true);
         event.stopPropagation();
         event.preventDefault();
-        await fetch("/api/delete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ id: item.id, type: item.type }),
-        });
-        window.dispatchEvent(new CustomEvent("refetch-admin"));
-        setDeleting(false);
+        try {
+            const res = await fetch("/api/delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ id: item.id, type: item.type }),
+            });
+            // refetch unconditionally: the row may already be gone even on a 500
+            // (deleteItem commits before the Cloudinary cleanup runs)
+            if (res.ok) setCurrItem(null);
+            window.dispatchEvent(new CustomEvent("refetch-admin"));
+        } catch {
+            // network/CORS failure: nothing was deleted, so leave the list alone
+        } finally {
+            setDeleting(false);
+        }
     }
 
     function handleEdit(event, item) {

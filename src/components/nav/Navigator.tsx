@@ -120,7 +120,7 @@ export default function Navigator({ toggleNavigatorVisibility, dialogRef }) {
     }
 
     return (
-        <dialog ref={dialogRef} className="top-1/2 left-1/2 -translate-1/2 relative border-2 bg-black/70 p-8 overflow-hidden">
+        <dialog ref={dialogRef} className="top-1/2 left-1/2 -translate-1/2 relative border-2 bg-black/70 p-8 overflow-clip">
             <div className="flex justify-between gap-4 text-center p-2 border-2 w-[15rem]">
                 {pageIcon}
                 <p>{items[activeIndex]}</p>

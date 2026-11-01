@@ -356,3 +356,20 @@ video {
 .tiptap {
     outline: none;
 }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+@supports selector(::-webkit-scrollbar) {
+    * {
+        scrollbar-width: auto;
+        scrollbar-color: auto;
+    }
+    *::-webkit-scrollbar { width: 4px; height: 4px; }
+    *::-webkit-scrollbar-button { display: none; }
+    *::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-corner { background: transparent; }
+    *::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.5); border-radius: 999px; }
+}
